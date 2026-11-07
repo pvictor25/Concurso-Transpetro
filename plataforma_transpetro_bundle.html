@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-  <script>window.APP_BUILD_HASH = "957d5d19d4";</script>
+  <script>window.APP_BUILD_HASH = "576b410e3e";</script>
   <style>
 :root {
   --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -2150,7 +2150,6 @@ body {
         <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
         <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">Exportar</button>
         <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">Importar</button>
-        <button class="btn-utility" id="btn-force-refresh-cache" title="Recarregar estilos e scripts sem apagar seu progresso salvo">Recarregar UI</button>
         <input type="file" id="input-import-json" accept=".json" style="display:none;">
       </div>
       <div class="sidebar-meta-foot" id="sidebar-cloud-hint">
@@ -8042,13 +8041,6 @@ window.QUESTOES_PARTE2 = [
       .getElementById("btn-import-progress")
       ?.addEventListener("click", function () {
         document.getElementById("input-import-json")?.click();
-      });
-
-    document
-      .getElementById("btn-force-refresh-cache")
-      ?.addEventListener("click", function () {
-        this.textContent = "Atualizando...";
-        forceRefreshUIWithoutLosingData();
       });
 
     document

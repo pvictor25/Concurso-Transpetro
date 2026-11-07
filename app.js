@@ -2107,13 +2107,6 @@
       });
 
     document
-      .getElementById("btn-force-refresh-cache")
-      ?.addEventListener("click", function () {
-        this.textContent = "Atualizando...";
-        forceRefreshUIWithoutLosingData();
-      });
-
-    document
       .getElementById("input-import-json")
       ?.addEventListener("change", function (ev) {
         const file = ev.target.files && ev.target.files[0];
