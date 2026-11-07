@@ -38,9 +38,11 @@ Plataforma interativa desenvolvida sob medida para a preparação diária de **3
    - Mini-simulado (10 questões / 30 min), Foco Específicas (20 questões / 60 min) e Prova Completa (70 questões / 4h30min).
    - Simulador das regras de corte da Fase 1 (mínimo de 50% em Conhecimentos Específicos) e Fase 2 (eliminação com zero em Português ou Inglês), comparando com o corte de homologação de 2x (Vagas + CR) por polo e modalidade.
 
-6. **💾 Persistência e Backup**:
-   - Progresso salvo automaticamente no `localStorage` do navegador.
-   - Botões de **Exportar (.json)** e **Importar Backup** para sincronização fácil entre desktop e smartphone.
+6. **☁️ Sincronização Automática na Nuvem (Auto-Save) + Backup Local**:
+   - **Auto-Save em Nuvem**: Suporte integrado a **Google Apps Script** (100% gratuito na Conta Google, sem avisos de permissão), **GitHub Gist Secreto** e **Firebase / REST JSON**.
+   - **Mesclagem Inteligente**: Ao abrir em outro dispositivo (celular, PC ou Google Sites), puxa e mescla automaticamente as questões resolvidas e o progresso mais recente.
+   - **Exportação com Nuvem Embutida**: Botão no modal de nuvem que gera o pacote HTML único já pré-configurado com sua nuvem para colar no Google Sites Restrito.
+   - Progresso salvo simultaneamente no `localStorage` do navegador + botões de **Exportar (.json)** e **Importar Backup**.
 
 ---
 
@@ -48,11 +50,21 @@ Plataforma interativa desenvolvida sob medida para a preparação diária de **3
 
 Basta abrir o arquivo `index.html` diretamente em qualquer navegador moderno (Chrome, Edge, Firefox, Safari). Não requer instalação de servidores ou dependências externas.
 
+Para atualizar o pacote único (`plataforma_transpetro_bundle.html`) e copiá-lo automaticamente para a Área de Transferência (`Ctrl + V`), execute no PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\gerar_bundle.ps1
+```
+
 ---
 
 ## 🌐 Publicação no GitHub Pages e Google Sites
 
-1. Suba os arquivos para seu repositório no GitHub (`main`).
-2. Ative o **GitHub Pages** em `Settings > Pages > Branch: main > Save`.
-3. Para exibir no **Google Sites**: crie uma página com **Incorporação de página inteira** (`</>`) e cole a URL do GitHub Pages (`https://seu-usuario.github.io/seu-repo/`).
+1. **Via Código Embutido (100% Privado no Google Sites Restrito)**:
+   - Conecte sua nuvem em `☁️ Nuvem: Configurar` e clique em `📦 Copiar HTML p/ Google Sites (Com Nuvem Embutida)`.
+   - No Google Sites, crie uma página com **Incorporação de página inteira (`</>`) > Incorporar código** e cole (`Ctrl + V`).
+2. **Via GitHub Pages (Por URL)**:
+   - Suba os arquivos para seu repositório no GitHub (`main`).
+   - Ative o **GitHub Pages** em `Settings > Pages > Branch: main > Save`.
+   - No **Google Sites**, crie uma página com **Incorporação de página inteira (`</>`)** e cole a URL do GitHub Pages (`https://seu-usuario.github.io/seu-repo/`).
 
