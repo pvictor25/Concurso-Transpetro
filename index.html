@@ -2,7 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Concurso Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Plataforma de Estudo 30 min/dia</title>
   <!-- KaTeX para renderização matemática LaTeX nativa -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
@@ -21,6 +24,7 @@
           <h1>TRANSPETRO 2026.4</h1>
           <span>Ênfase 23 • Engenharia Elétrica</span>
         </div>
+        <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Fechar menu">✕</button>
       </div>
     </div>
 
@@ -95,18 +99,25 @@
     </div>
   </aside>
 
+  <!-- BACKDROP ESCURO PARA MENU MOBILE/TABLET -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <!-- ÁREA PRINCIPAL -->
   <div class="main-wrapper">
     <!-- TOPBAR -->
     <header class="topbar">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="mobile-toggle" id="btn-mobile-menu">☰</button>
+      <div class="topbar-left" style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <button class="mobile-toggle" id="btn-mobile-menu" aria-label="Abrir menu">☰</button>
         <div class="topbar-info">
           <span class="countdown-pill" id="countdown-days-text">⏳ Prova em 06/12/2026</span>
           <span class="salary-pill">💰 Remuneração Mínima: R$ 14.973,62 (Base: R$ 8.647,34)</span>
         </div>
       </div>
-      <div class="topbar-progress" style="display:flex;align-items:center;gap:12px;">
+      <div class="topbar-progress" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Toque para Iniciar ou Pausar o Ciclo de 30 minutos">
+          <span id="mobile-timer-icon">▶</span>
+          <span id="mobile-timer-text">30:00</span>
+        </button>
         <button class="cloud-status-pill" id="btn-topbar-cloud" title="Clique para configurar ou sincronizar seu progresso na nuvem">
           <span class="cloud-dot" id="cloud-status-dot"></span>
           <span id="cloud-status-label">☁️ Nuvem: Configurar</span>
@@ -553,6 +564,34 @@
 
     </main>
   </div>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR PARA SMARTPHONES E TABLETS -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegação rápida mobile">
+    <button class="mobile-nav-btn active" data-tab="dashboard">
+      <span class="mobile-nav-icon">📊</span>
+      <span class="mobile-nav-label">Hoje</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="plano">
+      <span class="mobile-nav-icon">🗓️</span>
+      <span class="mobile-nav-label">30 Dias</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="teoria">
+      <span class="mobile-nav-icon">📚</span>
+      <span class="mobile-nav-label">Teoria</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="questoes">
+      <span class="mobile-nav-icon">✍️</span>
+      <span class="mobile-nav-label">Questões</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="simulado">
+      <span class="mobile-nav-icon">🎯</span>
+      <span class="mobile-nav-label">Simulado</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="edital">
+      <span class="mobile-nav-icon">📅</span>
+      <span class="mobile-nav-label">Edital</span>
+    </button>
+  </nav>
 
   <!-- MODAL DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM -->
   <div class="cloud-modal-backdrop" id="cloud-sync-modal" style="display:none;">

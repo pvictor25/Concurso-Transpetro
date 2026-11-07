@@ -581,11 +581,19 @@
   function updateTimerUI() {
     const min = Math.floor(timerSeconds / 60);
     const sec = timerSeconds % 60;
+    const formatted =
+      String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
     const display = document.getElementById("timer-display");
     if (display) {
-      display.textContent =
-        String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+      display.textContent = formatted;
     }
+
+    const mobText = document.getElementById("mobile-timer-text");
+    const mobIcon = document.getElementById("mobile-timer-icon");
+    const mobPill = document.getElementById("btn-mobile-timer-pill");
+    if (mobText) mobText.textContent = formatted;
+    if (mobIcon) mobIcon.textContent = timerRunning ? "⏸" : "▶";
+    if (mobPill) mobPill.classList.toggle("running", !!timerRunning);
 
     const badge = document.getElementById("timer-phase-badge");
     const seg1 = document.getElementById("timer-seg-1");
@@ -668,6 +676,11 @@
   // =========================================================================
   // NAVEGAÇÃO ENTRE ABAS E CONTADORES GLOBAIS
   // =========================================================================
+  function closeMobileSidebar() {
+    document.getElementById("sidebar")?.classList.remove("open");
+    document.getElementById("sidebar-backdrop")?.classList.remove("open");
+  }
+
   function switchTab(tabId) {
     currentTab = tabId;
     document.querySelectorAll(".tab-section").forEach((sec) => {
@@ -676,10 +689,12 @@
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
     });
+    document.querySelectorAll(".mobile-nav-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+    });
 
-    // Fecha menu mobile caso aberto
-    const sidebar = document.getElementById("sidebar");
-    if (sidebar) sidebar.classList.remove("open");
+    // Fecha menu mobile/tablet caso aberto
+    closeMobileSidebar();
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -1187,6 +1202,20 @@
         renderTeoria();
       });
     });
+
+    // Em smartphones/tablets, centraliza automaticamente o chip ativo na barra horizontal
+    const activeChip = sidebarEl.querySelector(".theory-topic-btn.active");
+    if (activeChip && window.innerWidth <= 1024 && activeChip.scrollIntoView) {
+      try {
+        activeChip.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest"
+        });
+      } catch (e) {
+        // ignora
+      }
+    }
 
     const isStudied = state.studiedTheory.includes(activeMod.id);
     const relatedCount = TODAS_QUESTOES.filter(
@@ -1957,23 +1986,35 @@
     updateTimerUI();
     updateGlobalCounters();
 
-    // Botões de navegação lateral
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
+    // Botões de navegação lateral e barra inferior mobile/tablet
+    document.querySelectorAll(".nav-btn, .mobile-nav-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
         switchTab(this.getAttribute("data-tab"));
       });
     });
 
-    // Menu mobile
+    // Menu mobile e backdrop
     document
       .getElementById("btn-mobile-menu")
       ?.addEventListener("click", function () {
-        document.getElementById("sidebar")?.classList.toggle("open");
+        const sb = document.getElementById("sidebar");
+        const bd = document.getElementById("sidebar-backdrop");
+        const isOpen = sb?.classList.toggle("open");
+        if (bd) bd.classList.toggle("open", !!isOpen);
       });
+    document
+      .getElementById("btn-close-sidebar")
+      ?.addEventListener("click", closeMobileSidebar);
+    document
+      .getElementById("sidebar-backdrop")
+      ?.addEventListener("click", closeMobileSidebar);
 
-    // Timer de 30 minutos
+    // Timer de 30 minutos (Sidebar e Pílula Mobile na Topbar)
     document
       .getElementById("btn-timer-toggle")
+      ?.addEventListener("click", toggleTimer);
+    document
+      .getElementById("btn-mobile-timer-pill")
       ?.addEventListener("click", toggleTimer);
     document
       .getElementById("btn-timer-reset")

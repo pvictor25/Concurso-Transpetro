@@ -2,7 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Concurso Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Plataforma de Estudo 30 min/dia</title>
   <!-- KaTeX para renderização matemática LaTeX nativa -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
@@ -1606,37 +1609,451 @@ body.light-theme .visual-card {
   border-color: var(--accent-blue);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .theory-layout {
-    grid-template-columns: 1fr;
-  }
-  .theory-sidebar {
-    position: static;
-    max-height: 280px;
-  }
-  .grid-2 {
-    grid-template-columns: 1fr;
-  }
+/* Mobile & Tablet Navigation Elements (Hidden on Desktop > 1024px) */
+.sidebar-close-btn {
+  display: none;
+  margin-left: auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (max-width: 768px) {
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.68);
+  backdrop-filter: blur(3px);
+  z-index: 1050;
+}
+
+.sidebar-backdrop.open {
+  display: block;
+}
+
+.mobile-timer-pill {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  background: var(--accent-green-soft);
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.mobile-timer-pill.running {
+  background: var(--accent-yellow);
+  border-color: var(--accent-yellow);
+  color: #0f172a;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+}
+
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px));
+  z-index: 950;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  gap: 2px;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-nav-icon {
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+
+.mobile-nav-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.mobile-nav-btn.active {
+  color: var(--accent-green);
+  background: var(--accent-green-soft);
+}
+
+/* =========================================================================
+   RESPONSIVE OPTIMIZATION FOR TABLETS (<= 1024px) & SMARTPHONES (<= 768px)
+   ========================================================================= */
+@media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
+    z-index: 1100;
+    width: 290px;
+    max-width: 86vw;
+    box-shadow: 12px 0 36px rgba(0, 0, 0, 0.65);
   }
   .sidebar.open {
     transform: translateX(0);
   }
+  .sidebar-close-btn {
+    display: inline-flex;
+  }
   .main-wrapper {
     margin-left: 0;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
   }
   .mobile-toggle {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    min-height: 38px;
+  }
+  .mobile-timer-pill {
+    display: inline-flex;
+  }
+  .mobile-bottom-nav {
+    display: grid;
+  }
+  .salary-pill {
+    display: none;
+  }
+  .topbar {
+    padding: 10px 18px;
+    gap: 10px;
   }
   .content-container {
-    padding: 16px;
+    padding: 20px 18px;
+  }
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  /* Na apostila teórica, transforma a lista de blocos em barra horizontal deslizável no topo */
+  .theory-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .theory-sidebar {
+    position: sticky;
+    top: 59px;
+    z-index: 35;
+    max-height: none;
+    padding: 10px 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .theory-sidebar > div:first-child {
+    display: none;
+  }
+  #theory-topics-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .theory-topic-btn {
+    width: auto;
+    flex: 0 0 auto;
+    min-width: 190px;
+    max-width: 240px;
+    margin-bottom: 0;
+    padding: 8px 11px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
   }
 }
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+  .progress-mini-wrap {
+    display: none;
+  }
+  .countdown-pill {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    max-width: 185px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cloud-status-pill {
+    padding: 6px 9px;
+    font-size: 0.74rem;
+  }
+  .content-container {
+    padding: 14px 12px;
+  }
+  .section-header {
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  .section-header h2 {
+    font-size: 1.24rem;
+    line-height: 1.3;
+  }
+  .section-header p {
+    font-size: 0.85rem;
+  }
+
+  /* Cards de estatísticas 2x2 compactos no celular */
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    padding: 12px 13px;
+  }
+  .stat-label {
+    font-size: 0.68rem;
+  }
+  .stat-value {
+    font-size: 1.35rem;
+    margin: 4px 0 2px;
+  }
+  .stat-sub {
+    font-size: 0.73rem;
+    line-height: 1.3;
+  }
+
+  .grid-3,
+  .days-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Hero Mission Card no Smartphone */
+  .hero-mission {
+    padding: 16px 15px;
+    gap: 16px;
+    margin-bottom: 18px;
+    border-radius: var(--radius-md);
+  }
+  .hero-mission-content {
+    min-width: 0;
+    width: 100%;
+  }
+  .hero-mission h3 {
+    font-size: 1.15rem;
+    line-height: 1.3;
+  }
+  .hero-mission p {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+  .mission-steps-pills {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .step-pill {
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 7px 10px;
+  }
+  .hero-mission-actions {
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+  }
+  .hero-mission-actions .btn {
+    width: 100%;
+    min-height: 44px;
+    font-size: 0.88rem;
+  }
+
+  /* Filtros do Plano 30 Dias em barra horizontal deslizável */
+  .plan-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+    gap: 8px;
+  }
+  .filter-chip {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 7px 13px;
+    font-size: 0.8rem;
+  }
+
+  /* Cards gerais, Teoria e Questões */
+  .card,
+  .theory-content-card,
+  .question-card,
+  .day-card {
+    padding: 15px 14px;
+  }
+  .card-title {
+    font-size: 0.98rem;
+    flex-wrap: wrap;
+  }
+  .day-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .day-actions > div {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+  .day-actions > div .btn {
+    flex: 1;
+    min-height: 40px;
+  }
+
+  /* Controles do Banco de Questões e prevenção de auto-zoom no iOS Safari (16px) */
+  .quiz-controls-bar {
+    padding: 12px;
+    gap: 10px;
+  }
+  .quiz-filters-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  .form-select,
+  .form-input,
+  textarea {
+    width: 100%;
+    font-size: 16px !important;
+    min-height: 42px;
+  }
+  .question-meta {
+    gap: 6px;
+  }
+  .question-statement {
+    font-size: 0.93rem;
+  }
+  .option-btn {
+    padding: 12px;
+    font-size: 0.89rem;
+    gap: 10px;
+  }
+  .explanation-box {
+    padding: 12px 14px;
+    font-size: 0.87rem;
+  }
+
+  /* Fórmulas LaTeX e Ilustrações SVG em Smartphones */
+  .formula-box {
+    padding: 12px 13px;
+    font-size: 0.9rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .katex {
+    font-size: 0.98em !important;
+  }
+  .visual-card {
+    padding: 12px;
+    margin: 14px 0;
+  }
+  .visual-card-title {
+    font-size: 0.84rem;
+  }
+  .visual-svg-wrap {
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .visual-svg-wrap svg {
+    min-width: 480px;
+  }
+  .visual-card-caption {
+    font-size: 0.78rem;
+  }
+
+  /* Tabelas responsivas com rolagem suave */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -4px;
+    padding: 0 4px;
+  }
+  .data-table {
+    font-size: 0.8rem;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 8px 9px;
+  }
+
+  /* Modal da Nuvem estilo Bottom-Sheet no Smartphone */
+  .cloud-modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .cloud-modal {
+    border-radius: 18px 18px 0 0;
+    max-height: 92vh;
+    padding: 18px 15px calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+  .cloud-tab-btn {
+    min-width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 420px) {
+  .countdown-pill {
+    max-width: 130px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  #cloud-status-label {
+    max-width: 92px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mobile-nav-icon {
+    font-size: 1.05rem;
+  }
+  .mobile-nav-label {
+    font-size: 0.62rem;
+  }
+}
+
 
 
 </style>
@@ -1652,6 +2069,7 @@ body.light-theme .visual-card {
           <h1>TRANSPETRO 2026.4</h1>
           <span>Ênfase 23 • Engenharia Elétrica</span>
         </div>
+        <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Fechar menu">✕</button>
       </div>
     </div>
 
@@ -1726,18 +2144,25 @@ body.light-theme .visual-card {
     </div>
   </aside>
 
+  <!-- BACKDROP ESCURO PARA MENU MOBILE/TABLET -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <!-- ÁREA PRINCIPAL -->
   <div class="main-wrapper">
     <!-- TOPBAR -->
     <header class="topbar">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="mobile-toggle" id="btn-mobile-menu">☰</button>
+      <div class="topbar-left" style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <button class="mobile-toggle" id="btn-mobile-menu" aria-label="Abrir menu">☰</button>
         <div class="topbar-info">
           <span class="countdown-pill" id="countdown-days-text">⏳ Prova em 06/12/2026</span>
           <span class="salary-pill">💰 Remuneração Mínima: R$ 14.973,62 (Base: R$ 8.647,34)</span>
         </div>
       </div>
-      <div class="topbar-progress" style="display:flex;align-items:center;gap:12px;">
+      <div class="topbar-progress" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Toque para Iniciar ou Pausar o Ciclo de 30 minutos">
+          <span id="mobile-timer-icon">▶</span>
+          <span id="mobile-timer-text">30:00</span>
+        </button>
         <button class="cloud-status-pill" id="btn-topbar-cloud" title="Clique para configurar ou sincronizar seu progresso na nuvem">
           <span class="cloud-dot" id="cloud-status-dot"></span>
           <span id="cloud-status-label">☁️ Nuvem: Configurar</span>
@@ -2184,6 +2609,34 @@ body.light-theme .visual-card {
 
     </main>
   </div>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR PARA SMARTPHONES E TABLETS -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegação rápida mobile">
+    <button class="mobile-nav-btn active" data-tab="dashboard">
+      <span class="mobile-nav-icon">📊</span>
+      <span class="mobile-nav-label">Hoje</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="plano">
+      <span class="mobile-nav-icon">🗓️</span>
+      <span class="mobile-nav-label">30 Dias</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="teoria">
+      <span class="mobile-nav-icon">📚</span>
+      <span class="mobile-nav-label">Teoria</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="questoes">
+      <span class="mobile-nav-icon">✍️</span>
+      <span class="mobile-nav-label">Questões</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="simulado">
+      <span class="mobile-nav-icon">🎯</span>
+      <span class="mobile-nav-label">Simulado</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="edital">
+      <span class="mobile-nav-icon">📅</span>
+      <span class="mobile-nav-label">Edital</span>
+    </button>
+  </nav>
 
   <!-- MODAL DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM -->
   <div class="cloud-modal-backdrop" id="cloud-sync-modal" style="display:none;">
@@ -6043,11 +6496,19 @@ window.QUESTOES_PARTE2 = [
   function updateTimerUI() {
     const min = Math.floor(timerSeconds / 60);
     const sec = timerSeconds % 60;
+    const formatted =
+      String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
     const display = document.getElementById("timer-display");
     if (display) {
-      display.textContent =
-        String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+      display.textContent = formatted;
     }
+
+    const mobText = document.getElementById("mobile-timer-text");
+    const mobIcon = document.getElementById("mobile-timer-icon");
+    const mobPill = document.getElementById("btn-mobile-timer-pill");
+    if (mobText) mobText.textContent = formatted;
+    if (mobIcon) mobIcon.textContent = timerRunning ? "⏸" : "▶";
+    if (mobPill) mobPill.classList.toggle("running", !!timerRunning);
 
     const badge = document.getElementById("timer-phase-badge");
     const seg1 = document.getElementById("timer-seg-1");
@@ -6130,6 +6591,11 @@ window.QUESTOES_PARTE2 = [
   // =========================================================================
   // NAVEGAÇÃO ENTRE ABAS E CONTADORES GLOBAIS
   // =========================================================================
+  function closeMobileSidebar() {
+    document.getElementById("sidebar")?.classList.remove("open");
+    document.getElementById("sidebar-backdrop")?.classList.remove("open");
+  }
+
   function switchTab(tabId) {
     currentTab = tabId;
     document.querySelectorAll(".tab-section").forEach((sec) => {
@@ -6138,10 +6604,12 @@ window.QUESTOES_PARTE2 = [
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
     });
+    document.querySelectorAll(".mobile-nav-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+    });
 
-    // Fecha menu mobile caso aberto
-    const sidebar = document.getElementById("sidebar");
-    if (sidebar) sidebar.classList.remove("open");
+    // Fecha menu mobile/tablet caso aberto
+    closeMobileSidebar();
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -6649,6 +7117,20 @@ window.QUESTOES_PARTE2 = [
         renderTeoria();
       });
     });
+
+    // Em smartphones/tablets, centraliza automaticamente o chip ativo na barra horizontal
+    const activeChip = sidebarEl.querySelector(".theory-topic-btn.active");
+    if (activeChip && window.innerWidth <= 1024 && activeChip.scrollIntoView) {
+      try {
+        activeChip.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest"
+        });
+      } catch (e) {
+        // ignora
+      }
+    }
 
     const isStudied = state.studiedTheory.includes(activeMod.id);
     const relatedCount = TODAS_QUESTOES.filter(
@@ -7419,23 +7901,35 @@ window.QUESTOES_PARTE2 = [
     updateTimerUI();
     updateGlobalCounters();
 
-    // Botões de navegação lateral
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
+    // Botões de navegação lateral e barra inferior mobile/tablet
+    document.querySelectorAll(".nav-btn, .mobile-nav-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
         switchTab(this.getAttribute("data-tab"));
       });
     });
 
-    // Menu mobile
+    // Menu mobile e backdrop
     document
       .getElementById("btn-mobile-menu")
       ?.addEventListener("click", function () {
-        document.getElementById("sidebar")?.classList.toggle("open");
+        const sb = document.getElementById("sidebar");
+        const bd = document.getElementById("sidebar-backdrop");
+        const isOpen = sb?.classList.toggle("open");
+        if (bd) bd.classList.toggle("open", !!isOpen);
       });
+    document
+      .getElementById("btn-close-sidebar")
+      ?.addEventListener("click", closeMobileSidebar);
+    document
+      .getElementById("sidebar-backdrop")
+      ?.addEventListener("click", closeMobileSidebar);
 
-    // Timer de 30 minutos
+    // Timer de 30 minutos (Sidebar e Pílula Mobile na Topbar)
     document
       .getElementById("btn-timer-toggle")
+      ?.addEventListener("click", toggleTimer);
+    document
+      .getElementById("btn-mobile-timer-pill")
       ?.addEventListener("click", toggleTimer);
     document
       .getElementById("btn-timer-reset")
