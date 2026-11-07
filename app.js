@@ -2326,7 +2326,7 @@
         if (modal) modal.style.display = "flex";
 
         // Se foi aberto a partir do index.html modular, embute os dados e o script principal automaticamente
-        if (rawDoc.includes('<script src="app.js"></script>')) {
+        if (/src="app\.js(\?[^"]*)?"/.test(rawDoc)) {
           let inlineCss = "";
           try {
             Array.from(document.styleSheets).forEach((sheet) => {
@@ -2340,7 +2340,7 @@
           }
           if (inlineCss) {
             rawDoc = rawDoc.replace(
-              /<link rel="stylesheet" href="styles\.css"\s*\/?>/,
+              /<link rel="stylesheet" href="styles\.css(\?[^"]*)?"\s*\/?>/,
               "<style>\n" + inlineCss + "\n</style>"
             );
           }
@@ -2356,11 +2356,11 @@
             "</script>";
 
           rawDoc = rawDoc
-            .replace('<script src="dados_edital_plano.js"></script>', "")
-            .replace('<script src="dados_teoria.js"></script>', "")
-            .replace('<script src="dados_questoes_parte1.js"></script>', "")
-            .replace('<script src="dados_questoes_parte2.js"></script>', "")
-            .replace('<script src="app.js"></script>', dataScripts);
+            .replace(/<script src="dados_edital_plano\.js(\?[^"]*)?"><\/script>/, "")
+            .replace(/<script src="dados_teoria\.js(\?[^"]*)?"><\/script>/, "")
+            .replace(/<script src="dados_questoes_parte1\.js(\?[^"]*)?"><\/script>/, "")
+            .replace(/<script src="dados_questoes_parte2\.js(\?[^"]*)?"><\/script>/, "")
+            .replace(/<script src="app\.js(\?[^"]*)?"><\/script>/, dataScripts);
         }
 
         const withCloud = rawDoc.replace(
