@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#0d0f12">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +18,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="styles.css?v=20261107v3">
+  <script>window.APP_BUILD_HASH = "957d5d19d4";</script>
+  <link rel="stylesheet" id="main-stylesheet" href="styles.css?v=957d5d19d4">
 </head>
 <body>
 
@@ -113,6 +117,7 @@
         <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
         <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">Exportar</button>
         <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">Importar</button>
+        <button class="btn-utility" id="btn-force-refresh-cache" title="Recarregar estilos e scripts sem apagar seu progresso salvo">Recarregar UI</button>
         <input type="file" id="input-import-json" accept=".json" style="display:none;">
       </div>
       <div class="sidebar-meta-foot" id="sidebar-cloud-hint">
@@ -711,10 +716,10 @@
   </div>
 
   <!-- SCRIPTS LOCAIS (FUNCIONA 100% OFFLINE DIRETO NO NAVEGADOR) -->
-  <script src="dados_edital_plano.js?v=20261107v3"></script>
-  <script src="dados_teoria.js?v=20261107v3"></script>
-  <script src="dados_questoes_parte1.js?v=20261107v3"></script>
-  <script src="dados_questoes_parte2.js?v=20261107v3"></script>
-  <script src="app.js?v=20261107v3"></script>
+  <script src="dados_edital_plano.js?v=957d5d19d4"></script>
+  <script src="dados_teoria.js?v=957d5d19d4"></script>
+  <script src="dados_questoes_parte1.js?v=957d5d19d4"></script>
+  <script src="dados_questoes_parte2.js?v=957d5d19d4"></script>
+  <script src="app.js?v=957d5d19d4"></script>
 </body>
 </html>

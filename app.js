@@ -66,9 +66,76 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return JSON.parse(JSON.stringify(defaultState));
       const parsed = JSON.parse(raw);
-      return Object.assign({}, JSON.parse(JSON.stringify(defaultState)), parsed);
+      const merged = Object.assign({}, JSON.parse(JSON.stringify(defaultState)), parsed);
+      if (typeof merged.personalNotes === "string" && merged.personalNotes.startsWith("📌 ")) {
+        merged.personalNotes = merged.personalNotes.replace(/^📌\s*/, "");
+      }
+      return merged;
     } catch (e) {
       return JSON.parse(JSON.stringify(defaultState));
+    }
+  }
+
+  // =========================================================================
+  // MOTOR ANTI-CACHE E ATUALIZAÇÃO AUTOMÁTICA SEM PERDER DADOS LOCAIS
+  // =========================================================================
+  async function clearStaleBrowserCaches() {
+    try {
+      if ("caches" in window && window.caches && typeof window.caches.keys === "function") {
+        const keys = await window.caches.keys();
+        await Promise.all(keys.map((k) => window.caches.delete(k)));
+      }
+      if ("serviceWorker" in navigator && navigator.serviceWorker) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+      }
+    } catch (e) {
+      // Ignora em contextos restritos (file:// ou iframe sandbox)
+    }
+  }
+
+  async function forceRefreshUIWithoutLosingData(targetHash) {
+    await clearStaleBrowserCaches();
+    const bust = (targetHash || window.APP_BUILD_HASH || "v") + "_" + Date.now();
+    const sheet = document.getElementById("main-stylesheet");
+    if (sheet && sheet.getAttribute("href")) {
+      const baseHref = sheet.getAttribute("href").split("?")[0];
+      sheet.setAttribute("href", baseHref + "?v=" + bust);
+    }
+    if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("v", bust);
+      window.location.replace(url.toString());
+    } else {
+      window.location.reload();
+    }
+  }
+
+  async function checkAndApplyAppUpdate() {
+    await clearStaleBrowserCaches();
+    if (window.location.protocol !== "http:" && window.location.protocol !== "https:") {
+      return;
+    }
+    try {
+      const res = await fetch("version.json?t=" + Date.now(), {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache"
+        }
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && data.hash && window.APP_BUILD_HASH && data.hash !== window.APP_BUILD_HASH) {
+        const lastReloadedHash = sessionStorage.getItem("TP_LAST_RELOADED_HASH");
+        if (lastReloadedHash !== data.hash) {
+          sessionStorage.setItem("TP_LAST_RELOADED_HASH", data.hash);
+          await forceRefreshUIWithoutLosingData(data.hash);
+        }
+      }
+    } catch (e) {
+      // Offline ou arquivo version.json indisponível no bundle inline
     }
   }
 
@@ -2040,6 +2107,13 @@
       });
 
     document
+      .getElementById("btn-force-refresh-cache")
+      ?.addEventListener("click", function () {
+        this.textContent = "Atualizando...";
+        forceRefreshUIWithoutLosingData();
+      });
+
+    document
       .getElementById("input-import-json")
       ?.addEventListener("change", function (ev) {
         const file = ev.target.files && ev.target.files[0];
@@ -2340,7 +2414,7 @@
           }
           if (inlineCss) {
             rawDoc = rawDoc.replace(
-              /<link rel="stylesheet" href="styles\.css(\?[^"]*)?"\s*\/?>/,
+              /<link rel="stylesheet"[^>]*href="styles\.css(\?[^"]*)?"[^>]*>/,
               "<style>\n" + inlineCss + "\n</style>"
             );
           }
@@ -2384,14 +2458,18 @@
     // Renderização inicial
     updateCloudStatusUI();
     renderDashboard();
+    checkAndApplyAppUpdate();
 
     // Se a nuvem estiver configurada, busca progresso mais recente ao abrir e ao voltar para a aba
     if (isCloudConfigured()) {
       pullFromCloud({ silent: true });
     }
     document.addEventListener("visibilitychange", function () {
-      if (document.visibilityState === "visible" && isCloudConfigured()) {
-        pullFromCloud({ silent: true });
+      if (document.visibilityState === "visible") {
+        checkAndApplyAppUpdate();
+        if (isCloudConfigured()) {
+          pullFromCloud({ silent: true });
+        }
       }
     });
 
