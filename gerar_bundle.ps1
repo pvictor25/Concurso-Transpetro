@@ -1,4 +1,4 @@
-﻿# Script para gerar o pacote único (plataforma_transpetro_bundle.html) e copiar para a Área de Transferência (Ctrl+V no Google Sites)
+# Script para gerar o pacote único (plataforma_transpetro_bundle.html) e copiar para a Área de Transferência (Ctrl+V no Google Sites)
 $ErrorActionPreference = "Stop"
 $dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $utf8 = New-Object System.Text.UTF8Encoding($false)
@@ -28,3 +28,4 @@ try {
 } catch {
     Write-Output "✅ Pacote atualizado em '$bundlePath'."
 }
+
