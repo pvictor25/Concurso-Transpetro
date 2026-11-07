@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concurso Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Plataforma de Estudo 30 min/dia</title>
+  <!-- KaTeX para renderização matemática LaTeX nativa -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- BARRA LATERAL FIXA -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-header">
+      <div class="brand-logo">
+        <div class="brand-badge">BR</div>
+        <div class="brand-title">
+          <h1>TRANSPETRO 2026.4</h1>
+          <span>Ênfase 23 • Engenharia Elétrica</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRONÔMETRO GUIADO DE 30 MINUTOS -->
+    <div class="sidebar-timer">
+      <div class="timer-top">
+        <span class="timer-label">⏱️ Ciclo Diário 30m</span>
+        <span class="timer-phase-badge" id="timer-phase-badge">1/3 • 10m Teoria</span>
+      </div>
+      <div class="timer-display" id="timer-display">30:00</div>
+      <div class="timer-stages-bar" title="10m Teoria + 15m Questões + 5m Revisão">
+        <div class="timer-stage-seg active" id="timer-seg-1"></div>
+        <div class="timer-stage-seg" id="timer-seg-2"></div>
+        <div class="timer-stage-seg" id="timer-seg-3"></div>
+      </div>
+      <div class="timer-controls">
+        <button class="btn-timer primary" id="btn-timer-toggle">▶ Iniciar 30m</button>
+        <button class="btn-timer" id="btn-timer-reset" title="Reiniciar 30:00">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- MENU DE NAVEGAÇÃO -->
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <button class="nav-btn active" data-tab="dashboard">
+          <span class="nav-btn-left"><span class="nav-icon">📊</span> Painel & Meta de Hoje</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-btn" data-tab="plano">
+          <span class="nav-btn-left"><span class="nav-icon">🗓️</span> Plano 30 Dias (30m/dia)</span>
+          <span class="nav-badge" id="nav-badge-plano">0/30</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-btn" data-tab="teoria">
+          <span class="nav-btn-left"><span class="nav-icon">📚</span> Apostila & Conteúdos</span>
+          <span class="nav-badge" id="nav-badge-teoria">0/10</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-btn" data-tab="questoes">
+          <span class="nav-btn-left"><span class="nav-icon">✍️</span> Banco de Questões</span>
+          <span class="nav-badge" id="nav-badge-questoes">0/85</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-btn" data-tab="simulado">
+          <span class="nav-btn-left"><span class="nav-icon">🎯</span> Simulados & Corte</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-btn" data-tab="edital">
+          <span class="nav-btn-left"><span class="nav-icon">📅</span> Edital, Datas & Vagas</span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="footer-actions">
+        <button class="btn-utility" id="btn-toggle-theme">☀️ Modo Claro</button>
+        <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">💾 Exportar</button>
+        <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">📂 Importar</button>
+        <input type="file" id="input-import-json" accept=".json" style="display:none;">
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-muted);text-align:center;">
+        Edital Nº 04/2026 • Banca Cesgranrio<br>Progresso salvo automaticamente
+      </div>
+    </div>
+  </aside>
+
+  <!-- ÁREA PRINCIPAL -->
+  <div class="main-wrapper">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="mobile-toggle" id="btn-mobile-menu">☰</button>
+        <div class="topbar-info">
+          <span class="countdown-pill" id="countdown-days-text">⏳ Prova em 06/12/2026</span>
+          <span class="salary-pill">💰 Remuneração Mínima: R$ 14.973,62 (Base: R$ 8.647,34)</span>
+        </div>
+      </div>
+      <div class="topbar-progress">
+        <div class="progress-mini-wrap">
+          <div class="progress-mini-label">
+            <span>Plano 30 Dias</span>
+            <span id="top-progress-pct">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="top-progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-container">
+
+      <!-- ===================================================================
+           ABA 1: DASHBOARD & MISSÃO DE HOJE
+           =================================================================== -->
+      <section class="tab-section active" id="tab-dashboard">
+        <div class="section-header">
+          <div>
+            <h2>⚡ Painel de Controle — Engenheiro Eletricista Júnior (Transpetro)</h2>
+            <p>Planejamento intensivo de alta eficiência: <strong>30 minutos por dia (10m Teoria + 15m Questões + 5m Revisão)</strong> até <strong>06/12/2026</strong>.</p>
+          </div>
+        </div>
+
+        <!-- HERO CARD: MISSÃO DO DIA -->
+        <div id="hero-mission-container"></div>
+
+        <!-- KPI CARDS -->
+        <div class="grid-4">
+          <div class="stat-card">
+            <span class="stat-label">Dias do Plano Concluídos</span>
+            <div class="stat-value" id="stat-days-val">0 / 30</div>
+            <div class="stat-sub" id="stat-days-sub">0h acumuladas (meta: 15h)</div>
+          </div>
+          <div class="stat-card yellow">
+            <span class="stat-label">Questões Resolvidas</span>
+            <div class="stat-value" id="stat-questions-val">0 / 85</div>
+            <div class="stat-sub" id="stat-questions-sub">70 da Prova 2023.2 + 15 Inéditas</div>
+          </div>
+          <div class="stat-card blue">
+            <span class="stat-label">Módulos da Apostila Lidos</span>
+            <div class="stat-value" id="stat-theory-val">0 / 10</div>
+            <div class="stat-sub" id="stat-theory-sub">8 Blocos Específicos + PT + EN</div>
+          </div>
+          <div class="stat-card purple">
+            <span class="stat-label">Regra de Ouro do Edital 2026.4</span>
+            <div class="stat-value" style="font-size:1.35rem;">Fase 1 Habilita!</div>
+            <div class="stat-sub">50 Qs Específicas definem o corte 2x CR (44 no RJ / 22 em SP)</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- RAIO-X ESTATÍSTICO DA PROVA ANTERIOR -->
+          <div class="card">
+            <div class="card-title">
+              <span>📈 Raio-X Oficial da Prova Anterior (Transpetro 2023.2 — Prova 22)</span>
+              <span class="badge badge-green">70 Questões</span>
+            </div>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
+              Distribuição exata das 50 questões específicas e 20 básicas da última prova da Cesgranrio para guiar seus 30 minutos diários pelo princípio de Pareto (80/20):
+            </p>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bloco do Edital</th>
+                    <th>Qtd.</th>
+                    <th>Peso</th>
+                    <th>Prioridade</th>
+                    <th>Questões na Prova 2023.2</th>
+                  </tr>
+                </thead>
+                <tbody id="raiox-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- CADERNO DE FÓRMULAS & ANOTAÇÕES PESSOAIS -->
+          <div class="card">
+            <div class="card-title">
+              <span>📝 Meu Resumo Rápido & Fórmulas de Bolso (5 min finais)</span>
+              <span class="badge badge-blue">Salvo Automaticamente</span>
+            </div>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:10px;">
+              Use este espaço nos <strong>5 minutos finais</strong> da sua sessão diária para anotar fórmulas, artigos da NR-10/Lei 14.133 ou pegadinhas da Cesgranrio que você não pode esquecer:
+            </p>
+            <textarea
+              id="personal-notes-area"
+              class="form-input"
+              style="width:100%;min-height:295px;resize:vertical;font-family:monospace;line-height:1.5;"
+              placeholder="Anote aqui suas fórmulas, macetes e pontos de revisão..."
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- DESEMPENHO POR BLOCO EM TEMPO REAL -->
+          <div class="card">
+            <div class="card-title">
+              <span>🎯 Meu Desempenho por Bloco / Disciplina</span>
+              <span class="badge badge-purple">Tempo Real</span>
+            </div>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
+              Acompanhe sua taxa de acerto em cada bloco conforme resolve as 85 questões do banco:
+            </p>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bloco / Disciplina</th>
+                    <th>Resolvidas</th>
+                    <th>Acertos</th>
+                    <th>Aproveitamento</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody id="block-performance-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- FLASHCARDS DE REVISÃO RÁPIDA (5 MINUTOS FINAIS) -->
+          <div class="card">
+            <div class="card-title">
+              <span>⚡ Flashcards de Revisão Rápida (Etapa 3: 5 Minutos Finais)</span>
+              <span class="badge badge-yellow" id="flashcard-counter-badge">Card 1 / 16</span>
+            </div>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
+              Treine memorização ativa das fórmulas e normas mais cobradas pela Cesgranrio:
+            </p>
+            <div
+              id="flashcard-box"
+              style="background:var(--bg-surface);border:2px solid var(--accent-blue);border-radius:12px;padding:24px;min-height:190px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:all 0.2s;"
+              title="Clique para virar o cartão (Pergunta / Resposta)"
+            >
+              <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:var(--accent-yellow);margin-bottom:8px;" id="flashcard-side-label">FRENTE • PERGUNTA (CLIQUE PARA REVELAR)</div>
+              <div style="font-size:1.05rem;font-weight:700;color:var(--text-primary);line-height:1.5;" id="flashcard-text"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px;">
+              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">⬅️ Anterior</button>
+              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">🔄 Virar Cartão (Ver Resposta)</button>
+              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo ➡️</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           ABA 2: PLANEJAMENTO DE 30 DIAS (30 MINUTOS POR DIA)
+           =================================================================== -->
+      <section class="tab-section" id="tab-plano">
+        <div class="section-header">
+          <div>
+            <h2>🗓️ Cronograma Estratégico — 30 Minutos por Dia (07/11/2026 a 06/12/2026)</h2>
+            <p>Cada sessão diária de 30 minutos é dividida em <strong>10 min de Teoria Direta</strong> + <strong>15 min de Resolução de Questões</strong> + <strong>5 min de Revisão Ativa</strong>, priorizando os blocos de maior peso na Cesgranrio.</p>
+          </div>
+        </div>
+
+        <div class="plan-filters">
+          <button class="filter-chip active" data-plan-filter="todos">Todos os 30 Dias</button>
+          <button class="filter-chip" data-plan-filter="pendentes">⏳ Pendentes</button>
+          <button class="filter-chip" data-plan-filter="concluidos">✅ Concluídos</button>
+          <button class="filter-chip" data-plan-filter="semana1">Semana 1: SEP & Circuitos (38% da prova)</button>
+          <button class="filter-chip" data-plan-filter="semana2">Semana 2: Máquinas & Instalações (26% da prova)</button>
+          <button class="filter-chip" data-plan-filter="semana3">Semana 3: Controle & Matemática (22% da prova)</button>
+          <button class="filter-chip" data-plan-filter="semana4">Semana 4: Medidas, NR-10/Licitações, PT/EN & Revisão</button>
+        </div>
+
+        <div class="days-grid" id="days-grid-container"></div>
+      </section>
+
+      <!-- ===================================================================
+           ABA 3: APOSTILA TEÓRICA COMPLETA (TODOS OS BLOCOS DO EDITAL)
+           =================================================================== -->
+      <section class="tab-section" id="tab-teoria">
+        <div class="section-header">
+          <div>
+            <h2>📚 Apostila Direcionada — Conteúdo Completo Explicado (Anexo IV)</h2>
+            <p>Explicações teóricas enxutas, tabelas normativas, fórmulas essenciais e dicas das pegadinhas da Cesgranrio para todos os 8 Blocos de Engenharia Elétrica + Português e Inglês.</p>
+          </div>
+        </div>
+
+        <div class="theory-layout">
+          <div class="theory-sidebar" id="theory-topics-list"></div>
+          <div class="theory-content-card" id="theory-content-view"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           ABA 4: BANCO DE QUESTÕES COMENTADAS (70 DE 2023.2 + 15 INÉDITAS)
+           =================================================================== -->
+      <section class="tab-section" id="tab-questoes">
+        <div class="section-header">
+          <div>
+            <h2>✍️ Banco de Questões de Múltipla Escolha Comentadas (85 Questões)</h2>
+            <p>Inclui <strong>todas as 70 questões oficiais da Prova 22 (Engenharia Elétrica — Transpetro 2023.2)</strong> com diagramas e textos-base + <strong>15 questões inéditas</strong> focadas no Edital 2026.4.</p>
+          </div>
+        </div>
+
+        <div class="quiz-controls-bar">
+          <div class="quiz-filters-group">
+            <input
+              type="text"
+              id="filter-q-search"
+              class="form-input"
+              style="min-width:220px;flex:1;"
+              placeholder="🔍 Buscar por assunto, palavra ou nº (ex: p.u., NR-10, Q50)..."
+            >
+            <select id="filter-q-bloco" class="form-select">
+              <option value="todos">📚 Todos os Blocos / Disciplinas (85)</option>
+              <option value="bloco4">Bloco 4: Análise de Sistemas Elétricos - SEP (13)</option>
+              <option value="bloco2">Bloco 2: Circuitos Elétricos (11)</option>
+              <option value="bloco6">Bloco 6: Máquinas Elétricas (9)</option>
+              <option value="bloco5">Bloco 5: Instalações Elétricas e Subestações (8)</option>
+              <option value="bloco7">Bloco 7: Sistemas de Controle (7)</option>
+              <option value="bloco1">Bloco 1: Matemática Aplicada (6)</option>
+              <option value="bloco3">Bloco 3: Medidas Elétricas e SI (5)</option>
+              <option value="bloco8">Bloco 8: Legislação - NR-10 e Lei 14.133 (4)</option>
+              <option value="portugues">Básicos: Língua Portuguesa (11)</option>
+              <option value="ingles">Básicos: Língua Inglesa (11)</option>
+            </select>
+            <select id="filter-q-origem" class="form-select">
+              <option value="todas">🏛️ Todas as Origens (85)</option>
+              <option value="2023">Prova Oficial Transpetro 2023.2 (Q01 a Q70)</option>
+              <option value="ineditas">Questões Inéditas Edital 2026.4 (Q71 a Q85)</option>
+            </select>
+            <select id="filter-q-status" class="form-select">
+              <option value="todas">📌 Todos os Status</option>
+              <option value="nao_respondidas">⏳ Não Respondidas</option>
+              <option value="acertos">✅ Questões que Acertei</option>
+              <option value="erros">❌ Questões que Errei (Para Revisar)</option>
+              <option value="favoritas">⭐ Minhas Favoritas (Caderno de Revisão)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="questions-filter-summary"></div>
+        <div id="questions-list-container"></div>
+      </section>
+
+      <!-- ===================================================================
+           ABA 5: SIMULADOS CRONOMETRADOS & CALCULADORA DE HABILITAÇÃO
+           =================================================================== -->
+      <section class="tab-section" id="tab-simulado">
+        <div class="section-header">
+          <div>
+            <h2>🎯 Simulados Cronometrados & Simulador Oficial de Habilitação (Fases 1 e 2)</h2>
+            <p>Treine gestão de tempo no padrão Cesgranrio e simule sua nota frente às regras de eliminação e ao corte de 2x (Vagas + CR) do Edital 2026.4.</p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <span class="badge badge-green" style="margin-bottom:8px;">Ideal para a rotina de 30 min/dia</span>
+            <h3 style="margin-bottom:8px;">⚡ Mini-Simulado Rápido (10 Questões)</h3>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
+              Sorteia <strong>7 questões de Engenharia Elétrica + 2 de Português + 1 de Inglês</strong> com cronômetro de <strong>30 minutos</strong>.
+            </p>
+            <button class="btn btn-primary" style="width:100%;" id="btn-sim-rapido10">▶️ Iniciar Mini-Simulado (30 min)</button>
+          </div>
+
+          <div class="card">
+            <span class="badge badge-yellow" style="margin-bottom:8px;">Treino de Fim de Semana</span>
+            <h3 style="margin-bottom:8px;">🔌 Simulado Foco Específicas (20 Qs)</h3>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
+              Sorteia <strong>20 questões exclusivas de Engenharia Elétrica (Fase 1)</strong> com cronômetro de <strong>60 minutos</strong>.
+            </p>
+            <button class="btn btn-yellow" style="width:100%;" id="btn-sim-especificas20">▶️ Iniciar Simulado Específicas (60 min)</button>
+          </div>
+
+          <div class="card">
+            <span class="badge badge-blue" style="margin-bottom:8px;">Experiência Real de Prova</span>
+            <h3 style="margin-bottom:8px;">🏛️ Prova Completa 2023.2 (70 Questões)</h3>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
+              A Prova 22 completa de Engenharia Elétrica de 2023.2 (70 questões) com tempo oficial de <strong>4h30min</strong>.
+            </p>
+            <button class="btn btn-secondary" style="width:100%;" id="btn-sim-completo70">▶️ Iniciar Prova Completa (4h30min)</button>
+          </div>
+        </div>
+
+        <!-- ÁREA DO SIMULADO EM EXECUÇÃO -->
+        <div id="simulado-stage-container"></div>
+
+        <div class="grid-2">
+          <!-- CALCULADORA DE CORTE E ELIMINAÇÃO -->
+          <div class="card">
+            <div class="card-title">
+              <span>🧮 Simulador de Nota e Critérios de Eliminação (Edital 2026.4)</span>
+              <span class="badge badge-yellow">Item 7.1.4.3</span>
+            </div>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:14px;">
+              Simule sua pontuação nas Fases 1 e 2 e verifique se ela atende aos critérios eliminatórios e ao limite de habilitação do seu Polo:
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+              <div>
+                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Polo de Trabalho</label>
+                <select id="calc-polo" class="form-select" style="width:100%;">
+                  <option value="0">Polo Rio de Janeiro (22 Vagas+CR)</option>
+                  <option value="1">Polo São Paulo (11 Vagas+CR)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Modalidade de Concorrência</label>
+                <select id="calc-modalidade" class="form-select" style="width:100%;">
+                  <option value="AC">Ampla Concorrência (AC)</option>
+                  <option value="PN">Pessoas Negras (PN)</option>
+                  <option value="PCD">Pessoas com Deficiência (PcD)</option>
+                  <option value="PI">Pessoas Indígenas (PI)</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
+              <div>
+                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Específicos (0 a 50)</label>
+                <input type="number" id="calc-esp" class="form-input" style="width:100%;" min="0" max="50" value="38">
+              </div>
+              <div>
+                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Português (0 a 10)</label>
+                <input type="number" id="calc-pt" class="form-input" style="width:100%;" min="0" max="10" value="7">
+              </div>
+              <div>
+                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Inglês (0 a 10)</label>
+                <input type="number" id="calc-en" class="form-input" style="width:100%;" min="0" max="10" value="7">
+              </div>
+            </div>
+            <div id="calc-result-box"></div>
+          </div>
+
+          <!-- HISTÓRICO DE SIMULADOS -->
+          <div class="card">
+            <div class="card-title">
+              <span>📜 Histórico dos Meus Simulados</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Simulado</th>
+                    <th>Acertos</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody id="simulado-history-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           ABA 6: EDITAL 2026.4, CRONOGRAMA OFICIAL, VAGAS & CHECKLIST
+           =================================================================== -->
+      <section class="tab-section" id="tab-edital">
+        <div class="section-header">
+          <div>
+            <h2>📅 Guia do Edital Nº 04/2026, Cronograma Oficial & Checklist de Prova</h2>
+            <p>Todas as datas oficiais do Anexo V, quadro de vagas (RJ e SP), municípios de lotação, remuneração e regras de prova para <strong>Ênfase 23: Engenharia Elétrica</strong>.</p>
+          </div>
+        </div>
+
+        <!-- QUADRO DE VAGAS E REGRAS -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <span>🏢 Quadro de Vagas, Cadastro de Reserva e Corte da Fase 1 (Anexo I)</span>
+              <span class="badge badge-green">Ênfase 23</span>
+            </div>
+            <div class="table-responsive" style="margin-bottom:14px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Polo de Trabalho</th>
+                    <th>Vagas Imediatas</th>
+                    <th>Total (Vagas + CR)</th>
+                    <th>Habilitados na Fase 1 (2x CR)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Rio de Janeiro</strong></td>
+                    <td><strong>2</strong> (1 AC + 1 PN)</td>
+                    <td><strong>22</strong> (12 AC, 3 PcD, 6 PN, 1 PI)</td>
+                    <td><span class="badge badge-yellow">Até 44º colocado</span> (24 AC, 6 PcD, 12 PN, 2 PI)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>São Paulo</strong></td>
+                    <td><strong>1</strong> (1 PcD)</td>
+                    <td><strong>11</strong> (5 AC, 3 PcD, 3 PN)</td>
+                    <td><span class="badge badge-yellow">Até 22º colocado</span> (10 AC, 6 PcD, 6 PN)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="font-size:0.84rem;color:var(--text-secondary);">
+              <p style="margin-bottom:6px;">📍 <strong>Municípios de Lotação — Polo RJ:</strong> Angra dos Reis, Duque de Caxias, Japeri, Macaé, Rio das Flores, Rio de Janeiro ou Volta Redonda.</p>
+              <p>📍 <strong>Municípios de Lotação — Polo SP:</strong> Barueri, Caraguatatuba, Cubatão, Guararema, Guarulhos, Mauá, Paulínia, Porto Ferreira, Ribeirão Preto, Santos, São Caetano do Sul, São José dos Campos, São Paulo, São Sebastião ou Taubaté.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>⚖️ Regras de Ouro da Prova e Critérios de Eliminação</span>
+              <span class="badge badge-danger">Atenção Máxima</span>
+            </div>
+            <ul style="margin-left:18px;font-size:0.89rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:8px;">
+              <li><strong>Remuneração:</strong> Salário Básico de <strong>R$ 8.647,34</strong> com garantia de Remuneração Mínima de <strong>R$ 14.973,62</strong> (Regime CLT).</li>
+              <li><strong>Estrutura da Prova (06/12/2026 — 4h30min):</strong> 70 questões de múltipla escolha (A a E), valendo 1,0 ponto cada (50 de Conhecimentos Específicos + 10 de Português + 10 de Inglês).</li>
+              <li><strong>Fase 1 (Específicos — 50 pts):</strong> Eliminado quem fizer menos de <strong>25,0 pontos (50%)</strong>. Os candidatos aprovados são ranqueados <em>apenas</em> pela nota de Específicos até o limite de <strong>2x (Vagas + CR)</strong> (respeitada a paridade de 50% de mulheres habilitadas).</li>
+              <li><strong>Fase 2 (Gerais — 20 pts):</strong> Eliminado quem fizer menos de <strong>10,0 pontos (50%)</strong> na soma de Português + Inglês ou obtiver <strong>nota ZERO</strong> em qualquer uma das duas disciplinas.</li>
+              <li><strong>Nota Final Classificatória:</strong> Soma simples Fase 1 + Fase 2 (máximo 70,0 pontos) para os habilitados na Fase 1.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- CRONOGRAMA OFICIAL (ANEXO V) -->
+          <div class="card">
+            <div class="card-title">
+              <span>🗓️ Cronograma Oficial Completo (Anexo V — Edital 2026.4)</span>
+              <span class="badge badge-yellow">Datas Oficiais</span>
+            </div>
+            <div class="timeline" id="official-timeline-container"></div>
+          </div>
+
+          <!-- CHECKLIST DE VÉSPERA E DIA DE PROVA -->
+          <div class="card">
+            <div class="card-title">
+              <span>🎒 Checklist Obrigatório para o Dia da Prova (06/12/2026)</span>
+              <span class="badge badge-green">Evite Eliminação</span>
+            </div>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
+              Marque os itens à medida que organizar seu material para o dia <strong>06/12/2026</strong>:
+            </p>
+            <div id="exam-checklist-container"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- SCRIPTS LOCAIS (FUNCIONA 100% OFFLINE DIRETO NO NAVEGADOR) -->
+  <script src="dados_edital_plano.js"></script>
+  <script src="dados_teoria.js"></script>
+  <script src="dados_questoes_parte1.js"></script>
+  <script src="dados_questoes_parte2.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+

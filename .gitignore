@@ -1,0 +1,7 @@
+# Arquivos binários pesados de referência local
+*.pdf
+
+# Arquivos temporários de sistema
+.DS_Store
+Thumbs.db
+
