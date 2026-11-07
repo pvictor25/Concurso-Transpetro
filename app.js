@@ -22,7 +22,7 @@
     bookmarkedQuestions: [],
     completedChecklist: [],
     personalNotes:
-      "📌 Fórmulas Rápidas para Revisar antes da Prova:\n" +
+      "Fórmulas Rápidas para Revisar antes da Prova:\n" +
       "• Curto 1φ-Terra franco: I_f = 3·E / (Z1 + Z2 + Z0)\n" +
       "• Mudança de base p.u.: Z_novo = Z_antigo · (S_novo/S_antigo) · (V_antigo/V_novo)²\n" +
       "• NBR 5410 Sobrecarga: IL ≤ Id ≤ Ic\n" +
@@ -136,8 +136,8 @@
 
     if (!isCloudConfigured()) {
       if (dot) dot.className = "cloud-dot";
-      if (label) label.textContent = "☁️ Nuvem: Configurar";
-      if (modalTitle) modalTitle.textContent = "⚪ Nuvem desconectada (Salvando apenas neste navegador)";
+      if (label) label.textContent = "Nuvem: Configurar";
+      if (modalTitle) modalTitle.textContent = "Nuvem desconectada (persistência local no navegador)";
       if (modalSub)
         modalSub.textContent =
           "Escolha abaixo Google Script (recomendado p/ Google Sites), GitHub Gist ou Firebase para ativar o salvamento na nuvem.";
@@ -161,22 +161,22 @@
 
     if (cloudStatus.state === "syncing") {
       if (dot) dot.className = "cloud-dot syncing";
-      if (label) label.textContent = "🔄 Sincronizando nuvem...";
-      if (modalTitle) modalTitle.textContent = `🔄 Sincronizando com ${provName}...`;
-      if (modalSub) modalSub.textContent = "Aguarde um instante...";
+      if (label) label.textContent = "Sincronizando nuvem...";
+      if (modalTitle) modalTitle.textContent = `Sincronizando com ${provName}...`;
+      if (modalSub) modalSub.textContent = "Aguarde a confirmação do servidor...";
     } else if (cloudStatus.state === "error") {
       if (dot) dot.className = "cloud-dot error";
-      if (label) label.textContent = "⚠️ Nuvem: Erro (Ver)";
-      if (modalTitle) modalTitle.textContent = `⚠️ Falha ao sincronizar com ${provName}`;
+      if (label) label.textContent = "Nuvem: Erro de sinc.";
+      if (modalTitle) modalTitle.textContent = `Falha ao sincronizar com ${provName}`;
       if (modalSub) modalSub.textContent = cloudStatus.message || "Verifique sua URL/Token ou conexão com a internet.";
     } else {
       if (dot) dot.className = "cloud-dot synced";
       if (label)
         label.textContent = timeStr
-          ? `☁️ Salvo na Nuvem (${timeStr.slice(0, 5)})`
-          : "☁️ Nuvem Conectada ✓";
+          ? `Sincronizado (${timeStr.slice(0, 5)})`
+          : "Nuvem Conectada";
       if (modalTitle)
-        modalTitle.textContent = `🟢 Conectado a ${provName} ${timeStr ? "• Última sinc: " + timeStr : ""}`;
+        modalTitle.textContent = `Conectado a ${provName} ${timeStr ? "· Última sinc: " + timeStr : ""}`;
       if (modalSub)
         modalSub.textContent =
           cloudStatus.message ||
@@ -607,21 +607,21 @@
 
       if (timerSeconds > 1200) {
         // 30:00 até 20:01 (primeiros 10 min)
-        badge.textContent = "1/3 • 10m Teoria";
+        badge.textContent = "1/3 · 10m Teoria";
         seg1.classList.add("active");
       } else if (timerSeconds > 300) {
         // 20:00 até 05:01 (15 min seguintes)
-        badge.textContent = "2/3 • 15m Questões";
+        badge.textContent = "2/3 · 15m Questões";
         seg1.classList.add("done");
         seg2.classList.add("active");
       } else if (timerSeconds > 0) {
         // 05:00 até 00:01 (5 min finais)
-        badge.textContent = "3/3 • 5m Revisão";
+        badge.textContent = "3/3 · 5m Revisão";
         seg1.classList.add("done");
         seg2.classList.add("done");
         seg3.classList.add("active");
       } else {
-        badge.textContent = "✅ Meta 30m Concluída!";
+        badge.textContent = "Meta 30m Concluída";
         seg1.classList.add("done");
         seg2.classList.add("done");
         seg3.classList.add("done");
@@ -630,7 +630,7 @@
 
     const btnToggle = document.getElementById("btn-timer-toggle");
     if (btnToggle) {
-      btnToggle.textContent = timerRunning ? "⏸ Pausar" : "▶ Iniciar 30m";
+      btnToggle.textContent = timerRunning ? "Pausar" : "Iniciar 30m";
     }
   }
 
@@ -741,8 +741,8 @@
     if (countdownEl) {
       countdownEl.textContent =
         diffDays > 0
-          ? "⏳ Faltam " + diffDays + " dias para a Prova (06/12/2026)"
-          : "🎯 Dia da Prova: 06/12/2026";
+          ? "PROVA: 06/12/2026 (" + diffDays + " DIAS)"
+          : "DIA DA PROVA: 06/12/2026";
     }
   }
 
@@ -868,9 +868,9 @@
       const isDone = state.completedDays.includes(missionDay.dia);
       const overdueBannerHTML =
         overdueDays.length > 0
-          ? `<div style="background:rgba(251,191,36,0.14);border:1px solid var(--accent-yellow);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:0.85rem;">
-               <strong>🔄 Replanejamento Automático Ativo (${overdueDays.length} dia(s) acumulado(s)):</strong>
-               Nenhum conteúdo foi perdido! O sistema colocou o <strong>Dia ${missionDay.dia}</strong> na sua vez de hoje e usará os <strong>4 Dias Coringa (Dias 27 a 30)</strong> como margem de segurança, ou você pode usar abaixo o <strong>Modo Express (15m)</strong> ou <strong>Diluição (+10m = 40m)</strong>.
+          ? `<div style="background:rgba(217,119,6,0.12);border:1px solid var(--accent-yellow);border-radius:4px;padding:10px 14px;margin-bottom:14px;font-size:0.84rem;">
+               <strong>REPLANEJAMENTO AUTOMÁTICO ATIVO (${overdueDays.length} dia(s) pendente(s)):</strong>
+               Nenhum conteúdo foi perdido. O sistema alocou o <strong>Dia ${missionDay.dia}</strong> na fila atual e utilizará os <strong>4 Dias de Margem (Dias 27 a 30)</strong>, ou você pode acionar o <strong>Modo Express (15m)</strong> ou <strong>Diluição (40m)</strong>.
              </div>`
           : "";
 
@@ -878,25 +878,25 @@
         <div class="hero-mission">
           <div class="hero-mission-content">
             ${overdueBannerHTML}
-            <span class="mission-tag">⚡ Próxima Missão da Fila • Dia ${missionDay.dia} de 30 (Ref: ${missionDay.data} — ${missionDay.diaSemana})</span>
+            <span class="mission-tag"> SESSÃO ATUAL · DIA ${missionDay.dia} DE 30 · REF: ${missionDay.data} (${missionDay.diaSemana})</span>
             <h3>${missionDay.titulo}</h3>
-            <p><strong>${missionDay.bloco}</strong> • ${missionDay.fase}</p>
+            <p><strong>${missionDay.bloco}</strong> · ${missionDay.fase}</p>
             <div class="mission-steps-pills">
-              <div class="step-pill"><strong>⏱️ 10 min Teoria:</strong> ${missionDay.focoTeoria}</div>
-              <div class="step-pill"><strong>✍️ 15 min Questões:</strong> Questões ${missionDay.questoesIds.map((id) => "#" + id).join(", ")}</div>
-              <div class="step-pill"><strong>🔄 5 min Revisão:</strong> ${missionDay.focoRevisao}</div>
+              <div class="step-pill"><strong>10 min Teoria:</strong> ${missionDay.focoTeoria}</div>
+              <div class="step-pill"><strong>15 min Questões:</strong> Questões ${missionDay.questoesIds.map((id) => "#" + id).join(", ")}</div>
+              <div class="step-pill"><strong>05 min Revisão:</strong> ${missionDay.focoRevisao}</div>
             </div>
           </div>
           <div class="hero-mission-actions">
-            <button class="btn btn-yellow" id="hero-btn-start-timer">▶️ Iniciar Sessão Padrão (30 min)</button>
+            <button class="btn btn-yellow" id="hero-btn-start-timer">Iniciar Sessão Padrão (30 min)</button>
             <div style="display:flex;gap:6px;">
-              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-express-15" title="Sem tempo hoje? Faça só os 15 min de questões comentadas!">⚡ Express 15m</button>
-              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-recover-40" title="Recuperar atraso diluindo +10 min hoje (40 min)">🔥 Diluir 40m</button>
+              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-express-15" title="Executar apenas os 15 min de questões comentadas">Modo Express (15m)</button>
+              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-recover-40" title="Recuperar atraso diluindo +10 min na sessão (40 min)">Diluir Atraso (40m)</button>
             </div>
-            <button class="btn btn-primary" id="hero-btn-open-theory">📖 1. Ler Teoria (10 min)</button>
-            <button class="btn btn-secondary" id="hero-btn-open-questions">✍️ 2. Resolver ${missionDay.questoesIds.length} Questões (15 min)</button>
+            <button class="btn btn-primary" id="hero-btn-open-theory">1. Abrir Apostila Teórica (10 min)</button>
+            <button class="btn btn-secondary" id="hero-btn-open-questions">2. Resolver ${missionDay.questoesIds.length} Questões (15 min)</button>
             <button class="btn ${isDone ? "btn-secondary" : "btn-primary"}" id="hero-btn-toggle-day">
-              ${isDone ? "✅ Dia " + missionDay.dia + " Concluído (Desmarcar)" : "☑️ Marcar Dia " + missionDay.dia + " como Concluído"}
+              ${isDone ? "Dia " + missionDay.dia + " Concluído (Desmarcar)" : "Marcar Dia " + missionDay.dia + " como Concluído"}
             </button>
           </div>
         </div>
@@ -1031,8 +1031,8 @@
       badge.textContent = `Card ${currentFlashcardIdx + 1} / ${FLASHCARDS_REVISAO.length}`;
     if (sideLabel) {
       sideLabel.textContent = flashcardShowingBack
-        ? "✅ VERSO • RESPOSTA / FÓRMULA OFICIAL"
-        : "❓ FRENTE • PERGUNTA (CLIQUE PARA VIRAR)";
+        ? "VERSO · RESPOSTA / FÓRMULA OFICIAL"
+        : "FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)";
       sideLabel.style.color = flashcardShowingBack
         ? "var(--accent-green)"
         : "var(--accent-yellow)";
@@ -1101,11 +1101,11 @@
             <div>
               <div class="day-card-header">
                 <div>
-                  <span class="day-number">DIA ${d.dia} DE 30 ${isToday ? "• 🌟 HOJE" : ""}</span>
-                  <div class="day-date">📅 ${d.data} (${d.diaSemana})</div>
+                  <span class="day-number">DIA ${String(d.dia).padStart(2, "0")} / 30 ${isToday ? "· HOJE" : ""}</span>
+                  <div class="day-date">${d.data} (${d.diaSemana})</div>
                 </div>
                 <span class="badge ${isCompleted ? "badge-green" : "badge-yellow"}">
-                  ${isCompleted ? "✓ Concluído" : "⏱️ 30 min"}
+                  ${isCompleted ? "CONCLUÍDO" : "30 MIN"}
                 </span>
               </div>
               <div style="margin-bottom:6px;">
@@ -1133,8 +1133,8 @@
                 Concluído
               </label>
               <div style="margin-left:auto;display:flex;gap:6px;">
-                <button class="btn btn-secondary btn-sm" data-goto-theory="${d.teoriaId}">📖 Teoria</button>
-                <button class="btn btn-primary btn-sm" data-goto-questions="${d.dia}">✍️ Questões (${d.questoesIds.length})</button>
+                <button class="btn btn-secondary btn-sm" data-goto-theory="${d.teoriaId}">Teoria</button>
+                <button class="btn btn-primary btn-sm" data-goto-questions="${d.dia}">Questões (${d.questoesIds.length})</button>
               </div>
             </div>
           </div>
@@ -1227,22 +1227,22 @@
         <div>
           <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
             <span class="badge badge-blue">${activeMod.codigo}</span>
-            <span class="badge badge-yellow">📊 Incidência: ${activeMod.pesoProva}</span>
+            <span class="badge badge-yellow">Incidência: ${activeMod.pesoProva}</span>
             <span class="badge ${isStudied ? "badge-green" : "badge-purple"}">
-              ${isStudied ? "✅ Módulo Estudado" : "📌 Prioridade: " + activeMod.prioridade}
+              ${isStudied ? "Módulo Estudado" : "Prioridade: " + activeMod.prioridade}
             </span>
           </div>
-          <h2 style="font-size:1.45rem;font-weight:800;">${activeMod.titulo}</h2>
+          <h2 style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;">${activeMod.titulo}</h2>
           <p style="font-size:0.84rem;color:var(--text-muted);margin-top:4px;">
             <strong>Tópicos do Anexo IV do Edital 2026.4:</strong> ${activeMod.subtopicosEdital}
           </p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn ${isStudied ? "btn-secondary" : "btn-primary"} btn-sm" id="btn-toggle-studied-theory">
-            ${isStudied ? "✅ Marcar como Não Lido" : "☑️ Marcar Módulo como Estudado"}
+            ${isStudied ? "Marcar como Não Lido" : "Marcar Módulo como Estudado"}
           </button>
           <button class="btn btn-yellow btn-sm" id="btn-practice-block-questions">
-            ✍️ Resolver ${relatedCount} Questões deste Bloco
+            Resolver ${relatedCount} Questões deste Bloco
           </button>
         </div>
       </div>
@@ -1334,9 +1334,9 @@
     if (summaryBanner) {
       if (customQuestionIdsFilter) {
         summaryBanner.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--accent-green-soft);border:1px solid var(--accent-green);padding:10px 16px;border-radius:8px;margin-bottom:16px;">
-            <span>🎯 Exibindo as <strong>${filtered.length} questões selecionadas</strong> para a meta: <strong>${customFilterLabel}</strong></span>
-            <button class="btn btn-secondary btn-sm" id="btn-clear-day-filter">✕ Mostrar Todas as 85 Questões</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--accent-green-soft);border:1px solid var(--accent-green);padding:10px 16px;border-radius:4px;margin-bottom:16px;">
+            <span>FILTRO DE META ATIVO: exibindo as <strong>${filtered.length} questões selecionadas</strong> para <strong>${customFilterLabel}</strong></span>
+            <button class="btn btn-secondary btn-sm" id="btn-clear-day-filter">Mostrar Todas as 85 Questões</button>
           </div>
         `;
         document
@@ -1348,9 +1348,9 @@
           });
       } else {
         summaryBanner.innerHTML = `
-          <div style="margin-bottom:14px;font-size:0.88rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="margin-bottom:14px;font-size:0.84rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <span>Exibindo <strong>${filtered.length}</strong> de <strong>${TODAS_QUESTOES.length}</strong> questões disponíveis (70 da Prova 2023.2 + 15 Inéditas 2026.4).</span>
-            <span>💡 Clique em uma alternativa (A a E) para corrigir automaticamente e abrir a resolução passo a passo!</span>
+            <span>Selecione uma alternativa (A–E) para aferição imediata e exibição do memorial de cálculo.</span>
           </div>
         `;
       }
@@ -1431,7 +1431,7 @@
     if (textoBase) {
       baseTextHTML = `
         <details class="base-text-Toggle">
-          <summary>📄 Ler ${textoBase.titulo} (Clique para expandir/recolher)</summary>
+          <summary>Texto-Base: ${textoBase.titulo} (expandir / recolher)</summary>
           <div class="base-text-body">
             ${textoBase.paragrafos.map((p) => `<p style="margin-bottom:8px;">${p}</p>`).join("")}
             <div style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;"><em>${textoBase.autor}</em></div>
@@ -1474,7 +1474,7 @@
                 : ""
             }
             <button class="btn btn-secondary btn-sm" data-q-bookmark="${q.id}" title="Salvar no Caderno de Revisão">
-              ${isBookmarked ? "⭐ Favorita" : "☆ Favoritar"}
+              ${isBookmarked ? "★ Favorita" : "☆ Favoritar"}
             </button>
           </div>
         </div>
@@ -1486,16 +1486,16 @@
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
           <button class="btn btn-secondary btn-sm" data-q-toggle-exp="${q.id}">
-            💡 Ver / Ocultar Gabarito e Resolução Comentada
+            Ver / Ocultar Gabarito e Resolução Comentada
           </button>
           ${
             ans
-              ? `<button class="btn btn-secondary btn-sm" data-q-reset="${q.id}">🔄 Refazer Questão</button>`
+              ? `<button class="btn btn-secondary btn-sm" data-q-reset="${q.id}">Refazer Questão</button>`
               : ""
           }
         </div>
         <div class="explanation-box ${ans ? "visible" : ""}" id="exp-box-${q.id}">
-          <h4>✅ Gabarito Oficial: Alternativa (${q.correta})</h4>
+          <h4>GABARITO OFICIAL: ALTERNATIVA (${q.correta})</h4>
           <div>${formatRichText(q.comentario)}</div>
         </div>
       </div>
@@ -1642,17 +1642,17 @@
 
     if (!activeSimulado.finished) {
       container.innerHTML = `
-        <div class="card" style="border:2px solid var(--accent-yellow);margin-bottom:20px;">
+        <div class="card" style="border:1px solid var(--accent-yellow);margin-bottom:20px;">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div>
-              <span class="badge badge-yellow">🔥 Simulado em Andamento</span>
+              <span class="badge badge-yellow">SIMULADO EM EXECUÇÃO</span>
               <h3 style="margin-top:4px;">${activeSimulado.title}</h3>
             </div>
             <div style="display:flex;align-items:center;gap:14px;">
-              <div style="font-size:1.6rem;font-weight:800;color:var(--accent-yellow);font-variant-numeric:tabular-nums;" id="simulado-live-timer">
+              <div style="font-size:1.5rem;font-weight:700;font-family:var(--font-mono);color:var(--accent-yellow);font-variant-numeric:tabular-nums;" id="simulado-live-timer">
                 ${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}
               </div>
-              <button class="btn btn-primary" id="btn-finish-simulado">🏁 Finalizar e Corrigir Simulado</button>
+              <button class="btn btn-primary" id="btn-finish-simulado">Finalizar e Corrigir Simulado</button>
             </div>
           </div>
         </div>
@@ -1719,8 +1719,8 @@
       );
 
       container.innerHTML = `
-        <div class="card" style="border:2px solid var(--accent-green);margin-bottom:20px;">
-          <h3>🏆 Resultado do Simulado: ${correctCount} / ${activeSimulado.questions.length} acertos (${pct}%)</h3>
+        <div class="card" style="border:1px solid var(--accent-green);margin-bottom:20px;">
+          <h3>Resultado do Simulado: ${correctCount} / ${activeSimulado.questions.length} acertos (${pct}%)</h3>
           <p style="color:var(--text-secondary);margin-top:6px;">
             Todas as respostas foram registradas nas suas estatísticas e as resoluções comentadas estão liberadas abaixo.
           </p>
@@ -1833,7 +1833,7 @@
     const competitiva = ptsEsp >= 36 && ptsTotal >= 50;
 
     resultBox.innerHTML = `
-      <div style="padding:16px;border-radius:10px;border:1px solid ${
+      <div style="padding:16px;border-radius:4px;border:1px solid ${
         eliminado
           ? "var(--danger)"
           : competitiva
@@ -1847,16 +1847,16 @@
             : "var(--accent-yellow-soft)"
       };">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-          <h4 style="font-size:1.08rem;">
+          <h4 style="font-size:1rem;">
             ${
               eliminado
-                ? "❌ ELIMINADO PELOS CRITÉRIOS MÍNIMOS (Item 7.1.4.3)"
+                ? "ELIMINADO PELOS CRITÉRIOS MÍNIMOS (Item 7.1.4.3)"
                 : competitiva
-                  ? "🏆 APTO E ALTAMENTE COMPETITIVO PARA O CORTE 2x CR!"
-                  : "✅ APROVADO NOS MÍNIMOS (Atenção ao funil da Fase 1!)"
+                  ? "APTO E COMPETITIVO PARA O CORTE 2x CR"
+                  : "APROVADO NOS MÍNIMOS (Atenção ao funil da Fase 1)"
             }
           </h4>
-          <span class="badge ${eliminado ? "badge-danger" : "badge-green"}" style="font-size:0.9rem;">
+          <span class="badge ${eliminado ? "badge-danger" : "badge-green"}" style="font-size:0.82rem;">
             Nota Final: ${ptsTotal},0 / 70,0 pts (${Math.round((ptsTotal / 70) * 100)}%)
           </span>
         </div>
@@ -1902,7 +1902,7 @@
           return `
             <div class="${itemClass}">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <div class="timeline-date">📅 ${item.data}</div>
+                <div class="timeline-date">${item.data}</div>
                 <span class="badge ${
                   item.prova
                     ? "badge-danger"
@@ -1912,7 +1912,7 @@
                         ? "badge-yellow"
                         : "badge-blue"
                 }">
-                  ${item.prova ? "🎯 DIA DA PROVA" : isPast ? "✓ Concluído" : item.categoria}
+                  ${item.prova ? "DIA DA PROVA" : isPast ? "Concluído" : item.categoria}
                 </span>
               </div>
               <div class="timeline-title">${item.evento}</div>
@@ -1962,7 +1962,7 @@
     const btnTheme = document.getElementById("btn-toggle-theme");
     if (btnTheme) {
       btnTheme.textContent =
-        state.theme === "light" ? "🌙 Modo Escuro" : "☀️ Modo Claro";
+        state.theme === "light" ? "Tema Escuro" : "Tema Claro";
     }
   }
 
@@ -2238,10 +2238,10 @@
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(gasCode).then(() => {
-            this.textContent = "✅ Código Copiado! Cole em script.google.com";
+            this.textContent = "Código Copiado — Cole em script.google.com";
             setTimeout(() => {
               this.textContent =
-                "📋 1. Copiar Código do Google Apps Script (15 linhas)";
+                "1. Copiar Código do Google Apps Script (15 linhas)";
             }, 3500);
           });
         } else {
@@ -2372,10 +2372,10 @@
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(withCloud).then(() => {
             this.textContent =
-              "✅ HTML Copiado com Nuvem Embutida! Cole no Google Sites";
+              "HTML Copiado com Nuvem Embutida — Cole no Google Sites";
             setTimeout(() => {
               this.textContent =
-                "📦 Copiar HTML p/ Google Sites (Com Nuvem Embutida)";
+                "Copiar HTML p/ Google Sites (Com Nuvem Embutida)";
             }, 4000);
           });
         }

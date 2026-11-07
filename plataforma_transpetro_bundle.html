@@ -3,66 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1120">
+  <meta name="theme-color" content="#0d0f12">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Concurso Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Plataforma de Estudo 30 min/dia</title>
+  <title>Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Caderno Técnico de Estudos</title>
+  <!-- Tipografia Técnica: IBM Plex Sans & IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <!-- KaTeX para renderização matemática LaTeX nativa -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
   <style>
 :root {
-  --bg-primary: #0b1120;
-  --bg-secondary: #111827;
-  --bg-card: #1e293b;
-  --bg-card-hover: #263349;
-  --bg-surface: #0f172a;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border-color: #334155;
-  --accent-green: #00a859;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', 'Consolas', monospace;
+
+  /* Matte Carbon Technical Palette (Dark) */
+  --bg-primary: #0d0f12;
+  --bg-secondary: #12151a;
+  --bg-card: #161a20;
+  --bg-card-hover: #1c2129;
+  --bg-surface: #0f1216;
+  --bg-tertiary: #1a1f27;
+
+  --text-primary: #f1f3f5;
+  --text-secondary: #adb5bd;
+  --text-muted: #6c757d;
+
+  --border-color: #262b33;
+  --border-subtle: #1e2229;
+
+  /* Institutional Transpetro / Technical Accents */
+  --accent-green: #009650;
   --accent-green-dark: #007a40;
-  --accent-green-soft: rgba(0, 168, 89, 0.14);
-  --accent-yellow: #fbbf24;
-  --accent-yellow-dark: #d97706;
-  --accent-yellow-soft: rgba(251, 191, 36, 0.14);
-  --accent-blue: #38bdf8;
-  --accent-blue-soft: rgba(56, 189, 248, 0.14);
-  --accent-purple: #a855f7;
-  --accent-purple-soft: rgba(168, 85, 247, 0.14);
+  --accent-green-soft: rgba(0, 150, 80, 0.12);
+
+  --accent-yellow: #eab308;
+  --accent-yellow-dark: #ca8a04;
+  --accent-yellow-soft: rgba(234, 179, 8, 0.11);
+
+  --accent-blue: #3b82f6;
+  --accent-blue-soft: rgba(59, 130, 246, 0.11);
+
+  --accent-purple: #8b949e;
+  --accent-purple-soft: rgba(139, 148, 158, 0.12);
+
   --danger: #ef4444;
-  --danger-soft: rgba(239, 68, 68, 0.14);
+  --danger-soft: rgba(239, 68, 68, 0.12);
+  --accent-red: #ef4444;
+
   --success: #10b981;
-  --success-soft: rgba(16, 185, 129, 0.15);
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --success-soft: rgba(16, 185, 129, 0.12);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.45);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
 }
 
 body.light-theme {
-  --bg-primary: #f1f5f9;
+  --bg-primary: #f3f4f6;
   --bg-secondary: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
-  --bg-surface: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --border-color: #cbd5e1;
-  --accent-green: #008542;
-  --accent-green-dark: #006834;
-  --accent-green-soft: rgba(0, 133, 66, 0.1);
-  --accent-yellow: #d97706;
-  --accent-yellow-dark: #b45309;
-  --accent-yellow-soft: rgba(217, 119, 6, 0.12);
-  --accent-blue: #0284c7;
-  --accent-blue-soft: rgba(2, 132, 199, 0.1);
-  --shadow-sm: 0 1px 4px rgba(15, 23, 42, 0.08);
-  --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.1);
+  --bg-card-hover: #f9fafb;
+  --bg-surface: #f8f9fa;
+  --bg-tertiary: #f1f3f5;
+
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+
+  --border-color: #d1d5db;
+  --border-subtle: #e5e7eb;
+
+  --accent-green: #007a40;
+  --accent-green-dark: #005c30;
+  --accent-green-soft: rgba(0, 122, 64, 0.08);
+
+  --accent-yellow: #b45309;
+  --accent-yellow-dark: #92400e;
+  --accent-yellow-soft: rgba(180, 83, 9, 0.08);
+
+  --accent-blue: #1d4ed8;
+  --accent-blue-soft: rgba(29, 78, 216, 0.08);
+
+  --accent-purple: #4b5563;
+  --accent-purple-soft: rgba(75, 85, 99, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 * {
@@ -72,18 +105,19 @@ body.light-theme {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.55;
   display: flex;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Sidebar Navigation */
 .sidebar {
-  width: 280px;
+  width: 264px;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -93,13 +127,13 @@ body {
   bottom: 0;
   left: 0;
   z-index: 100;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .brand-header {
-  padding: 20px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, rgba(0, 168, 89, 0.16), rgba(251, 191, 36, 0.08));
+  background-color: var(--bg-secondary);
 }
 
 .brand-logo {
@@ -109,79 +143,83 @@ body {
 }
 
 .brand-badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #008542, #00a859);
-  border: 2px solid #fbbf24;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--accent-green);
+  border-bottom: 3px solid var(--accent-yellow);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 1.1rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.5px;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 168, 89, 0.3);
   flex-shrink: 0;
 }
 
 .brand-title h1 {
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 0.3px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--text-primary);
   line-height: 1.2;
 }
 
 .brand-title span {
-  font-size: 0.76rem;
-  color: var(--accent-yellow);
-  font-weight: 600;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-weight: 500;
   display: block;
   margin-top: 2px;
 }
 
 /* Timer Widget in Sidebar */
 .sidebar-timer {
-  margin: 14px 16px;
-  padding: 14px;
-  background-color: var(--bg-card);
+  margin: 12px 14px;
+  padding: 12px 14px;
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }
 
 .timer-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .timer-label {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
 }
 
 .timer-phase-badge {
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  padding: 1px 6px;
+  border-radius: 3px;
   background-color: var(--accent-green-soft);
   color: var(--accent-green);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .timer-display {
-  font-size: 2rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 1.85rem;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: center;
   color: var(--text-primary);
   margin: 4px 0 8px;
-  letter-spacing: 1px;
+  letter-spacing: 0.03em;
 }
 
 .timer-stages-bar {
@@ -192,8 +230,8 @@ body {
 }
 
 .timer-stage-seg {
-  height: 5px;
-  border-radius: 3px;
+  height: 4px;
+  border-radius: 2px;
   background-color: var(--border-color);
   overflow: hidden;
 }
@@ -216,12 +254,13 @@ body {
   padding: 6px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
-  background-color: var(--bg-surface);
+  background-color: var(--bg-card);
   color: var(--text-primary);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 
 .btn-timer.primary {
@@ -235,19 +274,19 @@ body {
 }
 
 .btn-timer:hover {
-  border-color: var(--accent-blue);
+  border-color: var(--text-muted);
 }
 
 /* Nav Links */
 .nav-menu {
   list-style: none;
-  padding: 8px 12px;
+  padding: 6px 10px;
   flex: 1;
   overflow-y: auto;
 }
 
 .nav-item {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .nav-btn {
@@ -255,16 +294,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 11px 14px;
+  padding: 9px 12px;
   border-radius: var(--radius-sm);
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 
 .nav-btn-left {
@@ -273,10 +313,11 @@ body {
   gap: 10px;
 }
 
-.nav-icon {
-  font-size: 1.1rem;
-  width: 22px;
-  text-align: center;
+.nav-svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.75;
 }
 
 .nav-btn:hover {
@@ -285,63 +326,81 @@ body {
 }
 
 .nav-btn.active {
-  background-color: var(--accent-green-soft);
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.nav-btn.active .nav-svg {
   color: var(--accent-green);
-  border-left: 3px solid var(--accent-green);
+  opacity: 1;
 }
 
 .nav-badge {
-  font-size: 0.72rem;
-  padding: 2px 7px;
-  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 3px;
   background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
   color: var(--text-muted);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .nav-btn.active .nav-badge {
-  background-color: var(--accent-green);
-  color: #fff;
+  border-color: var(--accent-green);
+  color: var(--accent-green);
 }
 
 .sidebar-footer {
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .footer-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btn-utility {
   flex: 1;
-  padding: 8px 10px;
+  padding: 6px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
-  background-color: var(--bg-card);
+  background-color: var(--bg-surface);
   color: var(--text-secondary);
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 
 .btn-utility:hover {
   background-color: var(--bg-card-hover);
   color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.sidebar-meta-foot {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 2px;
 }
 
 /* Main Content Area */
 .main-wrapper {
-  margin-left: 280px;
+  margin-left: 264px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -351,7 +410,7 @@ body {
 .topbar {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
-  padding: 14px 28px;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -363,45 +422,47 @@ body {
 
 .mobile-toggle {
   display: none;
-  background: none;
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 1.1rem;
 }
 
 .topbar-info {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .countdown-pill {
+  font-family: var(--font-mono);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 99px;
-  background-color: var(--accent-yellow-soft);
-  border: 1px solid rgba(251, 191, 36, 0.35);
-  color: var(--accent-yellow);
-  font-size: 0.84rem;
-  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-yellow);
+  color: var(--text-primary);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .salary-pill {
+  font-family: var(--font-mono);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 99px;
-  background-color: var(--accent-green-soft);
-  color: var(--accent-green);
-  font-size: 0.82rem;
-  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 500;
 }
 
 .topbar-progress {
@@ -411,13 +472,14 @@ body {
 }
 
 .progress-mini-wrap {
-  width: 140px;
+  width: 130px;
 }
 
 .progress-mini-label {
+  font-family: var(--font-mono);
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   color: var(--text-muted);
   margin-bottom: 3px;
   font-weight: 600;
@@ -425,99 +487,104 @@ body {
 
 .progress-bar-bg {
   width: 100%;
-  height: 7px;
+  height: 5px;
   background-color: var(--bg-surface);
-  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-green), var(--accent-yellow));
-  border-radius: 99px;
-  transition: width 0.4s ease;
+  background-color: var(--accent-green);
+  transition: width 0.35s ease;
 }
 
 .content-container {
-  padding: 28px;
-  max-width: 1360px;
+  padding: 24px 28px;
+  max-width: 1340px;
   width: 100%;
   margin: 0 auto;
 }
 
 .tab-section {
   display: none;
-  animation: fadeIn 0.25s ease;
 }
 
 .tab-section.active {
   display: block;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* Page Headers */
 .section-header {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
+}
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-green);
+  margin-bottom: 4px;
 }
 
 .section-header h2 {
-  font-size: 1.65rem;
-  font-weight: 800;
+  font-size: 1.42rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .section-header p {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   margin-top: 4px;
 }
 
 /* Grid Systems & Cards */
 .grid-4 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 18px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-  gap: 22px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 20px;
 }
 
 .card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 22px;
-  box-shadow: var(--shadow-sm);
+  padding: 18px 20px;
 }
 
 .card-title {
-  font-size: 1.08rem;
-  font-weight: 700;
-  margin-bottom: 14px;
+  font-size: 0.96rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -525,62 +592,51 @@ body {
   color: var(--text-primary);
 }
 
+/* Technical Telemetry Stat Cards */
 .stat-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 18px 20px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
-  overflow: hidden;
 }
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background-color: var(--accent-green);
-}
-
-.stat-card.yellow::before { background-color: var(--accent-yellow); }
-.stat-card.blue::before { background-color: var(--accent-blue); }
-.stat-card.purple::before { background-color: var(--accent-purple); }
 
 .stat-label {
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .stat-value {
-  font-size: 1.85rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin: 6px 0 4px;
 }
 
 .stat-sub {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
 }
 
-/* Today's Mission Hero Card */
+/* Today's Mission Protocol Card */
 .hero-mission {
-  background: linear-gradient(135deg, rgba(0, 168, 89, 0.18), rgba(15, 23, 42, 0.9));
-  border: 1px solid var(--accent-green);
-  border-radius: var(--radius-lg);
-  padding: 24px 28px;
-  margin-bottom: 26px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-top: 3px solid var(--accent-green);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
   flex-wrap: wrap;
 }
@@ -591,73 +647,121 @@ body {
 }
 
 .mission-tag {
+  font-family: var(--font-mono);
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background-color: var(--accent-yellow);
-  color: #0f172a;
-  font-weight: 800;
-  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background-color: var(--accent-green-soft);
+  border: 1px solid rgba(0, 150, 80, 0.3);
+  color: var(--accent-green);
+  font-weight: 600;
+  font-size: 0.68rem;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin-bottom: 8px;
 }
 
 .hero-mission h3 {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 6px;
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
 }
 
 .hero-mission p {
   color: var(--text-secondary);
-  font-size: 0.94rem;
+  font-size: 0.86rem;
   margin-bottom: 14px;
 }
 
 .mission-steps-pills {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
 }
 
 .step-pill {
-  padding: 6px 12px;
+  padding: 8px 11px;
   border-radius: var(--radius-sm);
-  background-color: rgba(15, 23, 42, 0.65);
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .step-pill strong {
-  color: var(--accent-yellow);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 2px;
 }
 
 .hero-mission-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-width: 210px;
+  gap: 7px;
+  min-width: 220px;
+}
+
+/* Flashcard Box */
+.flashcard-surface {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-blue);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  min-height: 175px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.flashcard-surface:hover {
+  border-color: var(--text-muted);
+}
+
+.flashcard-side-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.flashcard-body-text {
+  font-size: 0.96rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.55;
 }
 
 /* Buttons */
 .btn {
-  padding: 10px 18px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-family: var(--font-sans);
+  font-size: 0.83rem;
+  font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: all 0.2s;
+  gap: 6px;
+  transition: all 0.15s;
   text-decoration: none;
 }
 
 .btn-primary {
   background-color: var(--accent-green);
+  border-color: var(--accent-green);
   color: #fff;
 }
 
@@ -672,23 +776,24 @@ body {
 }
 
 .btn-secondary:hover {
-  border-color: var(--accent-blue);
+  border-color: var(--text-muted);
   background-color: var(--bg-card-hover);
 }
 
 .btn-yellow {
-  background-color: var(--accent-yellow);
-  color: #0f172a;
+  background-color: var(--bg-surface);
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
 }
 
 .btn-yellow:hover {
-  background-color: var(--accent-yellow-dark);
-  color: #fff;
+  background-color: var(--accent-yellow);
+  color: #0d0f12;
 }
 
 .btn-sm {
-  padding: 6px 12px;
-  font-size: 0.8rem;
+  padding: 6px 11px;
+  font-size: 0.76rem;
 }
 
 /* Tables */
@@ -699,122 +804,149 @@ body {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
 }
 
 .data-table th,
 .data-table td {
-  padding: 11px 14px;
+  padding: 9px 12px;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
 }
 
 .data-table th {
+  font-family: var(--font-mono);
   background-color: var(--bg-surface);
   color: var(--text-muted);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.5px;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
 }
 
 .data-table tr:hover td {
   background-color: var(--bg-card-hover);
 }
 
-/* Badges & Tags */
+/* Rectangular Technical Badges */
 .badge {
+  font-family: var(--font-mono);
   display: inline-block;
-  padding: 3px 9px;
-  border-radius: 99px;
-  font-size: 0.74rem;
-  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
 }
 
-.badge-green { background-color: var(--accent-green-soft); color: var(--accent-green); }
-.badge-yellow { background-color: var(--accent-yellow-soft); color: var(--accent-yellow); }
-.badge-blue { background-color: var(--accent-blue-soft); color: var(--accent-blue); }
-.badge-purple { background-color: var(--accent-purple-soft); color: var(--accent-purple); }
-.badge-danger { background-color: var(--danger-soft); color: var(--danger); }
+.badge-green {
+  background-color: var(--accent-green-soft);
+  border-color: rgba(0, 150, 80, 0.28);
+  color: var(--accent-green);
+}
+.badge-yellow {
+  background-color: var(--accent-yellow-soft);
+  border-color: rgba(234, 179, 8, 0.28);
+  color: var(--accent-yellow);
+}
+.badge-blue {
+  background-color: var(--accent-blue-soft);
+  border-color: rgba(59, 130, 246, 0.28);
+  color: var(--accent-blue);
+}
+.badge-purple {
+  background-color: var(--bg-surface);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+.badge-danger {
+  background-color: var(--danger-soft);
+  border-color: rgba(239, 68, 68, 0.28);
+  color: var(--danger);
+}
 
 /* 30-Day Study Plan Cards */
 .plan-filters {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 6px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
 }
 
 .filter-chip {
-  padding: 7px 14px;
-  border-radius: 99px;
+  font-family: var(--font-sans);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   background-color: var(--bg-card);
   color: var(--text-secondary);
-  font-size: 0.84rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 
 .filter-chip.active,
 .filter-chip:hover {
-  background-color: var(--accent-green);
+  background-color: var(--accent-green-soft);
   border-color: var(--accent-green);
-  color: #fff;
+  color: var(--accent-green);
+  font-weight: 600;
 }
 
 .days-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 14px;
 }
 
 .day-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.2s;
-  position: relative;
+  transition: border-color 0.15s;
 }
 
 .day-card.today {
-  border: 2px solid var(--accent-yellow);
-  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+  border-color: var(--accent-yellow);
+  border-top: 2px solid var(--accent-yellow);
 }
 
 .day-card.completed {
-  border-color: var(--accent-green);
-  background: linear-gradient(180deg, rgba(0, 168, 89, 0.08), var(--bg-card));
+  border-color: rgba(0, 150, 80, 0.45);
 }
 
 .day-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   gap: 8px;
 }
 
 .day-number {
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: var(--accent-blue);
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
 }
 
 .day-date {
-  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   color: var(--text-muted);
-  font-weight: 600;
 }
 
 .day-title {
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 10px;
@@ -822,17 +954,18 @@ body {
 
 .day-breakdown {
   background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  padding: 9px 11px;
   margin-bottom: 12px;
-  font-size: 0.83rem;
+  font-size: 0.8rem;
 }
 
 .day-breakdown-item {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   color: var(--text-secondary);
 }
 
@@ -841,14 +974,16 @@ body {
 }
 
 .time-pill {
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 1px 6px;
-  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 2px;
   background-color: var(--bg-card);
-  color: var(--accent-yellow);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
   white-space: nowrap;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .day-actions {
@@ -857,23 +992,23 @@ body {
   flex-wrap: wrap;
   margin-top: auto;
   padding-top: 10px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .check-day-label {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.84rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   user-select: none;
 }
 
 .check-day-label input {
-  width: 17px;
-  height: 17px;
+  width: 15px;
+  height: 15px;
   accent-color: var(--accent-green);
   cursor: pointer;
 }
@@ -881,8 +1016,8 @@ body {
 /* Theory Module */
 .theory-layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 22px;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
   align-items: start;
 }
 
@@ -890,30 +1025,31 @@ body {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 14px;
+  padding: 10px;
   position: sticky;
-  top: 84px;
-  max-height: calc(100vh - 110px);
+  top: 68px;
+  max-height: calc(100vh - 90px);
   overflow-y: auto;
 }
 
 .theory-topic-btn {
   width: 100%;
   text-align: left;
-  padding: 10px 12px;
+  padding: 9px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 0.86rem;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 4px;
-  transition: all 0.2s;
+  margin-bottom: 2px;
+  transition: all 0.15s;
 }
 
 .theory-topic-btn:hover {
@@ -922,35 +1058,38 @@ body {
 }
 
 .theory-topic-btn.active {
-  background-color: var(--accent-green-soft);
+  background-color: var(--bg-surface);
   border-color: var(--accent-green);
-  color: var(--accent-green);
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .theory-content-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 28px;
+  padding: 24px 26px;
+  min-width: 0;
 }
 
 .theory-header {
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 16px;
-  margin-bottom: 22px;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
 .theory-body h3 {
-  font-size: 1.22rem;
-  color: var(--accent-yellow);
-  margin: 24px 0 10px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 22px 0 10px;
   padding-bottom: 6px;
-  border-bottom: 1px dashed var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .theory-body h3:first-child {
@@ -958,54 +1097,41 @@ body {
 }
 
 .theory-body h4 {
-  font-size: 1.02rem;
-  color: var(--accent-blue);
-  margin: 16px 0 8px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin: 14px 0 6px;
 }
 
 .theory-body p {
   color: var(--text-secondary);
-  margin-bottom: 12px;
-  font-size: 0.95rem;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
 }
 
 .theory-body ul,
 .theory-body ol {
-  margin: 8px 0 16px 22px;
+  margin: 6px 0 14px 20px;
   color: var(--text-secondary);
-  font-size: 0.94rem;
+  font-size: 0.89rem;
 }
 
 .theory-body li {
-  margin-bottom: 6px;
-}
-
-.formula-box {
-  background-color: var(--bg-surface);
-  border-left: 4px solid var(--accent-blue);
-  padding: 14px 18px;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin: 14px 0;
-  font-family: 'Cambria Math', 'Times New Roman', monospace;
-  font-size: 1.02rem;
-  color: var(--text-primary);
-  overflow-x: auto;
+  margin-bottom: 5px;
 }
 
 .cesgranrio-tip {
-  background-color: var(--accent-yellow-soft);
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  border-left: 4px solid var(--accent-yellow);
-  padding: 14px 18px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-yellow);
+  padding: 12px 16px;
   border-radius: var(--radius-sm);
-  margin: 16px 0;
-  font-size: 0.9rem;
+  margin: 14px 0;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
 }
 
 .cesgranrio-tip strong {
-  color: var(--accent-yellow);
-  display: block;
-  margin-bottom: 4px;
+  color: var(--text-primary);
 }
 
 /* Questions Bank & Simulado */
@@ -1013,11 +1139,11 @@ body {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 18px;
-  margin-bottom: 22px;
+  padding: 14px;
+  margin-bottom: 18px;
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   justify-content: space-between;
 }
@@ -1025,33 +1151,33 @@ body {
 .quiz-filters-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
 }
 
 .form-select,
 .form-input {
-  padding: 9px 12px;
+  font-family: var(--font-sans);
+  padding: 8px 11px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   background-color: var(--bg-surface);
   color: var(--text-primary);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   outline: none;
 }
 
 .form-select:focus,
 .form-input:focus {
-  border-color: var(--accent-blue);
+  border-color: var(--accent-green);
 }
 
 .question-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
+  padding: 20px 22px;
+  margin-bottom: 16px;
 }
 
 .question-meta {
@@ -1060,108 +1186,100 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .question-num {
-  font-weight: 800;
-  font-size: 1rem;
-  color: var(--accent-yellow);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 2px 8px;
+  border-radius: 3px;
 }
 
 .base-text-Toggle {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 12px 16px;
-  margin-bottom: 16px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
 }
 
 .base-text-Toggle summary {
-  font-weight: 700;
-  font-size: 0.88rem;
-  color: var(--accent-blue);
+  font-weight: 600;
+  font-size: 0.83rem;
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
 .base-text-body {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid var(--border-color);
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   color: var(--text-secondary);
   white-space: pre-line;
-  max-height: 320px;
+  max-height: 300px;
   overflow-y: auto;
 }
 
 .question-statement {
-  font-size: 0.98rem;
+  font-size: 0.93rem;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   white-space: pre-line;
-}
-
-.question-diagram {
-  background-color: #ffffff;
-  color: #0f172a;
-  padding: 16px;
-  border-radius: var(--radius-sm);
-  margin: 14px auto;
-  max-width: 540px;
-  text-align: center;
-  border: 2px solid var(--border-color);
-}
-
-.question-diagram svg {
-  max-width: 100%;
-  height: auto;
+  line-height: 1.6;
 }
 
 .options-list {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  margin-bottom: 16px;
+  gap: 7px;
+  margin-bottom: 14px;
 }
 
 .option-btn {
   width: 100%;
   text-align: left;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   background-color: var(--bg-surface);
   color: var(--text-secondary);
-  font-size: 0.93rem;
+  font-family: var(--font-sans);
+  font-size: 0.89rem;
   cursor: pointer;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  transition: all 0.15s;
+  gap: 11px;
+  transition: all 0.12s;
 }
 
 .option-btn:hover:not(:disabled) {
-  border-color: var(--accent-blue);
+  border-color: var(--text-muted);
   background-color: var(--bg-card-hover);
   color: var(--text-primary);
 }
 
 .option-letter {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  font-family: var(--font-mono);
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 0.8rem;
+  font-weight: 600;
+  font-size: 0.76rem;
   flex-shrink: 0;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 .option-btn.selected {
@@ -1202,38 +1320,42 @@ body {
 
 .explanation-box {
   background-color: var(--bg-surface);
-  border-left: 4px solid var(--accent-green);
-  padding: 16px 20px;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin-top: 14px;
-  font-size: 0.92rem;
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-green);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+  font-size: 0.87rem;
   color: var(--text-secondary);
   display: none;
+  line-height: 1.6;
 }
 
 .explanation-box.visible {
   display: block;
-  animation: fadeIn 0.25s ease;
 }
 
 .explanation-box h4 {
+  font-family: var(--font-mono);
   color: var(--accent-green);
   margin-bottom: 6px;
-  font-size: 0.95rem;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 /* Timeline (Cronograma) */
 .timeline {
   position: relative;
-  padding-left: 28px;
-  border-left: 2px solid var(--border-color);
-  margin-left: 10px;
+  padding-left: 22px;
+  border-left: 1px solid var(--border-color);
+  margin-left: 8px;
 }
 
 .timeline-item {
   position: relative;
-  margin-bottom: 20px;
-  padding: 16px 18px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -1242,17 +1364,17 @@ body {
 .timeline-item::before {
   content: '';
   position: absolute;
-  left: -36px;
-  top: 20px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
+  left: -27px;
+  top: 16px;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
   background-color: var(--bg-card);
-  border: 3px solid var(--text-muted);
+  border: 2px solid var(--text-muted);
 }
 
 .timeline-item.past {
-  opacity: 0.72;
+  opacity: 0.65;
 }
 
 .timeline-item.past::before {
@@ -1262,18 +1384,15 @@ body {
 
 .timeline-item.next {
   border-color: var(--accent-yellow);
-  background-color: var(--accent-yellow-soft);
 }
 
 .timeline-item.next::before {
   background-color: var(--accent-yellow);
   border-color: var(--accent-yellow);
-  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.25);
 }
 
 .timeline-item.exam-day {
-  border: 2px solid var(--danger);
-  background-color: var(--danger-soft);
+  border-color: var(--danger);
 }
 
 .timeline-item.exam-day::before {
@@ -1282,15 +1401,16 @@ body {
 }
 
 .timeline-date {
-  font-weight: 800;
-  font-size: 0.86rem;
-  color: var(--accent-yellow);
-  margin-bottom: 4px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
 }
 
 .timeline-title {
-  font-weight: 700;
-  font-size: 0.96rem;
+  font-weight: 600;
+  font-size: 0.88rem;
   color: var(--text-primary);
 }
 
@@ -1300,26 +1420,26 @@ body {
 .formula-box {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-left: 4px solid var(--accent-blue);
-  padding: 16px 20px;
+  border-left: 3px solid var(--text-muted);
+  padding: 13px 16px;
   border-radius: var(--radius-sm);
-  margin: 14px 0;
+  margin: 12px 0;
   color: var(--text-primary);
   overflow-x: auto;
-  line-height: 1.8;
+  line-height: 1.75;
+  font-size: 0.94rem;
 }
 
 .formula-box .katex-display {
-  margin: 0.5em 0;
+  margin: 0.45em 0;
   overflow-x: auto;
   overflow-y: hidden;
 }
 
 .katex {
-  font-size: 1.06em !important;
+  font-size: 1.03em !important;
 }
 
-/* Native CSS Vertical Fraction Fallback (when offline without CDN) */
 .tex-frac {
   display: inline-flex;
   flex-direction: column;
@@ -1329,7 +1449,7 @@ body {
   font-family: 'Cambria Math', 'Times New Roman', serif;
 }
 .tex-frac > .tex-num {
-  border-bottom: 1.5px solid currentColor;
+  border-bottom: 1.3px solid currentColor;
   padding: 0 3px 1px;
   line-height: 1.15;
 }
@@ -1339,20 +1459,15 @@ body {
 }
 
 /* =========================================================================
-   Interactive Illustrations & Pedagogical SVG Animations
+   Interactive Illustrations & Technical SVG Diagrams
    ========================================================================= */
 .visual-card {
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.75));
+  background-color: #0f1318;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 18px 20px;
-  margin: 18px 0;
-  box-shadow: var(--shadow-sm);
-}
-
-body.light-theme .visual-card {
-  background: linear-gradient(180deg, #0f172a, #1e293b);
-  color: #f8fafc;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #f1f3f5;
 }
 
 .visual-card-header {
@@ -1361,33 +1476,35 @@ body.light-theme .visual-card {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 1px solid #242933;
 }
 
 .visual-card-title {
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: #38bdf8;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .visual-card-badge {
-  font-size: 0.72rem;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: rgba(0, 168, 89, 0.2);
-  color: #34d399;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid #2e3440;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .visual-card-caption {
-  font-size: 0.83rem;
-  color: #cbd5e1;
-  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 8px;
   text-align: center;
   line-height: 1.45;
 }
@@ -1421,8 +1538,8 @@ body.light-theme .visual-card {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.35; transform: scale(0.97); }
-  50% { opacity: 0.95; transform: scale(1.03); }
+  0%, 100% { opacity: 0.4; transform: scale(0.98); }
+  50% { opacity: 0.95; transform: scale(1.02); }
 }
 
 @keyframes traceCurve {
@@ -1435,89 +1552,54 @@ body.light-theme .visual-card {
   50% { transform: translateX(-52px); }
 }
 
-.anim-ccw {
-  animation: spinCCW 7s linear infinite;
-}
-
-.anim-ccw-slow {
-  animation: spinCCW 9s linear infinite;
-}
-
-.anim-cw {
-  animation: spinCW 7s linear infinite;
-}
-
-.anim-flow {
-  stroke-dasharray: 8 6;
-  animation: dashFlow 1.4s linear infinite;
-}
-
-.anim-pulse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: pulseGlow 2.4s ease-in-out infinite;
-}
-
-.anim-trace {
-  stroke-dasharray: 400;
-  animation: traceCurve 4.5s ease-out infinite;
-}
-
-.anim-pole-shift {
-  animation: moveDot 4s ease-in-out infinite;
-}
+.anim-ccw { animation: spinCCW 7s linear infinite; }
+.anim-ccw-slow { animation: spinCCW 9s linear infinite; }
+.anim-cw { animation: spinCW 7s linear infinite; }
+.anim-flow { stroke-dasharray: 8 6; animation: dashFlow 1.4s linear infinite; }
+.anim-pulse { transform-box: fill-box; transform-origin: center; animation: pulseGlow 2.4s ease-in-out infinite; }
+.anim-trace { stroke-dasharray: 400; animation: traceCurve 4.5s ease-out infinite; }
+.anim-pole-shift { animation: moveDot 4s ease-in-out infinite; }
 
 /* Cloud Sync Pill & Modal */
 .cloud-status-pill {
+  font-family: var(--font-mono);
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  background: var(--bg-tertiary);
+  gap: 6px;
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   white-space: nowrap;
 }
 
 .cloud-status-pill:hover {
-  border-color: var(--accent-blue);
-  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
 }
 
 .cloud-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--text-muted);
   display: inline-block;
 }
 
-.cloud-dot.synced {
-  background: var(--accent-green);
-  box-shadow: 0 0 8px var(--accent-green);
-}
-
-.cloud-dot.syncing {
-  background: var(--accent-yellow);
-  box-shadow: 0 0 8px var(--accent-yellow);
-  animation: pulseGlow 1s ease-in-out infinite;
-}
-
-.cloud-dot.error {
-  background: var(--accent-red);
-  box-shadow: 0 0 8px var(--accent-red);
-}
+.cloud-dot.synced { background: var(--accent-green); }
+.cloud-dot.syncing { background: var(--accent-yellow); animation: pulseGlow 1s ease-in-out infinite; }
+.cloud-dot.error { background: var(--danger); }
 
 .cloud-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 23, 0.78);
-  backdrop-filter: blur(4px);
+  background: rgba(5, 7, 10, 0.75);
+  backdrop-filter: blur(2px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -1528,13 +1610,13 @@ body.light-theme .visual-card {
 .cloud-modal {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 14px;
-  max-width: 680px;
+  border-radius: var(--radius-lg);
+  max-width: 660px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  padding: 22px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
 }
 
 .cloud-modal-header {
@@ -1548,9 +1630,9 @@ body.light-theme .visual-card {
 }
 
 .cloud-status-box {
-  background: var(--bg-tertiary);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 12px 14px;
   margin-bottom: 14px;
 }
@@ -1559,33 +1641,34 @@ body.light-theme .visual-card {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .cloud-tab-btn {
+  font-family: var(--font-mono);
   flex: 1;
-  min-width: 170px;
-  background: var(--bg-tertiary);
+  min-width: 160px;
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 0.8rem;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.74rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.15s ease;
 }
 
 .cloud-tab-btn.active {
-  background: rgba(56, 189, 248, 0.15);
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
+  background: var(--accent-green-soft);
+  border-color: var(--accent-green);
+  color: var(--accent-green);
 }
 
 .cloud-provider-panel {
-  background: var(--bg-primary);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 14px;
   margin-bottom: 14px;
 }
@@ -1595,32 +1678,17 @@ body.light-theme .visual-card {
   border-top: 1px solid var(--border-color);
 }
 
-.form-input {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  padding: 9px 12px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--accent-blue);
-}
-
-/* Mobile & Tablet Navigation Elements (Hidden on Desktop > 1024px) */
+/* Mobile & Tablet Navigation Elements */
 .sidebar-close-btn {
   display: none;
   margin-left: auto;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
   cursor: pointer;
   align-items: center;
   justify-content: center;
@@ -1630,8 +1698,7 @@ body.light-theme .visual-card {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 23, 0.68);
-  backdrop-filter: blur(3px);
+  background: rgba(5, 7, 10, 0.7);
   z-index: 1050;
 }
 
@@ -1640,27 +1707,25 @@ body.light-theme .visual-card {
 }
 
 .mobile-timer-pill {
+  font-family: var(--font-mono);
   display: none;
   align-items: center;
   gap: 5px;
-  background: var(--accent-green-soft);
-  border: 1px solid var(--accent-green);
-  color: var(--accent-green);
-  padding: 6px 11px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 800;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
 }
 
 .mobile-timer-pill.running {
-  background: var(--accent-yellow);
   border-color: var(--accent-yellow);
-  color: #0f172a;
-  box-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+  color: var(--accent-yellow);
 }
 
 .mobile-bottom-nav {
@@ -1675,7 +1740,6 @@ body.light-theme .visual-card {
   z-index: 950;
   grid-template-columns: repeat(6, 1fr);
   gap: 2px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .mobile-nav-btn {
@@ -1687,22 +1751,21 @@ body.light-theme .visual-card {
   align-items: center;
   justify-content: center;
   padding: 6px 2px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  gap: 2px;
-  transition: all 0.15s ease;
+  gap: 3px;
+  font-family: var(--font-sans);
   -webkit-tap-highlight-color: transparent;
 }
 
-.mobile-nav-icon {
-  font-size: 1.15rem;
-  line-height: 1.1;
+.mobile-nav-svg {
+  width: 17px;
+  height: 17px;
 }
 
 .mobile-nav-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.1px;
+  font-size: 0.65rem;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -1718,9 +1781,9 @@ body.light-theme .visual-card {
   .sidebar {
     transform: translateX(-100%);
     z-index: 1100;
-    width: 290px;
-    max-width: 86vw;
-    box-shadow: 12px 0 36px rgba(0, 0, 0, 0.65);
+    width: 280px;
+    max-width: 85vw;
+    box-shadow: var(--shadow-md);
   }
   .sidebar.open {
     transform: translateX(0);
@@ -1730,14 +1793,12 @@ body.light-theme .visual-card {
   }
   .main-wrapper {
     margin-left: 0;
-    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
   }
   .mobile-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 38px;
-    min-height: 38px;
   }
   .mobile-timer-pill {
     display: inline-flex;
@@ -1749,54 +1810,49 @@ body.light-theme .visual-card {
     display: none;
   }
   .topbar {
-    padding: 10px 18px;
+    padding: 9px 16px;
     gap: 10px;
   }
   .content-container {
-    padding: 20px 18px;
+    padding: 18px 16px;
   }
   .grid-2 {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 16px;
   }
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 12px;
   }
 
-  /* Na apostila teórica, transforma a lista de blocos em barra horizontal deslizável no topo */
   .theory-layout {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
   }
   .theory-sidebar {
     position: sticky;
-    top: 59px;
+    top: 53px;
     z-index: 35;
     max-height: none;
-    padding: 10px 12px;
+    padding: 8px 10px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-  .theory-sidebar > div:first-child {
-    display: none;
   }
   #theory-topics-list {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 4px;
+    gap: 6px;
+    padding-bottom: 2px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
   }
   .theory-topic-btn {
     width: auto;
     flex: 0 0 auto;
-    min-width: 190px;
-    max-width: 240px;
+    min-width: 180px;
+    max-width: 230px;
     margin-bottom: 0;
-    padding: 8px 11px;
+    padding: 7px 10px;
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
   }
@@ -1811,129 +1867,105 @@ body.light-theme .visual-card {
     display: none;
   }
   .countdown-pill {
-    padding: 5px 10px;
-    font-size: 0.75rem;
-    max-width: 185px;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    max-width: 175px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .cloud-status-pill {
-    padding: 6px 9px;
-    font-size: 0.74rem;
+    padding: 5px 8px;
+    font-size: 0.7rem;
   }
   .content-container {
     padding: 14px 12px;
   }
   .section-header {
-    margin-bottom: 16px;
-    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
   }
   .section-header h2 {
-    font-size: 1.24rem;
-    line-height: 1.3;
+    font-size: 1.18rem;
   }
   .section-header p {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
 
-  /* Cards de estatísticas 2x2 compactos no celular */
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 14px;
   }
   .stat-card {
-    padding: 12px 13px;
+    padding: 11px 12px;
   }
   .stat-label {
-    font-size: 0.68rem;
+    font-size: 0.64rem;
   }
   .stat-value {
-    font-size: 1.35rem;
-    margin: 4px 0 2px;
+    font-size: 1.28rem;
+    margin: 3px 0 2px;
   }
   .stat-sub {
-    font-size: 0.73rem;
-    line-height: 1.3;
+    font-size: 0.72rem;
   }
 
   .grid-3,
   .days-grid {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
   }
 
-  /* Hero Mission Card no Smartphone */
   .hero-mission {
-    padding: 16px 15px;
-    gap: 16px;
-    margin-bottom: 18px;
-    border-radius: var(--radius-md);
+    padding: 15px 14px;
+    gap: 14px;
+    margin-bottom: 16px;
   }
   .hero-mission-content {
     min-width: 0;
     width: 100%;
   }
   .hero-mission h3 {
-    font-size: 1.15rem;
-    line-height: 1.3;
-  }
-  .hero-mission p {
-    font-size: 0.85rem;
-    margin-bottom: 10px;
+    font-size: 1.08rem;
   }
   .mission-steps-pills {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 6px;
-  }
-  .step-pill {
-    width: 100%;
-    font-size: 0.8rem;
-    padding: 7px 10px;
   }
   .hero-mission-actions {
     width: 100%;
     min-width: 0;
-    gap: 8px;
+    gap: 6px;
   }
   .hero-mission-actions .btn {
     width: 100%;
-    min-height: 44px;
-    font-size: 0.88rem;
+    min-height: 40px;
   }
 
-  /* Filtros do Plano 30 Dias em barra horizontal deslizável */
   .plan-filters {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 6px;
-    margin-bottom: 14px;
-    gap: 8px;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+    gap: 6px;
   }
   .filter-chip {
     flex: 0 0 auto;
     white-space: nowrap;
-    padding: 7px 13px;
-    font-size: 0.8rem;
   }
 
-  /* Cards gerais, Teoria e Questões */
   .card,
   .theory-content-card,
   .question-card,
   .day-card {
-    padding: 15px 14px;
-  }
-  .card-title {
-    font-size: 0.98rem;
-    flex-wrap: wrap;
+    padding: 14px;
   }
   .day-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 8px;
   }
   .day-actions > div {
     margin-left: 0 !important;
@@ -1941,93 +1973,62 @@ body.light-theme .visual-card {
   }
   .day-actions > div .btn {
     flex: 1;
-    min-height: 40px;
+    min-height: 38px;
   }
 
-  /* Controles do Banco de Questões e prevenção de auto-zoom no iOS Safari (16px) */
   .quiz-controls-bar {
     padding: 12px;
-    gap: 10px;
   }
   .quiz-filters-group {
     flex-direction: column;
     width: 100%;
-    gap: 8px;
   }
   .form-select,
   .form-input,
   textarea {
     width: 100%;
     font-size: 16px !important;
-    min-height: 42px;
-  }
-  .question-meta {
-    gap: 6px;
-  }
-  .question-statement {
-    font-size: 0.93rem;
-  }
-  .option-btn {
-    padding: 12px;
-    font-size: 0.89rem;
-    gap: 10px;
-  }
-  .explanation-box {
-    padding: 12px 14px;
-    font-size: 0.87rem;
+    min-height: 40px;
   }
 
-  /* Fórmulas LaTeX e Ilustrações SVG em Smartphones */
   .formula-box {
-    padding: 12px 13px;
-    font-size: 0.9rem;
+    padding: 11px 12px;
+    font-size: 0.88rem;
     -webkit-overflow-scrolling: touch;
   }
   .katex {
-    font-size: 0.98em !important;
+    font-size: 0.96em !important;
   }
   .visual-card {
     padding: 12px;
-    margin: 14px 0;
-  }
-  .visual-card-title {
-    font-size: 0.84rem;
   }
   .visual-svg-wrap {
     justify-content: flex-start;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
   }
   .visual-svg-wrap svg {
-    min-width: 480px;
-  }
-  .visual-card-caption {
-    font-size: 0.78rem;
+    min-width: 460px;
   }
 
-  /* Tabelas responsivas com rolagem suave */
   .table-responsive {
     -webkit-overflow-scrolling: touch;
-    margin: 0 -4px;
-    padding: 0 4px;
   }
   .data-table {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
   .data-table th,
   .data-table td {
-    padding: 8px 9px;
+    padding: 7px 8px;
   }
 
-  /* Modal da Nuvem estilo Bottom-Sheet no Smartphone */
   .cloud-modal-backdrop {
     padding: 0;
     align-items: flex-end;
   }
   .cloud-modal {
-    border-radius: 18px 18px 0 0;
+    border-radius: 10px 10px 0 0;
     max-height: 92vh;
-    padding: 18px 15px calc(18px + env(safe-area-inset-bottom, 0px));
+    padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px));
   }
   .cloud-tab-btn {
     min-width: 100%;
@@ -2037,24 +2038,15 @@ body.light-theme .visual-card {
 
 @media (max-width: 420px) {
   .countdown-pill {
-    max-width: 130px;
-    font-size: 0.7rem;
-    padding: 4px 8px;
+    max-width: 125px;
+    font-size: 0.66rem;
   }
   #cloud-status-label {
-    max-width: 92px;
+    max-width: 88px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .mobile-nav-icon {
-    font-size: 1.05rem;
-  }
-  .mobile-nav-label {
-    font-size: 0.62rem;
-  }
 }
-
-
 
 </style>
 </head>
@@ -2064,10 +2056,10 @@ body.light-theme .visual-card {
   <aside class="sidebar" id="sidebar">
     <div class="brand-header">
       <div class="brand-logo">
-        <div class="brand-badge">BR</div>
+        <div class="brand-badge">TP</div>
         <div class="brand-title">
           <h1>TRANSPETRO 2026.4</h1>
-          <span>Ênfase 23 • Engenharia Elétrica</span>
+          <span>Ênfase 23 · Eng. Elétrica</span>
         </div>
         <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Fechar menu">✕</button>
       </div>
@@ -2076,8 +2068,8 @@ body.light-theme .visual-card {
     <!-- CRONÔMETRO GUIADO DE 30 MINUTOS -->
     <div class="sidebar-timer">
       <div class="timer-top">
-        <span class="timer-label">⏱️ Ciclo Diário 30m</span>
-        <span class="timer-phase-badge" id="timer-phase-badge">1/3 • 10m Teoria</span>
+        <span class="timer-label">Sessão Diária (30m)</span>
+        <span class="timer-phase-badge" id="timer-phase-badge">1/3 · 10m Teoria</span>
       </div>
       <div class="timer-display" id="timer-display">30:00</div>
       <div class="timer-stages-bar" title="10m Teoria + 15m Questões + 5m Revisão">
@@ -2086,8 +2078,8 @@ body.light-theme .visual-card {
         <div class="timer-stage-seg" id="timer-seg-3"></div>
       </div>
       <div class="timer-controls">
-        <button class="btn-timer primary" id="btn-timer-toggle">▶ Iniciar 30m</button>
-        <button class="btn-timer" id="btn-timer-reset" title="Reiniciar 30:00">↺ Reset</button>
+        <button class="btn-timer primary" id="btn-timer-toggle">Iniciar 30m</button>
+        <button class="btn-timer" id="btn-timer-reset" title="Reiniciar 30:00">Reiniciar</button>
       </div>
     </div>
 
@@ -2095,51 +2087,69 @@ body.light-theme .visual-card {
     <ul class="nav-menu">
       <li class="nav-item">
         <button class="nav-btn active" data-tab="dashboard">
-          <span class="nav-btn-left"><span class="nav-icon">📊</span> Painel & Meta de Hoje</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+            <span>Visão Geral &amp; Sessão</span>
+          </span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="plano">
-          <span class="nav-btn-left"><span class="nav-icon">🗓️</span> Plano 30 Dias (30m/dia)</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Cronograma 30 Dias</span>
+          </span>
           <span class="nav-badge" id="nav-badge-plano">0/30</span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="teoria">
-          <span class="nav-btn-left"><span class="nav-icon">📚</span> Apostila & Conteúdos</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Caderno Teórico</span>
+          </span>
           <span class="nav-badge" id="nav-badge-teoria">0/10</span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="questoes">
-          <span class="nav-btn-left"><span class="nav-icon">✍️</span> Banco de Questões</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>Banco de Questões</span>
+          </span>
           <span class="nav-badge" id="nav-badge-questoes">0/85</span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="simulado">
-          <span class="nav-btn-left"><span class="nav-icon">🎯</span> Simulados & Corte</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+            <span>Simulados &amp; Corte</span>
+          </span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="edital">
-          <span class="nav-btn-left"><span class="nav-icon">📅</span> Edital, Datas & Vagas</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Edital, Vagas &amp; Datas</span>
+          </span>
         </button>
       </li>
     </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-primary btn-sm" id="btn-open-cloud-modal" style="width:100%;margin-bottom:8px;justify-content:center;">
-        ☁️ Sincronização na Nuvem
+      <button class="btn btn-primary btn-sm" id="btn-open-cloud-modal" style="width:100%;margin-bottom:6px;justify-content:center;">
+        Sincronização em Nuvem
       </button>
       <div class="footer-actions">
-        <button class="btn-utility" id="btn-toggle-theme">☀️ Modo Claro</button>
-        <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">💾 Exportar</button>
-        <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">📂 Importar</button>
+        <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
+        <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">Exportar</button>
+        <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">Importar</button>
         <input type="file" id="input-import-json" accept=".json" style="display:none;">
       </div>
-      <div style="font-size:0.72rem;color:var(--text-muted);text-align:center;" id="sidebar-cloud-hint">
-        Edital Nº 04/2026 • Banca Cesgranrio<br>Progresso salvo localmente e na nuvem
+      <div class="sidebar-meta-foot" id="sidebar-cloud-hint">
+        EDITAL Nº 04/2026 · CESGRANRIO
       </div>
     </div>
   </aside>
@@ -2152,24 +2162,26 @@ body.light-theme .visual-card {
     <!-- TOPBAR -->
     <header class="topbar">
       <div class="topbar-left" style="display:flex;align-items:center;gap:10px;min-width:0;">
-        <button class="mobile-toggle" id="btn-mobile-menu" aria-label="Abrir menu">☰</button>
+        <button class="mobile-toggle" id="btn-mobile-menu" aria-label="Abrir menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <div class="topbar-info">
-          <span class="countdown-pill" id="countdown-days-text">⏳ Prova em 06/12/2026</span>
-          <span class="salary-pill">💰 Remuneração Mínima: R$ 14.973,62 (Base: R$ 8.647,34)</span>
+          <span class="countdown-pill" id="countdown-days-text">PROVA: 06/12/2026</span>
+          <span class="salary-pill">REMUNERAÇÃO MÍNIMA: R$ 14.973,62 (BASE: R$ 8.647,34)</span>
         </div>
       </div>
       <div class="topbar-progress" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-        <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Toque para Iniciar ou Pausar o Ciclo de 30 minutos">
+        <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Iniciar ou pausar o ciclo de 30 minutos">
           <span id="mobile-timer-icon">▶</span>
           <span id="mobile-timer-text">30:00</span>
         </button>
-        <button class="cloud-status-pill" id="btn-topbar-cloud" title="Clique para configurar ou sincronizar seu progresso na nuvem">
+        <button class="cloud-status-pill" id="btn-topbar-cloud" title="Configurar ou sincronizar progresso na nuvem">
           <span class="cloud-dot" id="cloud-status-dot"></span>
-          <span id="cloud-status-label">☁️ Nuvem: Configurar</span>
+          <span id="cloud-status-label">Nuvem: Offline</span>
         </button>
         <div class="progress-mini-wrap">
           <div class="progress-mini-label">
-            <span>Plano 30 Dias</span>
+            <span>PLANO 30D</span>
             <span id="top-progress-pct">0%</span>
           </div>
           <div class="progress-bar-bg">
@@ -2187,8 +2199,9 @@ body.light-theme .visual-card {
       <section class="tab-section active" id="tab-dashboard">
         <div class="section-header">
           <div>
-            <h2>⚡ Painel de Controle — Engenheiro Eletricista Júnior (Transpetro)</h2>
-            <p>Planejamento intensivo de alta eficiência: <strong>30 minutos por dia (10m Teoria + 15m Questões + 5m Revisão)</strong> até <strong>06/12/2026</strong>.</p>
+            <div class="section-eyebrow">ENGENHARIA ELÉTRICA · ÊNFASE 23 · NÍVEL SUPERIOR JÚNIOR</div>
+            <h2>Painel de Controle e Estudo Diário</h2>
+            <p>Planejamento estruturado de <strong>30 minutos diários (10m Teoria + 15m Questões + 5m Revisão)</strong> até a prova objetiva em <strong>06/12/2026</strong>.</p>
           </div>
         </div>
 
@@ -2198,24 +2211,24 @@ body.light-theme .visual-card {
         <!-- KPI CARDS -->
         <div class="grid-4">
           <div class="stat-card">
-            <span class="stat-label">Dias do Plano Concluídos</span>
+            <span class="stat-label">Progresso do Cronograma</span>
             <div class="stat-value" id="stat-days-val">0 / 30</div>
             <div class="stat-sub" id="stat-days-sub">0h acumuladas (meta: 15h)</div>
           </div>
           <div class="stat-card yellow">
             <span class="stat-label">Questões Resolvidas</span>
             <div class="stat-value" id="stat-questions-val">0 / 85</div>
-            <div class="stat-sub" id="stat-questions-sub">70 da Prova 2023.2 + 15 Inéditas</div>
+            <div class="stat-sub" id="stat-questions-sub">70 Prova 2023.2 + 15 Inéditas</div>
           </div>
           <div class="stat-card blue">
-            <span class="stat-label">Módulos da Apostila Lidos</span>
+            <span class="stat-label">Módulos Teóricos</span>
             <div class="stat-value" id="stat-theory-val">0 / 10</div>
             <div class="stat-sub" id="stat-theory-sub">8 Blocos Específicos + PT + EN</div>
           </div>
           <div class="stat-card purple">
-            <span class="stat-label">Regra de Ouro do Edital 2026.4</span>
-            <div class="stat-value" style="font-size:1.35rem;">Fase 1 Habilita!</div>
-            <div class="stat-sub">50 Qs Específicas definem o corte 2x CR (44 no RJ / 22 em SP)</div>
+            <span class="stat-label">Critério de Corte (Fase 1)</span>
+            <div class="stat-value" style="font-size:1.25rem;">2× (Vagas + CR)</div>
+            <div class="stat-sub">50 Qs Específicas definem habilitação (44 RJ / 22 SP)</div>
           </div>
         </div>
 
@@ -2223,11 +2236,11 @@ body.light-theme .visual-card {
           <!-- RAIO-X ESTATÍSTICO DA PROVA ANTERIOR -->
           <div class="card">
             <div class="card-title">
-              <span>📈 Raio-X Oficial da Prova Anterior (Transpetro 2023.2 — Prova 22)</span>
+              <span>Distribuição Histórica — Prova Transpetro 2023.2 (Prova 22)</span>
               <span class="badge badge-green">70 Questões</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Distribuição exata das 50 questões específicas e 20 básicas da última prova da Cesgranrio para guiar seus 30 minutos diários pelo princípio de Pareto (80/20):
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Incidência real por bloco temático na última edição da banca Cesgranrio para priorização de estudo:
             </p>
             <div class="table-responsive">
               <table class="data-table">
@@ -2237,7 +2250,7 @@ body.light-theme .visual-card {
                     <th>Qtd.</th>
                     <th>Peso</th>
                     <th>Prioridade</th>
-                    <th>Questões na Prova 2023.2</th>
+                    <th>Questões (2023.2)</th>
                   </tr>
                 </thead>
                 <tbody id="raiox-tbody"></tbody>
@@ -2248,17 +2261,17 @@ body.light-theme .visual-card {
           <!-- CADERNO DE FÓRMULAS & ANOTAÇÕES PESSOAIS -->
           <div class="card">
             <div class="card-title">
-              <span>📝 Meu Resumo Rápido & Fórmulas de Bolso (5 min finais)</span>
-              <span class="badge badge-blue">Salvo Automaticamente</span>
+              <span>Caderno Técnico de Fórmulas e Notas Pessoais</span>
+              <span class="badge badge-blue">Auto-Save</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:10px;">
-              Use este espaço nos <strong>5 minutos finais</strong> da sua sessão diária para anotar fórmulas, artigos da NR-10/Lei 14.133 ou pegadinhas da Cesgranrio que você não pode esquecer:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:10px;">
+              Registre relações matemáticas, itens normativos (NR-10, NBR 5410, Lei 14.133) e observações de resolução durante os 5 minutos finais de cada sessão:
             </p>
             <textarea
               id="personal-notes-area"
               class="form-input"
-              style="width:100%;min-height:295px;resize:vertical;font-family:monospace;line-height:1.5;"
-              placeholder="Anote aqui suas fórmulas, macetes e pontos de revisão..."
+              style="width:100%;min-height:295px;resize:vertical;font-family:'IBM Plex Mono',monospace;font-size:0.83rem;line-height:1.6;"
+              placeholder="Registre suas notas técnicas e fórmulas de revisão..."
             ></textarea>
           </div>
         </div>
@@ -2267,11 +2280,11 @@ body.light-theme .visual-card {
           <!-- DESEMPENHO POR BLOCO EM TEMPO REAL -->
           <div class="card">
             <div class="card-title">
-              <span>🎯 Meu Desempenho por Bloco / Disciplina</span>
-              <span class="badge badge-purple">Tempo Real</span>
+              <span>Rendimento por Bloco Temático</span>
+              <span class="badge badge-purple">Métricas</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Acompanhe sua taxa de acerto em cada bloco conforme resolve as 85 questões do banco:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Taxa de acerto consolidada por disciplina conforme resolução das 85 questões disponíveis:
             </p>
             <div class="table-responsive">
               <table class="data-table">
@@ -2280,7 +2293,7 @@ body.light-theme .visual-card {
                     <th>Bloco / Disciplina</th>
                     <th>Resolvidas</th>
                     <th>Acertos</th>
-                    <th>Aproveitamento</th>
+                    <th>Taxa</th>
                     <th>Ação</th>
                   </tr>
                 </thead>
@@ -2292,24 +2305,24 @@ body.light-theme .visual-card {
           <!-- FLASHCARDS DE REVISÃO RÁPIDA (5 MINUTOS FINAIS) -->
           <div class="card">
             <div class="card-title">
-              <span>⚡ Flashcards de Revisão Rápida (Etapa 3: 5 Minutos Finais)</span>
-              <span class="badge badge-yellow" id="flashcard-counter-badge">Card 1 / 16</span>
+              <span>Cartões de Revisão Técnica (Etapa 3 · 5 min)</span>
+              <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 12</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Treine memorização ativa das fórmulas e normas mais cobradas pela Cesgranrio:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Verificação rápida de fórmulas de curto-circuito, componentes simétricas, máquinas, controle e normas:
             </p>
             <div
               id="flashcard-box"
-              style="background:var(--bg-surface);border:2px solid var(--accent-blue);border-radius:12px;padding:24px;min-height:190px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:all 0.2s;"
-              title="Clique para virar o cartão (Pergunta / Resposta)"
+              class="flashcard-surface"
+              title="Clique para alternar entre pergunta e resposta"
             >
-              <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:var(--accent-yellow);margin-bottom:8px;" id="flashcard-side-label">FRENTE • PERGUNTA (CLIQUE PARA REVELAR)</div>
-              <div style="font-size:1.05rem;font-weight:700;color:var(--text-primary);line-height:1.5;" id="flashcard-text"></div>
+              <div class="flashcard-side-tag" id="flashcard-side-label">QUESTÃO DE REVISÃO · CLIQUE PARA REVELAR</div>
+              <div class="flashcard-body-text" id="flashcard-text"></div>
             </div>
-            <div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px;">
-              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">⬅️ Anterior</button>
-              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">🔄 Virar Cartão (Ver Resposta)</button>
-              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo ➡️</button>
+            <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
+              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
+              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">Alternar Frente / Verso</button>
+              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
             </div>
           </div>
         </div>
@@ -2321,19 +2334,20 @@ body.light-theme .visual-card {
       <section class="tab-section" id="tab-plano">
         <div class="section-header">
           <div>
-            <h2>🗓️ Cronograma Estratégico — 30 Minutos por Dia (07/11/2026 a 06/12/2026)</h2>
-            <p>Cada sessão diária de 30 minutos é dividida em <strong>10 min de Teoria Direta</strong> + <strong>15 min de Resolução de Questões</strong> + <strong>5 min de Revisão Ativa</strong>, priorizando os blocos de maior peso na Cesgranrio.</p>
+            <div class="section-eyebrow">PLANEJAMENTO SEQUENCIAL · 30 SESSÕES DE 30 MINUTOS</div>
+            <h2>Cronograma de Estudo Dirigido (07/11/2026 a 06/12/2026)</h2>
+            <p>Sessões estruturadas em <strong>10 min de Teoria</strong> + <strong>15 min de Questões</strong> + <strong>5 min de Revisão</strong>, ordenadas pelo peso estatístico da Cesgranrio.</p>
           </div>
         </div>
 
         <div class="plan-filters">
-          <button class="filter-chip active" data-plan-filter="todos">Todos os 30 Dias</button>
-          <button class="filter-chip" data-plan-filter="pendentes">⏳ Pendentes</button>
-          <button class="filter-chip" data-plan-filter="concluidos">✅ Concluídos</button>
-          <button class="filter-chip" data-plan-filter="semana1">Semana 1: SEP & Circuitos (38% da prova)</button>
-          <button class="filter-chip" data-plan-filter="semana2">Semana 2: Máquinas & Instalações (26% da prova)</button>
-          <button class="filter-chip" data-plan-filter="semana3">Semana 3: Controle & Matemática (22% da prova)</button>
-          <button class="filter-chip" data-plan-filter="semana4">Semana 4: Medidas, NR-10/Licitações, PT/EN & Revisão</button>
+          <button class="filter-chip active" data-plan-filter="todos">Todos (30)</button>
+          <button class="filter-chip" data-plan-filter="pendentes">Pendentes</button>
+          <button class="filter-chip" data-plan-filter="concluidos">Concluídos</button>
+          <button class="filter-chip" data-plan-filter="semana1">Semana 1 · SEP &amp; Circuitos (38%)</button>
+          <button class="filter-chip" data-plan-filter="semana2">Semana 2 · Máquinas &amp; Instalações (26%)</button>
+          <button class="filter-chip" data-plan-filter="semana3">Semana 3 · Controle &amp; Matemática (22%)</button>
+          <button class="filter-chip" data-plan-filter="semana4">Semana 4 · Medidas, NR-10, PT/EN &amp; Revisão</button>
         </div>
 
         <div class="days-grid" id="days-grid-container"></div>
@@ -2345,8 +2359,9 @@ body.light-theme .visual-card {
       <section class="tab-section" id="tab-teoria">
         <div class="section-header">
           <div>
-            <h2>📚 Apostila Direcionada — Conteúdo Completo Explicado (Anexo IV)</h2>
-            <p>Explicações teóricas enxutas, tabelas normativas, fórmulas essenciais e dicas das pegadinhas da Cesgranrio para todos os 8 Blocos de Engenharia Elétrica + Português e Inglês.</p>
+            <div class="section-eyebrow">CONTEÚDO PROGRAMÁTICO · ANEXO IV DO EDITAL 04/2026</div>
+            <h2>Caderno Teórico e Diagramas de Engenharia Elétrica</h2>
+            <p>Síntese técnica, formulação matemática em LaTeX, tabelas normativas e diagramas vetoriais/circuitais para os 8 Blocos Específicos, Português e Inglês.</p>
           </div>
         </div>
 
@@ -2362,8 +2377,9 @@ body.light-theme .visual-card {
       <section class="tab-section" id="tab-questoes">
         <div class="section-header">
           <div>
-            <h2>✍️ Banco de Questões de Múltipla Escolha Comentadas (85 Questões)</h2>
-            <p>Inclui <strong>todas as 70 questões oficiais da Prova 22 (Engenharia Elétrica — Transpetro 2023.2)</strong> com diagramas e textos-base + <strong>15 questões inéditas</strong> focadas no Edital 2026.4.</p>
+            <div class="section-eyebrow">TREINAMENTO DE PROVA · MÚLTIPLA ESCOLHA (A–E)</div>
+            <h2>Banco de Questões Comentadas (85 Questões)</h2>
+            <p>Contém as <strong>70 questões integrais da Prova 22 (Transpetro 2023.2 — Cesgranrio)</strong> com diagramas e textos-base + <strong>15 questões inéditas</strong> no padrão do Edital 2026.4.</p>
           </div>
         </div>
 
@@ -2374,32 +2390,32 @@ body.light-theme .visual-card {
               id="filter-q-search"
               class="form-input"
               style="min-width:220px;flex:1;"
-              placeholder="🔍 Buscar por assunto, palavra ou nº (ex: p.u., NR-10, Q50)..."
+              placeholder="Filtrar por termo, assunto ou código (ex: p.u., Fortescue, NR-10, Q50)..."
             >
             <select id="filter-q-bloco" class="form-select">
-              <option value="todos">📚 Todos os Blocos / Disciplinas (85)</option>
-              <option value="bloco4">Bloco 4: Análise de Sistemas Elétricos - SEP (13)</option>
-              <option value="bloco2">Bloco 2: Circuitos Elétricos (11)</option>
-              <option value="bloco6">Bloco 6: Máquinas Elétricas (9)</option>
-              <option value="bloco5">Bloco 5: Instalações Elétricas e Subestações (8)</option>
-              <option value="bloco7">Bloco 7: Sistemas de Controle (7)</option>
-              <option value="bloco1">Bloco 1: Matemática Aplicada (6)</option>
-              <option value="bloco3">Bloco 3: Medidas Elétricas e SI (5)</option>
-              <option value="bloco8">Bloco 8: Legislação - NR-10 e Lei 14.133 (4)</option>
-              <option value="portugues">Básicos: Língua Portuguesa (11)</option>
-              <option value="ingles">Básicos: Língua Inglesa (11)</option>
+              <option value="todos">Todos os Blocos / Disciplinas (85)</option>
+              <option value="bloco4">Bloco 4 · Sistemas Elétricos de Potência (13)</option>
+              <option value="bloco2">Bloco 2 · Circuitos Elétricos (11)</option>
+              <option value="bloco6">Bloco 6 · Máquinas Elétricas (9)</option>
+              <option value="bloco5">Bloco 5 · Instalações Elétricas e Subestações (8)</option>
+              <option value="bloco7">Bloco 7 · Sistemas de Controle (7)</option>
+              <option value="bloco1">Bloco 1 · Matemática Aplicada (6)</option>
+              <option value="bloco3">Bloco 3 · Medidas Elétricas e SI (5)</option>
+              <option value="bloco8">Bloco 8 · Legislação: NR-10 e Lei 14.133 (4)</option>
+              <option value="portugues">Gerais · Língua Portuguesa (11)</option>
+              <option value="ingles">Gerais · Língua Inglesa (11)</option>
             </select>
             <select id="filter-q-origem" class="form-select">
-              <option value="todas">🏛️ Todas as Origens (85)</option>
-              <option value="2023">Prova Oficial Transpetro 2023.2 (Q01 a Q70)</option>
-              <option value="ineditas">Questões Inéditas Edital 2026.4 (Q71 a Q85)</option>
+              <option value="todas">Todas as Origens (85)</option>
+              <option value="2023">Prova Oficial Transpetro 2023.2 (Q01–Q70)</option>
+              <option value="ineditas">Questões Inéditas Edital 2026.4 (Q71–Q85)</option>
             </select>
             <select id="filter-q-status" class="form-select">
-              <option value="todas">📌 Todos os Status</option>
-              <option value="nao_respondidas">⏳ Não Respondidas</option>
-              <option value="acertos">✅ Questões que Acertei</option>
-              <option value="erros">❌ Questões que Errei (Para Revisar)</option>
-              <option value="favoritas">⭐ Minhas Favoritas (Caderno de Revisão)</option>
+              <option value="todas">Todos os Status</option>
+              <option value="nao_respondidas">Não Respondidas</option>
+              <option value="acertos">Respondidas · Acertos</option>
+              <option value="erros">Respondidas · Erros (Revisar)</option>
+              <option value="favoritas">Marcadas para Revisão</option>
             </select>
           </div>
         </div>
@@ -2414,37 +2430,38 @@ body.light-theme .visual-card {
       <section class="tab-section" id="tab-simulado">
         <div class="section-header">
           <div>
-            <h2>🎯 Simulados Cronometrados & Simulador Oficial de Habilitação (Fases 1 e 2)</h2>
-            <p>Treine gestão de tempo no padrão Cesgranrio e simule sua nota frente às regras de eliminação e ao corte de 2x (Vagas + CR) do Edital 2026.4.</p>
+            <div class="section-eyebrow">AVALIAÇÃO DE DESEMPENHO &amp; REGRAS DE HABILITAÇÃO</div>
+            <h2>Simulados Cronometrados e Calculadora de Corte</h2>
+            <p>Verifique seu tempo de resolução por questão e simule sua pontuação frente às regras eliminatórias das Fases 1 e 2 do Edital 04/2026.</p>
           </div>
         </div>
 
         <div class="grid-3">
           <div class="card">
-            <span class="badge badge-green" style="margin-bottom:8px;">Ideal para a rotina de 30 min/dia</span>
-            <h3 style="margin-bottom:8px;">⚡ Mini-Simulado Rápido (10 Questões)</h3>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
-              Sorteia <strong>7 questões de Engenharia Elétrica + 2 de Português + 1 de Inglês</strong> com cronômetro de <strong>30 minutos</strong>.
+            <span class="badge badge-green" style="margin-bottom:10px;">ROTINA DIÁRIA · 30 MIN</span>
+            <h3 style="margin-bottom:6px;font-size:1.05rem;">Mini-Simulado Técnico (10 Questões)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+              Seleciona <strong>7 questões de Engenharia Elétrica + 2 de Português + 1 de Inglês</strong> com tempo limite de <strong>30 minutos</strong>.
             </p>
-            <button class="btn btn-primary" style="width:100%;" id="btn-sim-rapido10">▶️ Iniciar Mini-Simulado (30 min)</button>
+            <button class="btn btn-primary" style="width:100%;" id="btn-sim-rapido10">Iniciar Mini-Simulado (30m)</button>
           </div>
 
           <div class="card">
-            <span class="badge badge-yellow" style="margin-bottom:8px;">Treino de Fim de Semana</span>
-            <h3 style="margin-bottom:8px;">🔌 Simulado Foco Específicas (20 Qs)</h3>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
-              Sorteia <strong>20 questões exclusivas de Engenharia Elétrica (Fase 1)</strong> com cronômetro de <strong>60 minutos</strong>.
+            <span class="badge badge-yellow" style="margin-bottom:10px;">BLOCO ESPECÍFICO · 60 MIN</span>
+            <h3 style="margin-bottom:6px;font-size:1.05rem;">Simulado Conhecimentos Específicos (20 Qs)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+              Seleciona <strong>20 questões exclusivas de Engenharia Elétrica (Fase 1)</strong> com tempo limite de <strong>60 minutos</strong>.
             </p>
-            <button class="btn btn-yellow" style="width:100%;" id="btn-sim-especificas20">▶️ Iniciar Simulado Específicas (60 min)</button>
+            <button class="btn btn-yellow" style="width:100%;" id="btn-sim-especificas20">Iniciar Simulado Específicas (60m)</button>
           </div>
 
           <div class="card">
-            <span class="badge badge-blue" style="margin-bottom:8px;">Experiência Real de Prova</span>
-            <h3 style="margin-bottom:8px;">🏛️ Prova Completa 2023.2 (70 Questões)</h3>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
-              A Prova 22 completa de Engenharia Elétrica de 2023.2 (70 questões) com tempo oficial de <strong>4h30min</strong>.
+            <span class="badge badge-blue" style="margin-bottom:10px;">PROVA INTEGRAL · 4H30MIN</span>
+            <h3 style="margin-bottom:6px;font-size:1.05rem;">Prova Oficial Completa 2023.2 (70 Qs)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+              Execução integral da Prova 22 de Engenharia Elétrica de 2023.2 (70 questões) com duração oficial de <strong>4h30min</strong>.
             </p>
-            <button class="btn btn-secondary" style="width:100%;" id="btn-sim-completo70">▶️ Iniciar Prova Completa (4h30min)</button>
+            <button class="btn btn-secondary" style="width:100%;" id="btn-sim-completo70">Iniciar Prova Completa (4h30)</button>
           </div>
         </div>
 
@@ -2455,22 +2472,22 @@ body.light-theme .visual-card {
           <!-- CALCULADORA DE CORTE E ELIMINAÇÃO -->
           <div class="card">
             <div class="card-title">
-              <span>🧮 Simulador de Nota e Critérios de Eliminação (Edital 2026.4)</span>
+              <span>Simulador de Habilitação (Fases 1 e 2)</span>
               <span class="badge badge-yellow">Item 7.1.4.3</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:14px;">
-              Simule sua pontuação nas Fases 1 e 2 e verifique se ela atende aos critérios eliminatórios e ao limite de habilitação do seu Polo:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:14px;">
+              Projete sua pontuação nas Fases 1 e 2 e avalie o enquadramento nos critérios eliminatórios e no limite de corte do Polo escolhido:
             </p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Polo de Trabalho</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Polo de Trabalho</label>
                 <select id="calc-polo" class="form-select" style="width:100%;">
                   <option value="0">Polo Rio de Janeiro (22 Vagas+CR)</option>
                   <option value="1">Polo São Paulo (11 Vagas+CR)</option>
                 </select>
               </div>
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Modalidade de Concorrência</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Modalidade de Concorrência</label>
                 <select id="calc-modalidade" class="form-select" style="width:100%;">
                   <option value="AC">Ampla Concorrência (AC)</option>
                   <option value="PN">Pessoas Negras (PN)</option>
@@ -2481,15 +2498,15 @@ body.light-theme .visual-card {
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Específicos (0 a 50)</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Específicos (0–50)</label>
                 <input type="number" id="calc-esp" class="form-input" style="width:100%;" min="0" max="50" value="38">
               </div>
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Português (0 a 10)</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Português (0–10)</label>
                 <input type="number" id="calc-pt" class="form-input" style="width:100%;" min="0" max="10" value="7">
               </div>
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Inglês (0 a 10)</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Inglês (0–10)</label>
                 <input type="number" id="calc-en" class="form-input" style="width:100%;" min="0" max="10" value="7">
               </div>
             </div>
@@ -2499,16 +2516,16 @@ body.light-theme .visual-card {
           <!-- HISTÓRICO DE SIMULADOS -->
           <div class="card">
             <div class="card-title">
-              <span>📜 Histórico dos Meus Simulados</span>
+              <span>Histórico de Simulados Realizados</span>
             </div>
             <div class="table-responsive">
               <table class="data-table">
                 <thead>
                   <tr>
                     <th>Data</th>
-                    <th>Simulado</th>
-                    <th>Acertos</th>
-                    <th>%</th>
+                    <th>Modalidade</th>
+                    <th>Resultado</th>
+                    <th>Taxa</th>
                   </tr>
                 </thead>
                 <tbody id="simulado-history-tbody"></tbody>
@@ -2524,8 +2541,9 @@ body.light-theme .visual-card {
       <section class="tab-section" id="tab-edital">
         <div class="section-header">
           <div>
-            <h2>📅 Guia do Edital Nº 04/2026, Cronograma Oficial & Checklist de Prova</h2>
-            <p>Todas as datas oficiais do Anexo V, quadro de vagas (RJ e SP), municípios de lotação, remuneração e regras de prova para <strong>Ênfase 23: Engenharia Elétrica</strong>.</p>
+            <div class="section-eyebrow">INFORMAÇÕES NORMATIVAS · EDITAL Nº 04/2026</div>
+            <h2>Parâmetros do Edital, Quadro de Vagas e Cronograma Oficial</h2>
+            <p>Síntese das datas oficiais (Anexo V), distribuição de vagas por polo (Anexo I), municípios de lotação e critérios de eliminação para <strong>Ênfase 23: Engenharia Elétrica</strong>.</p>
           </div>
         </div>
 
@@ -2533,8 +2551,8 @@ body.light-theme .visual-card {
         <div class="grid-2">
           <div class="card">
             <div class="card-title">
-              <span>🏢 Quadro de Vagas, Cadastro de Reserva e Corte da Fase 1 (Anexo I)</span>
-              <span class="badge badge-green">Ênfase 23</span>
+              <span>Quadro de Vagas, Cadastro de Reserva e Limite da Fase 1</span>
+              <span class="badge badge-green">Anexo I</span>
             </div>
             <div class="table-responsive" style="margin-bottom:14px;">
               <table class="data-table">
@@ -2543,7 +2561,7 @@ body.light-theme .visual-card {
                     <th>Polo de Trabalho</th>
                     <th>Vagas Imediatas</th>
                     <th>Total (Vagas + CR)</th>
-                    <th>Habilitados na Fase 1 (2x CR)</th>
+                    <th>Limite Fase 1 (2× CR)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -2562,23 +2580,23 @@ body.light-theme .visual-card {
                 </tbody>
               </table>
             </div>
-            <div style="font-size:0.84rem;color:var(--text-secondary);">
-              <p style="margin-bottom:6px;">📍 <strong>Municípios de Lotação — Polo RJ:</strong> Angra dos Reis, Duque de Caxias, Japeri, Macaé, Rio das Flores, Rio de Janeiro ou Volta Redonda.</p>
-              <p>📍 <strong>Municípios de Lotação — Polo SP:</strong> Barueri, Caraguatatuba, Cubatão, Guararema, Guarulhos, Mauá, Paulínia, Porto Ferreira, Ribeirão Preto, Santos, São Caetano do Sul, São José dos Campos, São Paulo, São Sebastião ou Taubaté.</p>
+            <div style="font-size:0.83rem;color:var(--text-secondary);line-height:1.55;">
+              <p style="margin-bottom:6px;"><strong>Municípios de Lotação — Polo RJ:</strong> Angra dos Reis, Duque de Caxias, Japeri, Macaé, Rio das Flores, Rio de Janeiro ou Volta Redonda.</p>
+              <p><strong>Municípios de Lotação — Polo SP:</strong> Barueri, Caraguatatuba, Cubatão, Guararema, Guarulhos, Mauá, Paulínia, Porto Ferreira, Ribeirão Preto, Santos, São Caetano do Sul, São José dos Campos, São Paulo, São Sebastião ou Taubaté.</p>
             </div>
           </div>
 
           <div class="card">
             <div class="card-title">
-              <span>⚖️ Regras de Ouro da Prova e Critérios de Eliminação</span>
-              <span class="badge badge-danger">Atenção Máxima</span>
+              <span>Regras de Habilitação e Critérios de Eliminação</span>
+              <span class="badge badge-danger">Eliminatório</span>
             </div>
-            <ul style="margin-left:18px;font-size:0.89rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:8px;">
+            <ul style="margin-left:18px;font-size:0.87rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:8px;">
               <li><strong>Remuneração:</strong> Salário Básico de <strong>R$ 8.647,34</strong> com garantia de Remuneração Mínima de <strong>R$ 14.973,62</strong> (Regime CLT).</li>
-              <li><strong>Estrutura da Prova (06/12/2026 — 4h30min):</strong> 70 questões de múltipla escolha (A a E), valendo 1,0 ponto cada (50 de Conhecimentos Específicos + 10 de Português + 10 de Inglês).</li>
-              <li><strong>Fase 1 (Específicos — 50 pts):</strong> Eliminado quem fizer menos de <strong>25,0 pontos (50%)</strong>. Os candidatos aprovados são ranqueados <em>apenas</em> pela nota de Específicos até o limite de <strong>2x (Vagas + CR)</strong> (respeitada a paridade de 50% de mulheres habilitadas).</li>
-              <li><strong>Fase 2 (Gerais — 20 pts):</strong> Eliminado quem fizer menos de <strong>10,0 pontos (50%)</strong> na soma de Português + Inglês ou obtiver <strong>nota ZERO</strong> em qualquer uma das duas disciplinas.</li>
-              <li><strong>Nota Final Classificatória:</strong> Soma simples Fase 1 + Fase 2 (máximo 70,0 pontos) para os habilitados na Fase 1.</li>
+              <li><strong>Estrutura da Prova (06/12/2026 — 4h30min):</strong> 70 questões objetivas (A a E), valendo 1,0 ponto cada (50 de Conhecimentos Específicos + 10 de Português + 10 de Inglês).</li>
+              <li><strong>Fase 1 (Específicos — 50 pts):</strong> Eliminado quem obtiver menos de <strong>25,0 pontos (50%)</strong>. Os aprovados são classificados exclusivamente pela nota de Específicos até o limite de <strong>2× (Vagas + CR)</strong> (assegurada a proporção mínima de 50% de mulheres habilitadas).</li>
+              <li><strong>Fase 2 (Gerais — 20 pts):</strong> Eliminado quem obtiver menos de <strong>10,0 pontos (50%)</strong> na soma de Português + Inglês ou <strong>nota ZERO</strong> em qualquer uma das duas disciplinas.</li>
+              <li><strong>Nota Final:</strong> Soma simples Fase 1 + Fase 2 (máximo de 70,0 pontos) para os candidatos habilitados na Fase 1.</li>
             </ul>
           </div>
         </div>
@@ -2587,7 +2605,7 @@ body.light-theme .visual-card {
           <!-- CRONOGRAMA OFICIAL (ANEXO V) -->
           <div class="card">
             <div class="card-title">
-              <span>🗓️ Cronograma Oficial Completo (Anexo V — Edital 2026.4)</span>
+              <span>Cronograma Oficial do Concurso (Anexo V)</span>
               <span class="badge badge-yellow">Datas Oficiais</span>
             </div>
             <div class="timeline" id="official-timeline-container"></div>
@@ -2596,11 +2614,11 @@ body.light-theme .visual-card {
           <!-- CHECKLIST DE VÉSPERA E DIA DE PROVA -->
           <div class="card">
             <div class="card-title">
-              <span>🎒 Checklist Obrigatório para o Dia da Prova (06/12/2026)</span>
-              <span class="badge badge-green">Evite Eliminação</span>
+              <span>Verificação de Documentos e Materiais (06/12/2026)</span>
+              <span class="badge badge-green">Checklist</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Marque os itens à medida que organizar seu material para o dia <strong>06/12/2026</strong>:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Itens exigidos em edital para acesso à sala e realização da prova objetiva em <strong>06/12/2026</strong>:
             </p>
             <div id="exam-checklist-container"></div>
           </div>
@@ -2613,27 +2631,27 @@ body.light-theme .visual-card {
   <!-- BARRA DE NAVEGAÇÃO INFERIOR PARA SMARTPHONES E TABLETS -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegação rápida mobile">
     <button class="mobile-nav-btn active" data-tab="dashboard">
-      <span class="mobile-nav-icon">📊</span>
-      <span class="mobile-nav-label">Hoje</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="mobile-nav-label">Painel</span>
     </button>
     <button class="mobile-nav-btn" data-tab="plano">
-      <span class="mobile-nav-icon">🗓️</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span class="mobile-nav-label">30 Dias</span>
     </button>
     <button class="mobile-nav-btn" data-tab="teoria">
-      <span class="mobile-nav-icon">📚</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       <span class="mobile-nav-label">Teoria</span>
     </button>
     <button class="mobile-nav-btn" data-tab="questoes">
-      <span class="mobile-nav-icon">✍️</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       <span class="mobile-nav-label">Questões</span>
     </button>
     <button class="mobile-nav-btn" data-tab="simulado">
-      <span class="mobile-nav-icon">🎯</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
       <span class="mobile-nav-label">Simulado</span>
     </button>
     <button class="mobile-nav-btn" data-tab="edital">
-      <span class="mobile-nav-icon">📅</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       <span class="mobile-nav-label">Edital</span>
     </button>
   </nav>
@@ -2643,70 +2661,70 @@ body.light-theme .visual-card {
     <div class="cloud-modal">
       <div class="cloud-modal-header">
         <div>
-          <h3>☁️ Sincronização Automática na Nuvem (Auto-Save)</h3>
-          <p style="font-size:0.82rem;color:var(--text-secondary);">Salve suas questões resolvidas, dias concluídos, simulados e anotações na nuvem em tempo real entre computador, celular e Google Sites.</p>
+          <h3>Sincronização em Nuvem (Auto-Save)</h3>
+          <p style="font-size:0.82rem;color:var(--text-secondary);">Mantenha o histórico de questões, cronograma, simulados e notas sincronizado entre computador, smartphone e Google Sites.</p>
         </div>
-        <button class="btn btn-secondary btn-sm" id="btn-close-cloud-modal">✕ Fechar</button>
+        <button class="btn btn-secondary btn-sm" id="btn-close-cloud-modal">Fechar</button>
       </div>
 
       <!-- STATUS ATUAL -->
       <div class="cloud-status-box" id="cloud-modal-status-box">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
-            <div style="font-weight:700;font-size:0.92rem;" id="cloud-modal-status-title">⚪ Nuvem ainda não configurada</div>
-            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Configure abaixo em 30 segundos usando sua Conta Google ou GitHub.</div>
+            <div style="font-weight:700;font-size:0.9rem;" id="cloud-modal-status-title">Nuvem não configurada</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Configure abaixo utilizando Google Apps Script, GitHub Gist ou endpoint REST.</div>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">⬆️ Salvar na Nuvem Agora</button>
-            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">⬇️ Baixar da Nuvem Agora</button>
+            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">Enviar para Nuvem</button>
+            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">Baixar da Nuvem</button>
           </div>
         </div>
       </div>
 
       <!-- SELETOR DE PROVEDOR -->
       <div class="cloud-provider-tabs">
-        <button class="cloud-tab-btn active" data-cloud-provider="google">1️⃣ Google Script / Drive (Recomendado)</button>
-        <button class="cloud-tab-btn" data-cloud-provider="github">2️⃣ GitHub Gist Secreto</button>
-        <button class="cloud-tab-btn" data-cloud-provider="firebase">3️⃣ Firebase / REST JSON</button>
+        <button class="cloud-tab-btn active" data-cloud-provider="google">01 · Google Apps Script</button>
+        <button class="cloud-tab-btn" data-cloud-provider="github">02 · GitHub Gist Privado</button>
+        <button class="cloud-tab-btn" data-cloud-provider="firebase">03 · Endpoint REST / Firebase</button>
       </div>
 
       <!-- ABA 1: GOOGLE APPS SCRIPT -->
       <div class="cloud-provider-panel active" id="cloud-panel-google">
-        <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;">
-          <strong>Por que usar o Google Apps Script?</strong> É 100% gratuito na sua própria Conta Google, funciona dentro do <strong>Google Sites Restrito</strong> sem bloqueios e <strong>não pede permissões extras</strong>:
+        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
+          <strong>Google Apps Script (Conta Google Pessoal):</strong> Opera diretamente na sua conta Google sem exigir permissões de OAuth externas e funciona dentro do iframe do Google Sites:
           <ol style="margin:6px 0 10px 18px;">
-            <li>Clique no botão abaixo para copiar o código de 15 linhas e abra <a href="https://script.google.com/home/start" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:700;">script.google.com (Novo Projeto) ↗</a>.</li>
-            <li>Apague o texto inicial do editor, cole o código copiado e clique em <strong>Implantar (Deploy) &gt; Nova implantação</strong>.</li>
-            <li>Escolha o tipo <strong>App da Web</strong>, em <em>"Quem pode acessar"</em> selecione <strong>Qualquer pessoa (Anyone)</strong> e clique em <strong>Implantar</strong>.</li>
-            <li>Copie a <strong>URL do App da Web</strong> gerada (`https://script.google.com/macros/s/.../exec`) e cole abaixo:</li>
+            <li>Copie o script de 15 linhas no botão abaixo e acesse <a href="https://script.google.com/home/start" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">script.google.com (Novo Projeto)</a>.</li>
+            <li>Substitua o conteúdo do editor pelo código copiado e selecione <strong>Implantar &gt; Nova implantação</strong>.</li>
+            <li>Escolha o tipo <strong>App da Web</strong>, defina o acesso como <strong>Qualquer pessoa (Anyone)</strong> e confirme em <strong>Implantar</strong>.</li>
+            <li>Copie a <strong>URL do App da Web</strong> (`https://script.google.com/macros/s/.../exec`) e insira abaixo:</li>
           </ol>
-          <button class="btn btn-secondary btn-sm" id="btn-copy-gas-code" style="margin-bottom:10px;">📋 1. Copiar Código do Google Apps Script (15 linhas)</button>
+          <button class="btn btn-secondary btn-sm" id="btn-copy-gas-code" style="margin-bottom:10px;">Copiar Script Google (15 linhas)</button>
         </div>
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">URL do seu Google Apps Script (`.../exec`):</label>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Web App (`.../exec`):</label>
         <input type="url" class="form-input" id="input-cloud-gas-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" style="width:100%;margin-bottom:8px;">
       </div>
 
       <!-- ABA 2: GITHUB GIST SECRETO -->
       <div class="cloud-provider-panel" id="cloud-panel-github" style="display:none;">
-        <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;">
-          Salva automaticamente em um arquivo privado (<strong>Secret Gist</strong>) na sua própria conta do GitHub:
+        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
+          Armazena o estado da aplicação em um arquivo JSON privado (<strong>Secret Gist</strong>) na sua conta do GitHub:
           <ol style="margin:6px 0 8px 18px;">
-            <li>Gere um token com permissão <code>gist</code> clicando em <a href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:700;">Criar Token GitHub (escopo Gist) ↗</a>.</li>
-            <li>Cole o Token abaixo (o <em>Gist ID</em> será criado ou localizado automaticamente na sua conta!):</li>
+            <li>Gere um Personal Access Token com escopo <code>gist</code> em <a href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">github.com/settings/tokens</a>.</li>
+            <li>Insira o token abaixo (o <em>Gist ID</em> é localizado ou criado automaticamente):</li>
           </ol>
         </div>
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">GitHub Personal Access Token (`ghp_...`):</label>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">GitHub Personal Access Token (`ghp_...`):</label>
         <input type="password" class="form-input" id="input-cloud-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%;margin-bottom:8px;">
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">Gist ID (opcional — preenchido automaticamente após conectar):</label>
-        <input type="text" class="form-input" id="input-cloud-gh-gist" placeholder="Deixe em branco para localizar/criar automaticamente" style="width:100%;margin-bottom:8px;">
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Gist ID (opcional — preenchido automaticamente):</label>
+        <input type="text" class="form-input" id="input-cloud-gh-gist" placeholder="Localizado automaticamente após conectar" style="width:100%;margin-bottom:8px;">
       </div>
 
       <!-- ABA 3: FIREBASE / REST JSON -->
       <div class="cloud-provider-panel" id="cloud-panel-firebase" style="display:none;">
-        <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;">
-          Se você utiliza <strong>Firebase Realtime Database</strong> ou qualquer endpoint REST JSON que aceite <code>GET</code> e <code>PUT</code>:
+        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
+          Compatível com <strong>Firebase Realtime Database</strong> ou qualquer endpoint REST JSON com suporte a requisições <code>GET</code> e <code>PUT</code>:
         </div>
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">URL do Endpoint JSON (ex: `https://seu-app-default-rtdb.firebaseio.com/transpetro.json`):</label>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Endpoint JSON:</label>
         <input type="url" class="form-input" id="input-cloud-fb-url" placeholder="https://seu-banco.firebaseio.com/transpetro.json" style="width:100%;margin-bottom:8px;">
       </div>
 
@@ -2714,11 +2732,11 @@ body.light-theme .visual-card {
       <div class="cloud-modal-footer">
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;width:100%;">
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-primary" id="btn-save-cloud-config">✅ Conectar e Sincronizar Agora</button>
-            <button class="btn btn-secondary btn-sm" id="btn-disconnect-cloud">🔌 Desconectar</button>
+            <button class="btn btn-primary" id="btn-save-cloud-config">Conectar e Sincronizar</button>
+            <button class="btn btn-secondary btn-sm" id="btn-disconnect-cloud">Desconectar</button>
           </div>
-          <button class="btn btn-yellow btn-sm" id="btn-copy-bundle-with-cloud" title="Copia o código HTML completo já com sua nuvem pré-configurada para colar no Google Sites Restrito">
-            📦 Copiar HTML p/ Google Sites (Com Nuvem Embutida)
+          <button class="btn btn-yellow btn-sm" id="btn-copy-bundle-with-cloud" title="Copia o código HTML completo já com sua nuvem pré-configurada para colar no Google Sites">
+            Copiar HTML p/ Google Sites (Com Nuvem Embutida)
           </button>
         </div>
       </div>
@@ -3246,7 +3264,7 @@ window.DADOS_TEORIA = [
         $$Z_{\\text{pu}} = \\frac{Z_{\\Omega}}{Z_{\\text{base}}} \\qquad ; \\qquad Z_{\\text{pu,novo}} = Z_{\\text{pu,antigo}} \\cdot \\left(\\frac{S_{\\text{base,novo}}}{S_{\\text{base,antigo}}}\\right) \\cdot \\left(\\frac{V_{\\text{base,antigo}}}{V_{\\text{base,novo}}}\\right)^2$$
       </div>
       <div class="cesgranrio-tip">
-        <strong>🎯 Pegadinha Clássica Cesgranrio (Q37 e Q56 de 2023.2):</strong>
+        <strong>OBSERVAÇÃO DE PROVA — CESGRANRIO (Q37 e Q56 de 2023.2):</strong>
         1) Se um equipamento conectado em estrela tem potência nominal $S_{\\text{nom}} = 400\\text{ kVA}$ e tensão $10\\text{ kV}$ sem especificar impedância interna percentual, a impedância nominal da própria carga é $1,0\\text{ p.u.}$ na sua própria base! Mudando para $S_{\\text{base}} = 100\\text{ kVA}$ (mesma tensão $10\\text{ kV}$): $Z_{\\text{pu}} = 1,0 \\times \\frac{100}{400} = \\mathbf{0,25\\text{ p.u.}}$<br>
         2) No <strong>diagrama unifilar</strong> (Q39), as grandezas representadas fazem referência à <strong>tensão de linha</strong>, <strong>corrente de linha</strong> e à <strong>impedância de uma das fases na ligação estrela (ou do equivalente estrela $Z_Y = Z_\\Delta / 3$ se a carga for delta)</strong>!
       </div>
@@ -3262,7 +3280,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 1: FASORES DE FORTESCUE GIRANDO -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🎬 Animação Vetorial: Decomposição de Fortescue (Sequências 1, 2 e 0)</span>
+          <span class="visual-card-title">FIGURA 4.1 — Decomposição Vetorial de Fortescue (Sequências 1, 2 e 0)</span>
           <span class="visual-card-badge">Rotação Fasorial ω (Anti-horária)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3333,8 +3351,8 @@ window.DADOS_TEORIA = [
         $$\\begin{bmatrix} \\dot{V}_A \\\\ \\dot{V}_B \\\\ \\dot{V}_C \\end{bmatrix} = \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & a^2 & a \\\\ 1 & a & a^2 \\end{bmatrix} \\begin{bmatrix} \\dot{V}_{A0} \\\\ \\dot{V}_{A1} \\\\ \\dot{V}_{A2} \\end{bmatrix} \\qquad \\iff \\qquad \\begin{bmatrix} \\dot{V}_{A0} \\\\ \\dot{V}_{A1} \\\\ \\dot{V}_{A2} \\end{bmatrix} = \\frac{1}{3} \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & a & a^2 \\\\ 1 & a^2 & a \\end{bmatrix} \\begin{bmatrix} \\dot{V}_A \\\\ \\dot{V}_B \\\\ \\dot{V}_C \\end{bmatrix}$$
       </div>
       <div class="cesgranrio-tip">
-        <strong>🎯 Dica de Ouro Cesgranrio (Q38 de 2023.2):</strong>
-        A Cesgranrio adora trocar a ordem das colunas da matriz! Para identificar quem é sequência positiva, negativa e zero na matriz que calcula $[\\dot{A}, \\dot{B}, \\dot{C}]^T$:<br>
+        <strong>OBSERVAÇÃO DE PROVA — CESGRANRIO (Q38 de 2023.2):</strong>
+        A Cesgranrio costuma permutar a ordem das colunas da matriz de transformação. Para identificar cada sequência na matriz que calcula $[\\dot{A}, \\dot{B}, \\dot{C}]^T$:<br>
         • A coluna $[1, 1, 1]^T$ é SEMPRE a <strong>Sequência Zero</strong>.<br>
         • A coluna $[1, a^2, a]^T$ é SEMPRE a <strong>Sequência Positiva</strong> (pois na fase B o fasor positivo atrasa $120^\\circ$, multiplicando por $a^2 = 1\\angle -120^\\circ$).<br>
         • A coluna $[1, a, a^2]^T$ é SEMPRE a <strong>Sequência Negativa</strong>.
@@ -3382,7 +3400,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 2: REDES DE SEQUÊNCIA EM CURTO-CIRCUITO -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">⚡ Animação de Faltas: Conexão das Redes de Sequência (1φ-Terra vs. 2φ)</span>
+          <span class="visual-card-title">FIGURA 4.2 — Conexão das Redes de Sequência em Faltas (1φ-Terra vs. 2φ)</span>
           <span class="visual-card-badge">Fluxo de Corrente de Curto</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3439,7 +3457,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 3: EFEITO PELICULAR -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🔬 Ilustração Animada: Efeito Pelicular (Skin Effect) na Seção do Condutor</span>
+          <span class="visual-card-title">FIGURA 4.3 — Efeito Pelicular (Skin Effect) na Seção Transversal do Condutor</span>
           <span class="visual-card-badge">CC (f = 0 Hz) vs. CA (Alta Frequência)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3519,7 +3537,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 4: TRIÂNGULO DE POTÊNCIAS E CORREÇÃO DO FP -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">📐 Ilustração Vetorial: Triângulo de Potências e Correção de Fator de Potência</span>
+          <span class="visual-card-title">FIGURA 2.1 — Triângulo de Potências e Correção de Fator de Potência</span>
           <span class="visual-card-badge">Qc = P · (tg φ₁ − tg φ₂)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3566,8 +3584,8 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 5: CURVA TRANSITÓRIA RC / RL -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">📈 Animação Transitória: Resposta ao Degrau de 1ª Ordem (Constante de Tempo τ)</span>
-          <span class="visual-card-badge">1τ = 63,2% • 3τ = 95,0% • 5τ = 99,3%</span>
+          <span class="visual-card-title">FIGURA 2.2 — Resposta ao Degrau de 1ª Ordem (Constante de Tempo τ)</span>
+          <span class="visual-card-badge">1τ = 63,2% · 3τ = 95,0% · 5τ = 99,3%</span>
         </div>
         <div class="visual-svg-wrap">
           <svg viewBox="0 0 560 185" width="560" height="185">
@@ -3617,7 +3635,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 6: AUTOTRANSFORMADOR -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🔌 Ilustração Animada: Autotransformador Abaixador 300 V / 100 V (Q24 de 2023.2)</span>
+          <span class="visual-card-title">FIGURA 6.1 — Autotransformador Abaixador 300 V / 100 V (Q24 de 2023.2)</span>
           <span class="visual-card-badge">S_auto = 60 kVA ⇒ S_isolado = 40 kVA</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3667,7 +3685,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 7: MOTOR DE INDUÇÃO (CAMPO GIRANTE + CURVA T x s) -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">⚙️ Animação Dupla: Escorregamento (n_s vs. n_r) e Deslocamento de Torque com R_adic</span>
+          <span class="visual-card-title">FIGURA 6.2 — Escorregamento (n_s vs. n_r) e Deslocamento de Conjugado com R_adic</span>
           <span class="visual-card-badge">MIT (Q27, Q28 e Q55)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3736,7 +3754,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 8: ESQUEMA TT E ESFERA ROLANTE SPDA -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🛡️ Ilustração Normativa: Esquema TT (NBR 5410 — Q31) & Esfera Rolante SPDA (NBR 5419)</span>
+          <span class="visual-card-title">FIGURA 5.1 — Esquema TT (NBR 5410 — Q31) & Esfera Rolante SPDA (NBR 5419)</span>
           <span class="visual-card-badge">Segurança de Instalações</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3804,7 +3822,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 9: RESPOSTA SUBAMORTECIDA E PLANO S -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🎛️ Animação de Controle: Senoide Subamortecida (ζ = 0,2) & Estabilização no Plano-s</span>
+          <span class="visual-card-title">FIGURA 7.1 — Resposta Subamortecida (ζ = 0,2) & Estabilização no Plano-s</span>
           <span class="visual-card-badge">Q47, Q68 e Q69</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3877,7 +3895,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 10: TRAJETÓRIA CIRCULAR DE PARTÍCULA (Q61) -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🧲 Animação Vetorial (Q61 de 2023.2): Aceleração Centrípeta A = B × v (Raio R = 1)</span>
+          <span class="visual-card-title">FIGURA 1.1 — Aceleração Centrípeta A = B × v (Q61 de 2023.2 · Raio R = 1)</span>
           <span class="visual-card-badge">B · v = 0 ⇒ Trajetória Circular</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3933,7 +3951,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO: OSCILOSCÓPIO + SHUNT (Q52) E MÉTODO DOS DOIS WATTÍMETROS (Q42) -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">📟 Ilustração Animada: Osciloscópio com Shunt (Q52) & Método dos Dois Wattímetros (Q42)</span>
+          <span class="visual-card-title">FIGURA 3.1 — Osciloscópio com Shunt (Q52) & Método dos Dois Wattímetros (Q42)</span>
           <span class="visual-card-badge">Medidas Elétricas em CA</span>
         </div>
         <div class="visual-svg-wrap">
@@ -3986,7 +4004,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 11: ZONAS DE RISCO E CONTROLADA DA NR-10 -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">⚠️ Ilustração Animada NR-10 (Anexo II): Zona de Risco (Rr), Zona Controlada (Rc) e Zona Livre</span>
+          <span class="visual-card-title">FIGURA 8.1 — NR-10 (Anexo II): Zona de Risco (Rr), Zona Controlada (Rc) e Zona Livre</span>
           <span class="visual-card-badge">Distâncias de Segurança</span>
         </div>
         <div class="visual-svg-wrap">
@@ -4007,12 +4025,12 @@ window.DADOS_TEORIA = [
             <!-- Sequência S-I-C-A-P-S -->
             <g transform="translate(310, 20)">
               <text x="0" y="15" fill="#38bdf8" font-size="12" font-weight="bold">Sequência de Desenergização (10.5.1):</text>
-              <text x="0" y="38" fill="#e2e8f0" font-size="11">1️⃣ <strong>S</strong>eccionamento</text>
-              <text x="0" y="58" fill="#e2e8f0" font-size="11">2️⃣ <strong>I</strong>mpedimento de reenergização</text>
-              <text x="0" y="78" fill="#e2e8f0" font-size="11">3️⃣ <strong>C</strong>onstatação da ausência de tensão</text>
-              <text x="0" y="98" fill="#fbbf24" font-size="11" font-weight="bold">4️⃣ <strong>A</strong>terramento temporário + equipotencialização</text>
-              <text x="0" y="118" fill="#e2e8f0" font-size="11">5️⃣ <strong>P</strong>roteção dos elementos na zona controlada</text>
-              <text x="0" y="138" fill="#e2e8f0" font-size="11">6️⃣ <strong>S</strong>inalização de impedimento</text>
+              <text x="0" y="38" fill="#e2e8f0" font-size="11">01. <strong>S</strong>eccionamento</text>
+              <text x="0" y="58" fill="#e2e8f0" font-size="11">02. <strong>I</strong>mpedimento de reenergização</text>
+              <text x="0" y="78" fill="#e2e8f0" font-size="11">03. <strong>C</strong>onstatação da ausência de tensão</text>
+              <text x="0" y="98" fill="#fbbf24" font-size="11" font-weight="bold">04. <strong>A</strong>terramento temporário + equipotencialização</text>
+              <text x="0" y="118" fill="#e2e8f0" font-size="11">05. <strong>P</strong>roteção dos elementos na zona controlada</text>
+              <text x="0" y="138" fill="#e2e8f0" font-size="11">06. <strong>S</strong>inalização de impedimento</text>
             </g>
           </svg>
         </div>
@@ -5937,7 +5955,7 @@ window.QUESTOES_PARTE2 = [
     bookmarkedQuestions: [],
     completedChecklist: [],
     personalNotes:
-      "📌 Fórmulas Rápidas para Revisar antes da Prova:\n" +
+      "Fórmulas Rápidas para Revisar antes da Prova:\n" +
       "• Curto 1φ-Terra franco: I_f = 3·E / (Z1 + Z2 + Z0)\n" +
       "• Mudança de base p.u.: Z_novo = Z_antigo · (S_novo/S_antigo) · (V_antigo/V_novo)²\n" +
       "• NBR 5410 Sobrecarga: IL ≤ Id ≤ Ic\n" +
@@ -6051,8 +6069,8 @@ window.QUESTOES_PARTE2 = [
 
     if (!isCloudConfigured()) {
       if (dot) dot.className = "cloud-dot";
-      if (label) label.textContent = "☁️ Nuvem: Configurar";
-      if (modalTitle) modalTitle.textContent = "⚪ Nuvem desconectada (Salvando apenas neste navegador)";
+      if (label) label.textContent = "Nuvem: Configurar";
+      if (modalTitle) modalTitle.textContent = "Nuvem desconectada (persistência local no navegador)";
       if (modalSub)
         modalSub.textContent =
           "Escolha abaixo Google Script (recomendado p/ Google Sites), GitHub Gist ou Firebase para ativar o salvamento na nuvem.";
@@ -6076,22 +6094,22 @@ window.QUESTOES_PARTE2 = [
 
     if (cloudStatus.state === "syncing") {
       if (dot) dot.className = "cloud-dot syncing";
-      if (label) label.textContent = "🔄 Sincronizando nuvem...";
-      if (modalTitle) modalTitle.textContent = `🔄 Sincronizando com ${provName}...`;
-      if (modalSub) modalSub.textContent = "Aguarde um instante...";
+      if (label) label.textContent = "Sincronizando nuvem...";
+      if (modalTitle) modalTitle.textContent = `Sincronizando com ${provName}...`;
+      if (modalSub) modalSub.textContent = "Aguarde a confirmação do servidor...";
     } else if (cloudStatus.state === "error") {
       if (dot) dot.className = "cloud-dot error";
-      if (label) label.textContent = "⚠️ Nuvem: Erro (Ver)";
-      if (modalTitle) modalTitle.textContent = `⚠️ Falha ao sincronizar com ${provName}`;
+      if (label) label.textContent = "Nuvem: Erro de sinc.";
+      if (modalTitle) modalTitle.textContent = `Falha ao sincronizar com ${provName}`;
       if (modalSub) modalSub.textContent = cloudStatus.message || "Verifique sua URL/Token ou conexão com a internet.";
     } else {
       if (dot) dot.className = "cloud-dot synced";
       if (label)
         label.textContent = timeStr
-          ? `☁️ Salvo na Nuvem (${timeStr.slice(0, 5)})`
-          : "☁️ Nuvem Conectada ✓";
+          ? `Sincronizado (${timeStr.slice(0, 5)})`
+          : "Nuvem Conectada";
       if (modalTitle)
-        modalTitle.textContent = `🟢 Conectado a ${provName} ${timeStr ? "• Última sinc: " + timeStr : ""}`;
+        modalTitle.textContent = `Conectado a ${provName} ${timeStr ? "· Última sinc: " + timeStr : ""}`;
       if (modalSub)
         modalSub.textContent =
           cloudStatus.message ||
@@ -6522,21 +6540,21 @@ window.QUESTOES_PARTE2 = [
 
       if (timerSeconds > 1200) {
         // 30:00 até 20:01 (primeiros 10 min)
-        badge.textContent = "1/3 • 10m Teoria";
+        badge.textContent = "1/3 · 10m Teoria";
         seg1.classList.add("active");
       } else if (timerSeconds > 300) {
         // 20:00 até 05:01 (15 min seguintes)
-        badge.textContent = "2/3 • 15m Questões";
+        badge.textContent = "2/3 · 15m Questões";
         seg1.classList.add("done");
         seg2.classList.add("active");
       } else if (timerSeconds > 0) {
         // 05:00 até 00:01 (5 min finais)
-        badge.textContent = "3/3 • 5m Revisão";
+        badge.textContent = "3/3 · 5m Revisão";
         seg1.classList.add("done");
         seg2.classList.add("done");
         seg3.classList.add("active");
       } else {
-        badge.textContent = "✅ Meta 30m Concluída!";
+        badge.textContent = "Meta 30m Concluída";
         seg1.classList.add("done");
         seg2.classList.add("done");
         seg3.classList.add("done");
@@ -6545,7 +6563,7 @@ window.QUESTOES_PARTE2 = [
 
     const btnToggle = document.getElementById("btn-timer-toggle");
     if (btnToggle) {
-      btnToggle.textContent = timerRunning ? "⏸ Pausar" : "▶ Iniciar 30m";
+      btnToggle.textContent = timerRunning ? "Pausar" : "Iniciar 30m";
     }
   }
 
@@ -6656,8 +6674,8 @@ window.QUESTOES_PARTE2 = [
     if (countdownEl) {
       countdownEl.textContent =
         diffDays > 0
-          ? "⏳ Faltam " + diffDays + " dias para a Prova (06/12/2026)"
-          : "🎯 Dia da Prova: 06/12/2026";
+          ? "PROVA: 06/12/2026 (" + diffDays + " DIAS)"
+          : "DIA DA PROVA: 06/12/2026";
     }
   }
 
@@ -6783,9 +6801,9 @@ window.QUESTOES_PARTE2 = [
       const isDone = state.completedDays.includes(missionDay.dia);
       const overdueBannerHTML =
         overdueDays.length > 0
-          ? `<div style="background:rgba(251,191,36,0.14);border:1px solid var(--accent-yellow);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:0.85rem;">
-               <strong>🔄 Replanejamento Automático Ativo (${overdueDays.length} dia(s) acumulado(s)):</strong>
-               Nenhum conteúdo foi perdido! O sistema colocou o <strong>Dia ${missionDay.dia}</strong> na sua vez de hoje e usará os <strong>4 Dias Coringa (Dias 27 a 30)</strong> como margem de segurança, ou você pode usar abaixo o <strong>Modo Express (15m)</strong> ou <strong>Diluição (+10m = 40m)</strong>.
+          ? `<div style="background:rgba(217,119,6,0.12);border:1px solid var(--accent-yellow);border-radius:4px;padding:10px 14px;margin-bottom:14px;font-size:0.84rem;">
+               <strong>REPLANEJAMENTO AUTOMÁTICO ATIVO (${overdueDays.length} dia(s) pendente(s)):</strong>
+               Nenhum conteúdo foi perdido. O sistema alocou o <strong>Dia ${missionDay.dia}</strong> na fila atual e utilizará os <strong>4 Dias de Margem (Dias 27 a 30)</strong>, ou você pode acionar o <strong>Modo Express (15m)</strong> ou <strong>Diluição (40m)</strong>.
              </div>`
           : "";
 
@@ -6793,25 +6811,25 @@ window.QUESTOES_PARTE2 = [
         <div class="hero-mission">
           <div class="hero-mission-content">
             ${overdueBannerHTML}
-            <span class="mission-tag">⚡ Próxima Missão da Fila • Dia ${missionDay.dia} de 30 (Ref: ${missionDay.data} — ${missionDay.diaSemana})</span>
+            <span class="mission-tag"> SESSÃO ATUAL · DIA ${missionDay.dia} DE 30 · REF: ${missionDay.data} (${missionDay.diaSemana})</span>
             <h3>${missionDay.titulo}</h3>
-            <p><strong>${missionDay.bloco}</strong> • ${missionDay.fase}</p>
+            <p><strong>${missionDay.bloco}</strong> · ${missionDay.fase}</p>
             <div class="mission-steps-pills">
-              <div class="step-pill"><strong>⏱️ 10 min Teoria:</strong> ${missionDay.focoTeoria}</div>
-              <div class="step-pill"><strong>✍️ 15 min Questões:</strong> Questões ${missionDay.questoesIds.map((id) => "#" + id).join(", ")}</div>
-              <div class="step-pill"><strong>🔄 5 min Revisão:</strong> ${missionDay.focoRevisao}</div>
+              <div class="step-pill"><strong>10 min Teoria:</strong> ${missionDay.focoTeoria}</div>
+              <div class="step-pill"><strong>15 min Questões:</strong> Questões ${missionDay.questoesIds.map((id) => "#" + id).join(", ")}</div>
+              <div class="step-pill"><strong>05 min Revisão:</strong> ${missionDay.focoRevisao}</div>
             </div>
           </div>
           <div class="hero-mission-actions">
-            <button class="btn btn-yellow" id="hero-btn-start-timer">▶️ Iniciar Sessão Padrão (30 min)</button>
+            <button class="btn btn-yellow" id="hero-btn-start-timer">Iniciar Sessão Padrão (30 min)</button>
             <div style="display:flex;gap:6px;">
-              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-express-15" title="Sem tempo hoje? Faça só os 15 min de questões comentadas!">⚡ Express 15m</button>
-              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-recover-40" title="Recuperar atraso diluindo +10 min hoje (40 min)">🔥 Diluir 40m</button>
+              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-express-15" title="Executar apenas os 15 min de questões comentadas">Modo Express (15m)</button>
+              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-recover-40" title="Recuperar atraso diluindo +10 min na sessão (40 min)">Diluir Atraso (40m)</button>
             </div>
-            <button class="btn btn-primary" id="hero-btn-open-theory">📖 1. Ler Teoria (10 min)</button>
-            <button class="btn btn-secondary" id="hero-btn-open-questions">✍️ 2. Resolver ${missionDay.questoesIds.length} Questões (15 min)</button>
+            <button class="btn btn-primary" id="hero-btn-open-theory">1. Abrir Apostila Teórica (10 min)</button>
+            <button class="btn btn-secondary" id="hero-btn-open-questions">2. Resolver ${missionDay.questoesIds.length} Questões (15 min)</button>
             <button class="btn ${isDone ? "btn-secondary" : "btn-primary"}" id="hero-btn-toggle-day">
-              ${isDone ? "✅ Dia " + missionDay.dia + " Concluído (Desmarcar)" : "☑️ Marcar Dia " + missionDay.dia + " como Concluído"}
+              ${isDone ? "Dia " + missionDay.dia + " Concluído (Desmarcar)" : "Marcar Dia " + missionDay.dia + " como Concluído"}
             </button>
           </div>
         </div>
@@ -6946,8 +6964,8 @@ window.QUESTOES_PARTE2 = [
       badge.textContent = `Card ${currentFlashcardIdx + 1} / ${FLASHCARDS_REVISAO.length}`;
     if (sideLabel) {
       sideLabel.textContent = flashcardShowingBack
-        ? "✅ VERSO • RESPOSTA / FÓRMULA OFICIAL"
-        : "❓ FRENTE • PERGUNTA (CLIQUE PARA VIRAR)";
+        ? "VERSO · RESPOSTA / FÓRMULA OFICIAL"
+        : "FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)";
       sideLabel.style.color = flashcardShowingBack
         ? "var(--accent-green)"
         : "var(--accent-yellow)";
@@ -7016,11 +7034,11 @@ window.QUESTOES_PARTE2 = [
             <div>
               <div class="day-card-header">
                 <div>
-                  <span class="day-number">DIA ${d.dia} DE 30 ${isToday ? "• 🌟 HOJE" : ""}</span>
-                  <div class="day-date">📅 ${d.data} (${d.diaSemana})</div>
+                  <span class="day-number">DIA ${String(d.dia).padStart(2, "0")} / 30 ${isToday ? "· HOJE" : ""}</span>
+                  <div class="day-date">${d.data} (${d.diaSemana})</div>
                 </div>
                 <span class="badge ${isCompleted ? "badge-green" : "badge-yellow"}">
-                  ${isCompleted ? "✓ Concluído" : "⏱️ 30 min"}
+                  ${isCompleted ? "CONCLUÍDO" : "30 MIN"}
                 </span>
               </div>
               <div style="margin-bottom:6px;">
@@ -7048,8 +7066,8 @@ window.QUESTOES_PARTE2 = [
                 Concluído
               </label>
               <div style="margin-left:auto;display:flex;gap:6px;">
-                <button class="btn btn-secondary btn-sm" data-goto-theory="${d.teoriaId}">📖 Teoria</button>
-                <button class="btn btn-primary btn-sm" data-goto-questions="${d.dia}">✍️ Questões (${d.questoesIds.length})</button>
+                <button class="btn btn-secondary btn-sm" data-goto-theory="${d.teoriaId}">Teoria</button>
+                <button class="btn btn-primary btn-sm" data-goto-questions="${d.dia}">Questões (${d.questoesIds.length})</button>
               </div>
             </div>
           </div>
@@ -7142,22 +7160,22 @@ window.QUESTOES_PARTE2 = [
         <div>
           <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
             <span class="badge badge-blue">${activeMod.codigo}</span>
-            <span class="badge badge-yellow">📊 Incidência: ${activeMod.pesoProva}</span>
+            <span class="badge badge-yellow">Incidência: ${activeMod.pesoProva}</span>
             <span class="badge ${isStudied ? "badge-green" : "badge-purple"}">
-              ${isStudied ? "✅ Módulo Estudado" : "📌 Prioridade: " + activeMod.prioridade}
+              ${isStudied ? "Módulo Estudado" : "Prioridade: " + activeMod.prioridade}
             </span>
           </div>
-          <h2 style="font-size:1.45rem;font-weight:800;">${activeMod.titulo}</h2>
+          <h2 style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;">${activeMod.titulo}</h2>
           <p style="font-size:0.84rem;color:var(--text-muted);margin-top:4px;">
             <strong>Tópicos do Anexo IV do Edital 2026.4:</strong> ${activeMod.subtopicosEdital}
           </p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn ${isStudied ? "btn-secondary" : "btn-primary"} btn-sm" id="btn-toggle-studied-theory">
-            ${isStudied ? "✅ Marcar como Não Lido" : "☑️ Marcar Módulo como Estudado"}
+            ${isStudied ? "Marcar como Não Lido" : "Marcar Módulo como Estudado"}
           </button>
           <button class="btn btn-yellow btn-sm" id="btn-practice-block-questions">
-            ✍️ Resolver ${relatedCount} Questões deste Bloco
+            Resolver ${relatedCount} Questões deste Bloco
           </button>
         </div>
       </div>
@@ -7249,9 +7267,9 @@ window.QUESTOES_PARTE2 = [
     if (summaryBanner) {
       if (customQuestionIdsFilter) {
         summaryBanner.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--accent-green-soft);border:1px solid var(--accent-green);padding:10px 16px;border-radius:8px;margin-bottom:16px;">
-            <span>🎯 Exibindo as <strong>${filtered.length} questões selecionadas</strong> para a meta: <strong>${customFilterLabel}</strong></span>
-            <button class="btn btn-secondary btn-sm" id="btn-clear-day-filter">✕ Mostrar Todas as 85 Questões</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--accent-green-soft);border:1px solid var(--accent-green);padding:10px 16px;border-radius:4px;margin-bottom:16px;">
+            <span>FILTRO DE META ATIVO: exibindo as <strong>${filtered.length} questões selecionadas</strong> para <strong>${customFilterLabel}</strong></span>
+            <button class="btn btn-secondary btn-sm" id="btn-clear-day-filter">Mostrar Todas as 85 Questões</button>
           </div>
         `;
         document
@@ -7263,9 +7281,9 @@ window.QUESTOES_PARTE2 = [
           });
       } else {
         summaryBanner.innerHTML = `
-          <div style="margin-bottom:14px;font-size:0.88rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="margin-bottom:14px;font-size:0.84rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <span>Exibindo <strong>${filtered.length}</strong> de <strong>${TODAS_QUESTOES.length}</strong> questões disponíveis (70 da Prova 2023.2 + 15 Inéditas 2026.4).</span>
-            <span>💡 Clique em uma alternativa (A a E) para corrigir automaticamente e abrir a resolução passo a passo!</span>
+            <span>Selecione uma alternativa (A–E) para aferição imediata e exibição do memorial de cálculo.</span>
           </div>
         `;
       }
@@ -7346,7 +7364,7 @@ window.QUESTOES_PARTE2 = [
     if (textoBase) {
       baseTextHTML = `
         <details class="base-text-Toggle">
-          <summary>📄 Ler ${textoBase.titulo} (Clique para expandir/recolher)</summary>
+          <summary>Texto-Base: ${textoBase.titulo} (expandir / recolher)</summary>
           <div class="base-text-body">
             ${textoBase.paragrafos.map((p) => `<p style="margin-bottom:8px;">${p}</p>`).join("")}
             <div style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;"><em>${textoBase.autor}</em></div>
@@ -7389,7 +7407,7 @@ window.QUESTOES_PARTE2 = [
                 : ""
             }
             <button class="btn btn-secondary btn-sm" data-q-bookmark="${q.id}" title="Salvar no Caderno de Revisão">
-              ${isBookmarked ? "⭐ Favorita" : "☆ Favoritar"}
+              ${isBookmarked ? "★ Favorita" : "☆ Favoritar"}
             </button>
           </div>
         </div>
@@ -7401,16 +7419,16 @@ window.QUESTOES_PARTE2 = [
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
           <button class="btn btn-secondary btn-sm" data-q-toggle-exp="${q.id}">
-            💡 Ver / Ocultar Gabarito e Resolução Comentada
+            Ver / Ocultar Gabarito e Resolução Comentada
           </button>
           ${
             ans
-              ? `<button class="btn btn-secondary btn-sm" data-q-reset="${q.id}">🔄 Refazer Questão</button>`
+              ? `<button class="btn btn-secondary btn-sm" data-q-reset="${q.id}">Refazer Questão</button>`
               : ""
           }
         </div>
         <div class="explanation-box ${ans ? "visible" : ""}" id="exp-box-${q.id}">
-          <h4>✅ Gabarito Oficial: Alternativa (${q.correta})</h4>
+          <h4>GABARITO OFICIAL: ALTERNATIVA (${q.correta})</h4>
           <div>${formatRichText(q.comentario)}</div>
         </div>
       </div>
@@ -7557,17 +7575,17 @@ window.QUESTOES_PARTE2 = [
 
     if (!activeSimulado.finished) {
       container.innerHTML = `
-        <div class="card" style="border:2px solid var(--accent-yellow);margin-bottom:20px;">
+        <div class="card" style="border:1px solid var(--accent-yellow);margin-bottom:20px;">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div>
-              <span class="badge badge-yellow">🔥 Simulado em Andamento</span>
+              <span class="badge badge-yellow">SIMULADO EM EXECUÇÃO</span>
               <h3 style="margin-top:4px;">${activeSimulado.title}</h3>
             </div>
             <div style="display:flex;align-items:center;gap:14px;">
-              <div style="font-size:1.6rem;font-weight:800;color:var(--accent-yellow);font-variant-numeric:tabular-nums;" id="simulado-live-timer">
+              <div style="font-size:1.5rem;font-weight:700;font-family:var(--font-mono);color:var(--accent-yellow);font-variant-numeric:tabular-nums;" id="simulado-live-timer">
                 ${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}
               </div>
-              <button class="btn btn-primary" id="btn-finish-simulado">🏁 Finalizar e Corrigir Simulado</button>
+              <button class="btn btn-primary" id="btn-finish-simulado">Finalizar e Corrigir Simulado</button>
             </div>
           </div>
         </div>
@@ -7634,8 +7652,8 @@ window.QUESTOES_PARTE2 = [
       );
 
       container.innerHTML = `
-        <div class="card" style="border:2px solid var(--accent-green);margin-bottom:20px;">
-          <h3>🏆 Resultado do Simulado: ${correctCount} / ${activeSimulado.questions.length} acertos (${pct}%)</h3>
+        <div class="card" style="border:1px solid var(--accent-green);margin-bottom:20px;">
+          <h3>Resultado do Simulado: ${correctCount} / ${activeSimulado.questions.length} acertos (${pct}%)</h3>
           <p style="color:var(--text-secondary);margin-top:6px;">
             Todas as respostas foram registradas nas suas estatísticas e as resoluções comentadas estão liberadas abaixo.
           </p>
@@ -7748,7 +7766,7 @@ window.QUESTOES_PARTE2 = [
     const competitiva = ptsEsp >= 36 && ptsTotal >= 50;
 
     resultBox.innerHTML = `
-      <div style="padding:16px;border-radius:10px;border:1px solid ${
+      <div style="padding:16px;border-radius:4px;border:1px solid ${
         eliminado
           ? "var(--danger)"
           : competitiva
@@ -7762,16 +7780,16 @@ window.QUESTOES_PARTE2 = [
             : "var(--accent-yellow-soft)"
       };">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-          <h4 style="font-size:1.08rem;">
+          <h4 style="font-size:1rem;">
             ${
               eliminado
-                ? "❌ ELIMINADO PELOS CRITÉRIOS MÍNIMOS (Item 7.1.4.3)"
+                ? "ELIMINADO PELOS CRITÉRIOS MÍNIMOS (Item 7.1.4.3)"
                 : competitiva
-                  ? "🏆 APTO E ALTAMENTE COMPETITIVO PARA O CORTE 2x CR!"
-                  : "✅ APROVADO NOS MÍNIMOS (Atenção ao funil da Fase 1!)"
+                  ? "APTO E COMPETITIVO PARA O CORTE 2x CR"
+                  : "APROVADO NOS MÍNIMOS (Atenção ao funil da Fase 1)"
             }
           </h4>
-          <span class="badge ${eliminado ? "badge-danger" : "badge-green"}" style="font-size:0.9rem;">
+          <span class="badge ${eliminado ? "badge-danger" : "badge-green"}" style="font-size:0.82rem;">
             Nota Final: ${ptsTotal},0 / 70,0 pts (${Math.round((ptsTotal / 70) * 100)}%)
           </span>
         </div>
@@ -7817,7 +7835,7 @@ window.QUESTOES_PARTE2 = [
           return `
             <div class="${itemClass}">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <div class="timeline-date">📅 ${item.data}</div>
+                <div class="timeline-date">${item.data}</div>
                 <span class="badge ${
                   item.prova
                     ? "badge-danger"
@@ -7827,7 +7845,7 @@ window.QUESTOES_PARTE2 = [
                         ? "badge-yellow"
                         : "badge-blue"
                 }">
-                  ${item.prova ? "🎯 DIA DA PROVA" : isPast ? "✓ Concluído" : item.categoria}
+                  ${item.prova ? "DIA DA PROVA" : isPast ? "Concluído" : item.categoria}
                 </span>
               </div>
               <div class="timeline-title">${item.evento}</div>
@@ -7877,7 +7895,7 @@ window.QUESTOES_PARTE2 = [
     const btnTheme = document.getElementById("btn-toggle-theme");
     if (btnTheme) {
       btnTheme.textContent =
-        state.theme === "light" ? "🌙 Modo Escuro" : "☀️ Modo Claro";
+        state.theme === "light" ? "Tema Escuro" : "Tema Claro";
     }
   }
 
@@ -8153,10 +8171,10 @@ window.QUESTOES_PARTE2 = [
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(gasCode).then(() => {
-            this.textContent = "✅ Código Copiado! Cole em script.google.com";
+            this.textContent = "Código Copiado — Cole em script.google.com";
             setTimeout(() => {
               this.textContent =
-                "📋 1. Copiar Código do Google Apps Script (15 linhas)";
+                "1. Copiar Código do Google Apps Script (15 linhas)";
             }, 3500);
           });
         } else {
@@ -8287,10 +8305,10 @@ window.QUESTOES_PARTE2 = [
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(withCloud).then(() => {
             this.textContent =
-              "✅ HTML Copiado com Nuvem Embutida! Cole no Google Sites";
+              "HTML Copiado com Nuvem Embutida — Cole no Google Sites";
             setTimeout(() => {
               this.textContent =
-                "📦 Copiar HTML p/ Google Sites (Com Nuvem Embutida)";
+                "Copiar HTML p/ Google Sites (Com Nuvem Embutida)";
             }, 4000);
           });
         }
@@ -8321,4 +8339,3 @@ window.QUESTOES_PARTE2 = [
 </script>
 </body>
 </html>
-

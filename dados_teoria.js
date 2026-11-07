@@ -19,7 +19,7 @@ window.DADOS_TEORIA = [
         $$Z_{\\text{pu}} = \\frac{Z_{\\Omega}}{Z_{\\text{base}}} \\qquad ; \\qquad Z_{\\text{pu,novo}} = Z_{\\text{pu,antigo}} \\cdot \\left(\\frac{S_{\\text{base,novo}}}{S_{\\text{base,antigo}}}\\right) \\cdot \\left(\\frac{V_{\\text{base,antigo}}}{V_{\\text{base,novo}}}\\right)^2$$
       </div>
       <div class="cesgranrio-tip">
-        <strong>🎯 Pegadinha Clássica Cesgranrio (Q37 e Q56 de 2023.2):</strong>
+        <strong>OBSERVAÇÃO DE PROVA — CESGRANRIO (Q37 e Q56 de 2023.2):</strong>
         1) Se um equipamento conectado em estrela tem potência nominal $S_{\\text{nom}} = 400\\text{ kVA}$ e tensão $10\\text{ kV}$ sem especificar impedância interna percentual, a impedância nominal da própria carga é $1,0\\text{ p.u.}$ na sua própria base! Mudando para $S_{\\text{base}} = 100\\text{ kVA}$ (mesma tensão $10\\text{ kV}$): $Z_{\\text{pu}} = 1,0 \\times \\frac{100}{400} = \\mathbf{0,25\\text{ p.u.}}$<br>
         2) No <strong>diagrama unifilar</strong> (Q39), as grandezas representadas fazem referência à <strong>tensão de linha</strong>, <strong>corrente de linha</strong> e à <strong>impedância de uma das fases na ligação estrela (ou do equivalente estrela $Z_Y = Z_\\Delta / 3$ se a carga for delta)</strong>!
       </div>
@@ -35,7 +35,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 1: FASORES DE FORTESCUE GIRANDO -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🎬 Animação Vetorial: Decomposição de Fortescue (Sequências 1, 2 e 0)</span>
+          <span class="visual-card-title">FIGURA 4.1 — Decomposição Vetorial de Fortescue (Sequências 1, 2 e 0)</span>
           <span class="visual-card-badge">Rotação Fasorial ω (Anti-horária)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -106,8 +106,8 @@ window.DADOS_TEORIA = [
         $$\\begin{bmatrix} \\dot{V}_A \\\\ \\dot{V}_B \\\\ \\dot{V}_C \\end{bmatrix} = \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & a^2 & a \\\\ 1 & a & a^2 \\end{bmatrix} \\begin{bmatrix} \\dot{V}_{A0} \\\\ \\dot{V}_{A1} \\\\ \\dot{V}_{A2} \\end{bmatrix} \\qquad \\iff \\qquad \\begin{bmatrix} \\dot{V}_{A0} \\\\ \\dot{V}_{A1} \\\\ \\dot{V}_{A2} \\end{bmatrix} = \\frac{1}{3} \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & a & a^2 \\\\ 1 & a^2 & a \\end{bmatrix} \\begin{bmatrix} \\dot{V}_A \\\\ \\dot{V}_B \\\\ \\dot{V}_C \\end{bmatrix}$$
       </div>
       <div class="cesgranrio-tip">
-        <strong>🎯 Dica de Ouro Cesgranrio (Q38 de 2023.2):</strong>
-        A Cesgranrio adora trocar a ordem das colunas da matriz! Para identificar quem é sequência positiva, negativa e zero na matriz que calcula $[\\dot{A}, \\dot{B}, \\dot{C}]^T$:<br>
+        <strong>OBSERVAÇÃO DE PROVA — CESGRANRIO (Q38 de 2023.2):</strong>
+        A Cesgranrio costuma permutar a ordem das colunas da matriz de transformação. Para identificar cada sequência na matriz que calcula $[\\dot{A}, \\dot{B}, \\dot{C}]^T$:<br>
         • A coluna $[1, 1, 1]^T$ é SEMPRE a <strong>Sequência Zero</strong>.<br>
         • A coluna $[1, a^2, a]^T$ é SEMPRE a <strong>Sequência Positiva</strong> (pois na fase B o fasor positivo atrasa $120^\\circ$, multiplicando por $a^2 = 1\\angle -120^\\circ$).<br>
         • A coluna $[1, a, a^2]^T$ é SEMPRE a <strong>Sequência Negativa</strong>.
@@ -155,7 +155,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 2: REDES DE SEQUÊNCIA EM CURTO-CIRCUITO -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">⚡ Animação de Faltas: Conexão das Redes de Sequência (1φ-Terra vs. 2φ)</span>
+          <span class="visual-card-title">FIGURA 4.2 — Conexão das Redes de Sequência em Faltas (1φ-Terra vs. 2φ)</span>
           <span class="visual-card-badge">Fluxo de Corrente de Curto</span>
         </div>
         <div class="visual-svg-wrap">
@@ -212,7 +212,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 3: EFEITO PELICULAR -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🔬 Ilustração Animada: Efeito Pelicular (Skin Effect) na Seção do Condutor</span>
+          <span class="visual-card-title">FIGURA 4.3 — Efeito Pelicular (Skin Effect) na Seção Transversal do Condutor</span>
           <span class="visual-card-badge">CC (f = 0 Hz) vs. CA (Alta Frequência)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -292,7 +292,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 4: TRIÂNGULO DE POTÊNCIAS E CORREÇÃO DO FP -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">📐 Ilustração Vetorial: Triângulo de Potências e Correção de Fator de Potência</span>
+          <span class="visual-card-title">FIGURA 2.1 — Triângulo de Potências e Correção de Fator de Potência</span>
           <span class="visual-card-badge">Qc = P · (tg φ₁ − tg φ₂)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -339,8 +339,8 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 5: CURVA TRANSITÓRIA RC / RL -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">📈 Animação Transitória: Resposta ao Degrau de 1ª Ordem (Constante de Tempo τ)</span>
-          <span class="visual-card-badge">1τ = 63,2% • 3τ = 95,0% • 5τ = 99,3%</span>
+          <span class="visual-card-title">FIGURA 2.2 — Resposta ao Degrau de 1ª Ordem (Constante de Tempo τ)</span>
+          <span class="visual-card-badge">1τ = 63,2% · 3τ = 95,0% · 5τ = 99,3%</span>
         </div>
         <div class="visual-svg-wrap">
           <svg viewBox="0 0 560 185" width="560" height="185">
@@ -390,7 +390,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 6: AUTOTRANSFORMADOR -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🔌 Ilustração Animada: Autotransformador Abaixador 300 V / 100 V (Q24 de 2023.2)</span>
+          <span class="visual-card-title">FIGURA 6.1 — Autotransformador Abaixador 300 V / 100 V (Q24 de 2023.2)</span>
           <span class="visual-card-badge">S_auto = 60 kVA ⇒ S_isolado = 40 kVA</span>
         </div>
         <div class="visual-svg-wrap">
@@ -440,7 +440,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 7: MOTOR DE INDUÇÃO (CAMPO GIRANTE + CURVA T x s) -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">⚙️ Animação Dupla: Escorregamento (n_s vs. n_r) e Deslocamento de Torque com R_adic</span>
+          <span class="visual-card-title">FIGURA 6.2 — Escorregamento (n_s vs. n_r) e Deslocamento de Conjugado com R_adic</span>
           <span class="visual-card-badge">MIT (Q27, Q28 e Q55)</span>
         </div>
         <div class="visual-svg-wrap">
@@ -509,7 +509,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 8: ESQUEMA TT E ESFERA ROLANTE SPDA -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🛡️ Ilustração Normativa: Esquema TT (NBR 5410 — Q31) & Esfera Rolante SPDA (NBR 5419)</span>
+          <span class="visual-card-title">FIGURA 5.1 — Esquema TT (NBR 5410 — Q31) & Esfera Rolante SPDA (NBR 5419)</span>
           <span class="visual-card-badge">Segurança de Instalações</span>
         </div>
         <div class="visual-svg-wrap">
@@ -577,7 +577,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 9: RESPOSTA SUBAMORTECIDA E PLANO S -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🎛️ Animação de Controle: Senoide Subamortecida (ζ = 0,2) & Estabilização no Plano-s</span>
+          <span class="visual-card-title">FIGURA 7.1 — Resposta Subamortecida (ζ = 0,2) & Estabilização no Plano-s</span>
           <span class="visual-card-badge">Q47, Q68 e Q69</span>
         </div>
         <div class="visual-svg-wrap">
@@ -650,7 +650,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 10: TRAJETÓRIA CIRCULAR DE PARTÍCULA (Q61) -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">🧲 Animação Vetorial (Q61 de 2023.2): Aceleração Centrípeta A = B × v (Raio R = 1)</span>
+          <span class="visual-card-title">FIGURA 1.1 — Aceleração Centrípeta A = B × v (Q61 de 2023.2 · Raio R = 1)</span>
           <span class="visual-card-badge">B · v = 0 ⇒ Trajetória Circular</span>
         </div>
         <div class="visual-svg-wrap">
@@ -706,7 +706,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO: OSCILOSCÓPIO + SHUNT (Q52) E MÉTODO DOS DOIS WATTÍMETROS (Q42) -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">📟 Ilustração Animada: Osciloscópio com Shunt (Q52) & Método dos Dois Wattímetros (Q42)</span>
+          <span class="visual-card-title">FIGURA 3.1 — Osciloscópio com Shunt (Q52) & Método dos Dois Wattímetros (Q42)</span>
           <span class="visual-card-badge">Medidas Elétricas em CA</span>
         </div>
         <div class="visual-svg-wrap">
@@ -759,7 +759,7 @@ window.DADOS_TEORIA = [
       <!-- ANIMAÇÃO 11: ZONAS DE RISCO E CONTROLADA DA NR-10 -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">⚠️ Ilustração Animada NR-10 (Anexo II): Zona de Risco (Rr), Zona Controlada (Rc) e Zona Livre</span>
+          <span class="visual-card-title">FIGURA 8.1 — NR-10 (Anexo II): Zona de Risco (Rr), Zona Controlada (Rc) e Zona Livre</span>
           <span class="visual-card-badge">Distâncias de Segurança</span>
         </div>
         <div class="visual-svg-wrap">
@@ -780,12 +780,12 @@ window.DADOS_TEORIA = [
             <!-- Sequência S-I-C-A-P-S -->
             <g transform="translate(310, 20)">
               <text x="0" y="15" fill="#38bdf8" font-size="12" font-weight="bold">Sequência de Desenergização (10.5.1):</text>
-              <text x="0" y="38" fill="#e2e8f0" font-size="11">1️⃣ <strong>S</strong>eccionamento</text>
-              <text x="0" y="58" fill="#e2e8f0" font-size="11">2️⃣ <strong>I</strong>mpedimento de reenergização</text>
-              <text x="0" y="78" fill="#e2e8f0" font-size="11">3️⃣ <strong>C</strong>onstatação da ausência de tensão</text>
-              <text x="0" y="98" fill="#fbbf24" font-size="11" font-weight="bold">4️⃣ <strong>A</strong>terramento temporário + equipotencialização</text>
-              <text x="0" y="118" fill="#e2e8f0" font-size="11">5️⃣ <strong>P</strong>roteção dos elementos na zona controlada</text>
-              <text x="0" y="138" fill="#e2e8f0" font-size="11">6️⃣ <strong>S</strong>inalização de impedimento</text>
+              <text x="0" y="38" fill="#e2e8f0" font-size="11">01. <strong>S</strong>eccionamento</text>
+              <text x="0" y="58" fill="#e2e8f0" font-size="11">02. <strong>I</strong>mpedimento de reenergização</text>
+              <text x="0" y="78" fill="#e2e8f0" font-size="11">03. <strong>C</strong>onstatação da ausência de tensão</text>
+              <text x="0" y="98" fill="#fbbf24" font-size="11" font-weight="bold">04. <strong>A</strong>terramento temporário + equipotencialização</text>
+              <text x="0" y="118" fill="#e2e8f0" font-size="11">05. <strong>P</strong>roteção dos elementos na zona controlada</text>
+              <text x="0" y="138" fill="#e2e8f0" font-size="11">06. <strong>S</strong>inalização de impedimento</text>
             </g>
           </svg>
         </div>

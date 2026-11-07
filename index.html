@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1120">
+  <meta name="theme-color" content="#0d0f12">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Concurso Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Plataforma de Estudo 30 min/dia</title>
+  <title>Transpetro 2026.4 — Engenharia Elétrica (Ênfase 23) | Caderno Técnico de Estudos</title>
+  <!-- Tipografia Técnica: IBM Plex Sans & IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <!-- KaTeX para renderização matemática LaTeX nativa -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
@@ -19,10 +23,10 @@
   <aside class="sidebar" id="sidebar">
     <div class="brand-header">
       <div class="brand-logo">
-        <div class="brand-badge">BR</div>
+        <div class="brand-badge">TP</div>
         <div class="brand-title">
           <h1>TRANSPETRO 2026.4</h1>
-          <span>Ênfase 23 • Engenharia Elétrica</span>
+          <span>Ênfase 23 · Eng. Elétrica</span>
         </div>
         <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Fechar menu">✕</button>
       </div>
@@ -31,8 +35,8 @@
     <!-- CRONÔMETRO GUIADO DE 30 MINUTOS -->
     <div class="sidebar-timer">
       <div class="timer-top">
-        <span class="timer-label">⏱️ Ciclo Diário 30m</span>
-        <span class="timer-phase-badge" id="timer-phase-badge">1/3 • 10m Teoria</span>
+        <span class="timer-label">Sessão Diária (30m)</span>
+        <span class="timer-phase-badge" id="timer-phase-badge">1/3 · 10m Teoria</span>
       </div>
       <div class="timer-display" id="timer-display">30:00</div>
       <div class="timer-stages-bar" title="10m Teoria + 15m Questões + 5m Revisão">
@@ -41,8 +45,8 @@
         <div class="timer-stage-seg" id="timer-seg-3"></div>
       </div>
       <div class="timer-controls">
-        <button class="btn-timer primary" id="btn-timer-toggle">▶ Iniciar 30m</button>
-        <button class="btn-timer" id="btn-timer-reset" title="Reiniciar 30:00">↺ Reset</button>
+        <button class="btn-timer primary" id="btn-timer-toggle">Iniciar 30m</button>
+        <button class="btn-timer" id="btn-timer-reset" title="Reiniciar 30:00">Reiniciar</button>
       </div>
     </div>
 
@@ -50,51 +54,69 @@
     <ul class="nav-menu">
       <li class="nav-item">
         <button class="nav-btn active" data-tab="dashboard">
-          <span class="nav-btn-left"><span class="nav-icon">📊</span> Painel & Meta de Hoje</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+            <span>Visão Geral &amp; Sessão</span>
+          </span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="plano">
-          <span class="nav-btn-left"><span class="nav-icon">🗓️</span> Plano 30 Dias (30m/dia)</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Cronograma 30 Dias</span>
+          </span>
           <span class="nav-badge" id="nav-badge-plano">0/30</span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="teoria">
-          <span class="nav-btn-left"><span class="nav-icon">📚</span> Apostila & Conteúdos</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Caderno Teórico</span>
+          </span>
           <span class="nav-badge" id="nav-badge-teoria">0/10</span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="questoes">
-          <span class="nav-btn-left"><span class="nav-icon">✍️</span> Banco de Questões</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>Banco de Questões</span>
+          </span>
           <span class="nav-badge" id="nav-badge-questoes">0/85</span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="simulado">
-          <span class="nav-btn-left"><span class="nav-icon">🎯</span> Simulados & Corte</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+            <span>Simulados &amp; Corte</span>
+          </span>
         </button>
       </li>
       <li class="nav-item">
         <button class="nav-btn" data-tab="edital">
-          <span class="nav-btn-left"><span class="nav-icon">📅</span> Edital, Datas & Vagas</span>
+          <span class="nav-btn-left">
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Edital, Vagas &amp; Datas</span>
+          </span>
         </button>
       </li>
     </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-primary btn-sm" id="btn-open-cloud-modal" style="width:100%;margin-bottom:8px;justify-content:center;">
-        ☁️ Sincronização na Nuvem
+      <button class="btn btn-primary btn-sm" id="btn-open-cloud-modal" style="width:100%;margin-bottom:6px;justify-content:center;">
+        Sincronização em Nuvem
       </button>
       <div class="footer-actions">
-        <button class="btn-utility" id="btn-toggle-theme">☀️ Modo Claro</button>
-        <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">💾 Exportar</button>
-        <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">📂 Importar</button>
+        <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
+        <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">Exportar</button>
+        <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">Importar</button>
         <input type="file" id="input-import-json" accept=".json" style="display:none;">
       </div>
-      <div style="font-size:0.72rem;color:var(--text-muted);text-align:center;" id="sidebar-cloud-hint">
-        Edital Nº 04/2026 • Banca Cesgranrio<br>Progresso salvo localmente e na nuvem
+      <div class="sidebar-meta-foot" id="sidebar-cloud-hint">
+        EDITAL Nº 04/2026 · CESGRANRIO
       </div>
     </div>
   </aside>
@@ -107,24 +129,26 @@
     <!-- TOPBAR -->
     <header class="topbar">
       <div class="topbar-left" style="display:flex;align-items:center;gap:10px;min-width:0;">
-        <button class="mobile-toggle" id="btn-mobile-menu" aria-label="Abrir menu">☰</button>
+        <button class="mobile-toggle" id="btn-mobile-menu" aria-label="Abrir menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <div class="topbar-info">
-          <span class="countdown-pill" id="countdown-days-text">⏳ Prova em 06/12/2026</span>
-          <span class="salary-pill">💰 Remuneração Mínima: R$ 14.973,62 (Base: R$ 8.647,34)</span>
+          <span class="countdown-pill" id="countdown-days-text">PROVA: 06/12/2026</span>
+          <span class="salary-pill">REMUNERAÇÃO MÍNIMA: R$ 14.973,62 (BASE: R$ 8.647,34)</span>
         </div>
       </div>
       <div class="topbar-progress" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-        <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Toque para Iniciar ou Pausar o Ciclo de 30 minutos">
+        <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Iniciar ou pausar o ciclo de 30 minutos">
           <span id="mobile-timer-icon">▶</span>
           <span id="mobile-timer-text">30:00</span>
         </button>
-        <button class="cloud-status-pill" id="btn-topbar-cloud" title="Clique para configurar ou sincronizar seu progresso na nuvem">
+        <button class="cloud-status-pill" id="btn-topbar-cloud" title="Configurar ou sincronizar progresso na nuvem">
           <span class="cloud-dot" id="cloud-status-dot"></span>
-          <span id="cloud-status-label">☁️ Nuvem: Configurar</span>
+          <span id="cloud-status-label">Nuvem: Offline</span>
         </button>
         <div class="progress-mini-wrap">
           <div class="progress-mini-label">
-            <span>Plano 30 Dias</span>
+            <span>PLANO 30D</span>
             <span id="top-progress-pct">0%</span>
           </div>
           <div class="progress-bar-bg">
@@ -142,8 +166,9 @@
       <section class="tab-section active" id="tab-dashboard">
         <div class="section-header">
           <div>
-            <h2>⚡ Painel de Controle — Engenheiro Eletricista Júnior (Transpetro)</h2>
-            <p>Planejamento intensivo de alta eficiência: <strong>30 minutos por dia (10m Teoria + 15m Questões + 5m Revisão)</strong> até <strong>06/12/2026</strong>.</p>
+            <div class="section-eyebrow">ENGENHARIA ELÉTRICA · ÊNFASE 23 · NÍVEL SUPERIOR JÚNIOR</div>
+            <h2>Painel de Controle e Estudo Diário</h2>
+            <p>Planejamento estruturado de <strong>30 minutos diários (10m Teoria + 15m Questões + 5m Revisão)</strong> até a prova objetiva em <strong>06/12/2026</strong>.</p>
           </div>
         </div>
 
@@ -153,24 +178,24 @@
         <!-- KPI CARDS -->
         <div class="grid-4">
           <div class="stat-card">
-            <span class="stat-label">Dias do Plano Concluídos</span>
+            <span class="stat-label">Progresso do Cronograma</span>
             <div class="stat-value" id="stat-days-val">0 / 30</div>
             <div class="stat-sub" id="stat-days-sub">0h acumuladas (meta: 15h)</div>
           </div>
           <div class="stat-card yellow">
             <span class="stat-label">Questões Resolvidas</span>
             <div class="stat-value" id="stat-questions-val">0 / 85</div>
-            <div class="stat-sub" id="stat-questions-sub">70 da Prova 2023.2 + 15 Inéditas</div>
+            <div class="stat-sub" id="stat-questions-sub">70 Prova 2023.2 + 15 Inéditas</div>
           </div>
           <div class="stat-card blue">
-            <span class="stat-label">Módulos da Apostila Lidos</span>
+            <span class="stat-label">Módulos Teóricos</span>
             <div class="stat-value" id="stat-theory-val">0 / 10</div>
             <div class="stat-sub" id="stat-theory-sub">8 Blocos Específicos + PT + EN</div>
           </div>
           <div class="stat-card purple">
-            <span class="stat-label">Regra de Ouro do Edital 2026.4</span>
-            <div class="stat-value" style="font-size:1.35rem;">Fase 1 Habilita!</div>
-            <div class="stat-sub">50 Qs Específicas definem o corte 2x CR (44 no RJ / 22 em SP)</div>
+            <span class="stat-label">Critério de Corte (Fase 1)</span>
+            <div class="stat-value" style="font-size:1.25rem;">2× (Vagas + CR)</div>
+            <div class="stat-sub">50 Qs Específicas definem habilitação (44 RJ / 22 SP)</div>
           </div>
         </div>
 
@@ -178,11 +203,11 @@
           <!-- RAIO-X ESTATÍSTICO DA PROVA ANTERIOR -->
           <div class="card">
             <div class="card-title">
-              <span>📈 Raio-X Oficial da Prova Anterior (Transpetro 2023.2 — Prova 22)</span>
+              <span>Distribuição Histórica — Prova Transpetro 2023.2 (Prova 22)</span>
               <span class="badge badge-green">70 Questões</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Distribuição exata das 50 questões específicas e 20 básicas da última prova da Cesgranrio para guiar seus 30 minutos diários pelo princípio de Pareto (80/20):
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Incidência real por bloco temático na última edição da banca Cesgranrio para priorização de estudo:
             </p>
             <div class="table-responsive">
               <table class="data-table">
@@ -192,7 +217,7 @@
                     <th>Qtd.</th>
                     <th>Peso</th>
                     <th>Prioridade</th>
-                    <th>Questões na Prova 2023.2</th>
+                    <th>Questões (2023.2)</th>
                   </tr>
                 </thead>
                 <tbody id="raiox-tbody"></tbody>
@@ -203,17 +228,17 @@
           <!-- CADERNO DE FÓRMULAS & ANOTAÇÕES PESSOAIS -->
           <div class="card">
             <div class="card-title">
-              <span>📝 Meu Resumo Rápido & Fórmulas de Bolso (5 min finais)</span>
-              <span class="badge badge-blue">Salvo Automaticamente</span>
+              <span>Caderno Técnico de Fórmulas e Notas Pessoais</span>
+              <span class="badge badge-blue">Auto-Save</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:10px;">
-              Use este espaço nos <strong>5 minutos finais</strong> da sua sessão diária para anotar fórmulas, artigos da NR-10/Lei 14.133 ou pegadinhas da Cesgranrio que você não pode esquecer:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:10px;">
+              Registre relações matemáticas, itens normativos (NR-10, NBR 5410, Lei 14.133) e observações de resolução durante os 5 minutos finais de cada sessão:
             </p>
             <textarea
               id="personal-notes-area"
               class="form-input"
-              style="width:100%;min-height:295px;resize:vertical;font-family:monospace;line-height:1.5;"
-              placeholder="Anote aqui suas fórmulas, macetes e pontos de revisão..."
+              style="width:100%;min-height:295px;resize:vertical;font-family:'IBM Plex Mono',monospace;font-size:0.83rem;line-height:1.6;"
+              placeholder="Registre suas notas técnicas e fórmulas de revisão..."
             ></textarea>
           </div>
         </div>
@@ -222,11 +247,11 @@
           <!-- DESEMPENHO POR BLOCO EM TEMPO REAL -->
           <div class="card">
             <div class="card-title">
-              <span>🎯 Meu Desempenho por Bloco / Disciplina</span>
-              <span class="badge badge-purple">Tempo Real</span>
+              <span>Rendimento por Bloco Temático</span>
+              <span class="badge badge-purple">Métricas</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Acompanhe sua taxa de acerto em cada bloco conforme resolve as 85 questões do banco:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Taxa de acerto consolidada por disciplina conforme resolução das 85 questões disponíveis:
             </p>
             <div class="table-responsive">
               <table class="data-table">
@@ -235,7 +260,7 @@
                     <th>Bloco / Disciplina</th>
                     <th>Resolvidas</th>
                     <th>Acertos</th>
-                    <th>Aproveitamento</th>
+                    <th>Taxa</th>
                     <th>Ação</th>
                   </tr>
                 </thead>
@@ -247,24 +272,24 @@
           <!-- FLASHCARDS DE REVISÃO RÁPIDA (5 MINUTOS FINAIS) -->
           <div class="card">
             <div class="card-title">
-              <span>⚡ Flashcards de Revisão Rápida (Etapa 3: 5 Minutos Finais)</span>
-              <span class="badge badge-yellow" id="flashcard-counter-badge">Card 1 / 16</span>
+              <span>Cartões de Revisão Técnica (Etapa 3 · 5 min)</span>
+              <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 12</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Treine memorização ativa das fórmulas e normas mais cobradas pela Cesgranrio:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Verificação rápida de fórmulas de curto-circuito, componentes simétricas, máquinas, controle e normas:
             </p>
             <div
               id="flashcard-box"
-              style="background:var(--bg-surface);border:2px solid var(--accent-blue);border-radius:12px;padding:24px;min-height:190px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:all 0.2s;"
-              title="Clique para virar o cartão (Pergunta / Resposta)"
+              class="flashcard-surface"
+              title="Clique para alternar entre pergunta e resposta"
             >
-              <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:var(--accent-yellow);margin-bottom:8px;" id="flashcard-side-label">FRENTE • PERGUNTA (CLIQUE PARA REVELAR)</div>
-              <div style="font-size:1.05rem;font-weight:700;color:var(--text-primary);line-height:1.5;" id="flashcard-text"></div>
+              <div class="flashcard-side-tag" id="flashcard-side-label">QUESTÃO DE REVISÃO · CLIQUE PARA REVELAR</div>
+              <div class="flashcard-body-text" id="flashcard-text"></div>
             </div>
-            <div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px;">
-              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">⬅️ Anterior</button>
-              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">🔄 Virar Cartão (Ver Resposta)</button>
-              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo ➡️</button>
+            <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
+              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
+              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">Alternar Frente / Verso</button>
+              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
             </div>
           </div>
         </div>
@@ -276,19 +301,20 @@
       <section class="tab-section" id="tab-plano">
         <div class="section-header">
           <div>
-            <h2>🗓️ Cronograma Estratégico — 30 Minutos por Dia (07/11/2026 a 06/12/2026)</h2>
-            <p>Cada sessão diária de 30 minutos é dividida em <strong>10 min de Teoria Direta</strong> + <strong>15 min de Resolução de Questões</strong> + <strong>5 min de Revisão Ativa</strong>, priorizando os blocos de maior peso na Cesgranrio.</p>
+            <div class="section-eyebrow">PLANEJAMENTO SEQUENCIAL · 30 SESSÕES DE 30 MINUTOS</div>
+            <h2>Cronograma de Estudo Dirigido (07/11/2026 a 06/12/2026)</h2>
+            <p>Sessões estruturadas em <strong>10 min de Teoria</strong> + <strong>15 min de Questões</strong> + <strong>5 min de Revisão</strong>, ordenadas pelo peso estatístico da Cesgranrio.</p>
           </div>
         </div>
 
         <div class="plan-filters">
-          <button class="filter-chip active" data-plan-filter="todos">Todos os 30 Dias</button>
-          <button class="filter-chip" data-plan-filter="pendentes">⏳ Pendentes</button>
-          <button class="filter-chip" data-plan-filter="concluidos">✅ Concluídos</button>
-          <button class="filter-chip" data-plan-filter="semana1">Semana 1: SEP & Circuitos (38% da prova)</button>
-          <button class="filter-chip" data-plan-filter="semana2">Semana 2: Máquinas & Instalações (26% da prova)</button>
-          <button class="filter-chip" data-plan-filter="semana3">Semana 3: Controle & Matemática (22% da prova)</button>
-          <button class="filter-chip" data-plan-filter="semana4">Semana 4: Medidas, NR-10/Licitações, PT/EN & Revisão</button>
+          <button class="filter-chip active" data-plan-filter="todos">Todos (30)</button>
+          <button class="filter-chip" data-plan-filter="pendentes">Pendentes</button>
+          <button class="filter-chip" data-plan-filter="concluidos">Concluídos</button>
+          <button class="filter-chip" data-plan-filter="semana1">Semana 1 · SEP &amp; Circuitos (38%)</button>
+          <button class="filter-chip" data-plan-filter="semana2">Semana 2 · Máquinas &amp; Instalações (26%)</button>
+          <button class="filter-chip" data-plan-filter="semana3">Semana 3 · Controle &amp; Matemática (22%)</button>
+          <button class="filter-chip" data-plan-filter="semana4">Semana 4 · Medidas, NR-10, PT/EN &amp; Revisão</button>
         </div>
 
         <div class="days-grid" id="days-grid-container"></div>
@@ -300,8 +326,9 @@
       <section class="tab-section" id="tab-teoria">
         <div class="section-header">
           <div>
-            <h2>📚 Apostila Direcionada — Conteúdo Completo Explicado (Anexo IV)</h2>
-            <p>Explicações teóricas enxutas, tabelas normativas, fórmulas essenciais e dicas das pegadinhas da Cesgranrio para todos os 8 Blocos de Engenharia Elétrica + Português e Inglês.</p>
+            <div class="section-eyebrow">CONTEÚDO PROGRAMÁTICO · ANEXO IV DO EDITAL 04/2026</div>
+            <h2>Caderno Teórico e Diagramas de Engenharia Elétrica</h2>
+            <p>Síntese técnica, formulação matemática em LaTeX, tabelas normativas e diagramas vetoriais/circuitais para os 8 Blocos Específicos, Português e Inglês.</p>
           </div>
         </div>
 
@@ -317,8 +344,9 @@
       <section class="tab-section" id="tab-questoes">
         <div class="section-header">
           <div>
-            <h2>✍️ Banco de Questões de Múltipla Escolha Comentadas (85 Questões)</h2>
-            <p>Inclui <strong>todas as 70 questões oficiais da Prova 22 (Engenharia Elétrica — Transpetro 2023.2)</strong> com diagramas e textos-base + <strong>15 questões inéditas</strong> focadas no Edital 2026.4.</p>
+            <div class="section-eyebrow">TREINAMENTO DE PROVA · MÚLTIPLA ESCOLHA (A–E)</div>
+            <h2>Banco de Questões Comentadas (85 Questões)</h2>
+            <p>Contém as <strong>70 questões integrais da Prova 22 (Transpetro 2023.2 — Cesgranrio)</strong> com diagramas e textos-base + <strong>15 questões inéditas</strong> no padrão do Edital 2026.4.</p>
           </div>
         </div>
 
@@ -329,32 +357,32 @@
               id="filter-q-search"
               class="form-input"
               style="min-width:220px;flex:1;"
-              placeholder="🔍 Buscar por assunto, palavra ou nº (ex: p.u., NR-10, Q50)..."
+              placeholder="Filtrar por termo, assunto ou código (ex: p.u., Fortescue, NR-10, Q50)..."
             >
             <select id="filter-q-bloco" class="form-select">
-              <option value="todos">📚 Todos os Blocos / Disciplinas (85)</option>
-              <option value="bloco4">Bloco 4: Análise de Sistemas Elétricos - SEP (13)</option>
-              <option value="bloco2">Bloco 2: Circuitos Elétricos (11)</option>
-              <option value="bloco6">Bloco 6: Máquinas Elétricas (9)</option>
-              <option value="bloco5">Bloco 5: Instalações Elétricas e Subestações (8)</option>
-              <option value="bloco7">Bloco 7: Sistemas de Controle (7)</option>
-              <option value="bloco1">Bloco 1: Matemática Aplicada (6)</option>
-              <option value="bloco3">Bloco 3: Medidas Elétricas e SI (5)</option>
-              <option value="bloco8">Bloco 8: Legislação - NR-10 e Lei 14.133 (4)</option>
-              <option value="portugues">Básicos: Língua Portuguesa (11)</option>
-              <option value="ingles">Básicos: Língua Inglesa (11)</option>
+              <option value="todos">Todos os Blocos / Disciplinas (85)</option>
+              <option value="bloco4">Bloco 4 · Sistemas Elétricos de Potência (13)</option>
+              <option value="bloco2">Bloco 2 · Circuitos Elétricos (11)</option>
+              <option value="bloco6">Bloco 6 · Máquinas Elétricas (9)</option>
+              <option value="bloco5">Bloco 5 · Instalações Elétricas e Subestações (8)</option>
+              <option value="bloco7">Bloco 7 · Sistemas de Controle (7)</option>
+              <option value="bloco1">Bloco 1 · Matemática Aplicada (6)</option>
+              <option value="bloco3">Bloco 3 · Medidas Elétricas e SI (5)</option>
+              <option value="bloco8">Bloco 8 · Legislação: NR-10 e Lei 14.133 (4)</option>
+              <option value="portugues">Gerais · Língua Portuguesa (11)</option>
+              <option value="ingles">Gerais · Língua Inglesa (11)</option>
             </select>
             <select id="filter-q-origem" class="form-select">
-              <option value="todas">🏛️ Todas as Origens (85)</option>
-              <option value="2023">Prova Oficial Transpetro 2023.2 (Q01 a Q70)</option>
-              <option value="ineditas">Questões Inéditas Edital 2026.4 (Q71 a Q85)</option>
+              <option value="todas">Todas as Origens (85)</option>
+              <option value="2023">Prova Oficial Transpetro 2023.2 (Q01–Q70)</option>
+              <option value="ineditas">Questões Inéditas Edital 2026.4 (Q71–Q85)</option>
             </select>
             <select id="filter-q-status" class="form-select">
-              <option value="todas">📌 Todos os Status</option>
-              <option value="nao_respondidas">⏳ Não Respondidas</option>
-              <option value="acertos">✅ Questões que Acertei</option>
-              <option value="erros">❌ Questões que Errei (Para Revisar)</option>
-              <option value="favoritas">⭐ Minhas Favoritas (Caderno de Revisão)</option>
+              <option value="todas">Todos os Status</option>
+              <option value="nao_respondidas">Não Respondidas</option>
+              <option value="acertos">Respondidas · Acertos</option>
+              <option value="erros">Respondidas · Erros (Revisar)</option>
+              <option value="favoritas">Marcadas para Revisão</option>
             </select>
           </div>
         </div>
@@ -369,37 +397,38 @@
       <section class="tab-section" id="tab-simulado">
         <div class="section-header">
           <div>
-            <h2>🎯 Simulados Cronometrados & Simulador Oficial de Habilitação (Fases 1 e 2)</h2>
-            <p>Treine gestão de tempo no padrão Cesgranrio e simule sua nota frente às regras de eliminação e ao corte de 2x (Vagas + CR) do Edital 2026.4.</p>
+            <div class="section-eyebrow">AVALIAÇÃO DE DESEMPENHO &amp; REGRAS DE HABILITAÇÃO</div>
+            <h2>Simulados Cronometrados e Calculadora de Corte</h2>
+            <p>Verifique seu tempo de resolução por questão e simule sua pontuação frente às regras eliminatórias das Fases 1 e 2 do Edital 04/2026.</p>
           </div>
         </div>
 
         <div class="grid-3">
           <div class="card">
-            <span class="badge badge-green" style="margin-bottom:8px;">Ideal para a rotina de 30 min/dia</span>
-            <h3 style="margin-bottom:8px;">⚡ Mini-Simulado Rápido (10 Questões)</h3>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
-              Sorteia <strong>7 questões de Engenharia Elétrica + 2 de Português + 1 de Inglês</strong> com cronômetro de <strong>30 minutos</strong>.
+            <span class="badge badge-green" style="margin-bottom:10px;">ROTINA DIÁRIA · 30 MIN</span>
+            <h3 style="margin-bottom:6px;font-size:1.05rem;">Mini-Simulado Técnico (10 Questões)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+              Seleciona <strong>7 questões de Engenharia Elétrica + 2 de Português + 1 de Inglês</strong> com tempo limite de <strong>30 minutos</strong>.
             </p>
-            <button class="btn btn-primary" style="width:100%;" id="btn-sim-rapido10">▶️ Iniciar Mini-Simulado (30 min)</button>
+            <button class="btn btn-primary" style="width:100%;" id="btn-sim-rapido10">Iniciar Mini-Simulado (30m)</button>
           </div>
 
           <div class="card">
-            <span class="badge badge-yellow" style="margin-bottom:8px;">Treino de Fim de Semana</span>
-            <h3 style="margin-bottom:8px;">🔌 Simulado Foco Específicas (20 Qs)</h3>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
-              Sorteia <strong>20 questões exclusivas de Engenharia Elétrica (Fase 1)</strong> com cronômetro de <strong>60 minutos</strong>.
+            <span class="badge badge-yellow" style="margin-bottom:10px;">BLOCO ESPECÍFICO · 60 MIN</span>
+            <h3 style="margin-bottom:6px;font-size:1.05rem;">Simulado Conhecimentos Específicos (20 Qs)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+              Seleciona <strong>20 questões exclusivas de Engenharia Elétrica (Fase 1)</strong> com tempo limite de <strong>60 minutos</strong>.
             </p>
-            <button class="btn btn-yellow" style="width:100%;" id="btn-sim-especificas20">▶️ Iniciar Simulado Específicas (60 min)</button>
+            <button class="btn btn-yellow" style="width:100%;" id="btn-sim-especificas20">Iniciar Simulado Específicas (60m)</button>
           </div>
 
           <div class="card">
-            <span class="badge badge-blue" style="margin-bottom:8px;">Experiência Real de Prova</span>
-            <h3 style="margin-bottom:8px;">🏛️ Prova Completa 2023.2 (70 Questões)</h3>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
-              A Prova 22 completa de Engenharia Elétrica de 2023.2 (70 questões) com tempo oficial de <strong>4h30min</strong>.
+            <span class="badge badge-blue" style="margin-bottom:10px;">PROVA INTEGRAL · 4H30MIN</span>
+            <h3 style="margin-bottom:6px;font-size:1.05rem;">Prova Oficial Completa 2023.2 (70 Qs)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+              Execução integral da Prova 22 de Engenharia Elétrica de 2023.2 (70 questões) com duração oficial de <strong>4h30min</strong>.
             </p>
-            <button class="btn btn-secondary" style="width:100%;" id="btn-sim-completo70">▶️ Iniciar Prova Completa (4h30min)</button>
+            <button class="btn btn-secondary" style="width:100%;" id="btn-sim-completo70">Iniciar Prova Completa (4h30)</button>
           </div>
         </div>
 
@@ -410,22 +439,22 @@
           <!-- CALCULADORA DE CORTE E ELIMINAÇÃO -->
           <div class="card">
             <div class="card-title">
-              <span>🧮 Simulador de Nota e Critérios de Eliminação (Edital 2026.4)</span>
+              <span>Simulador de Habilitação (Fases 1 e 2)</span>
               <span class="badge badge-yellow">Item 7.1.4.3</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:14px;">
-              Simule sua pontuação nas Fases 1 e 2 e verifique se ela atende aos critérios eliminatórios e ao limite de habilitação do seu Polo:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:14px;">
+              Projete sua pontuação nas Fases 1 e 2 e avalie o enquadramento nos critérios eliminatórios e no limite de corte do Polo escolhido:
             </p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Polo de Trabalho</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Polo de Trabalho</label>
                 <select id="calc-polo" class="form-select" style="width:100%;">
                   <option value="0">Polo Rio de Janeiro (22 Vagas+CR)</option>
                   <option value="1">Polo São Paulo (11 Vagas+CR)</option>
                 </select>
               </div>
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Modalidade de Concorrência</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Modalidade de Concorrência</label>
                 <select id="calc-modalidade" class="form-select" style="width:100%;">
                   <option value="AC">Ampla Concorrência (AC)</option>
                   <option value="PN">Pessoas Negras (PN)</option>
@@ -436,15 +465,15 @@
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Específicos (0 a 50)</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Específicos (0–50)</label>
                 <input type="number" id="calc-esp" class="form-input" style="width:100%;" min="0" max="50" value="38">
               </div>
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Português (0 a 10)</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Português (0–10)</label>
                 <input type="number" id="calc-pt" class="form-input" style="width:100%;" min="0" max="10" value="7">
               </div>
               <div>
-                <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:4px;">Inglês (0 a 10)</label>
+                <label style="font-size:0.76rem;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:600;">Inglês (0–10)</label>
                 <input type="number" id="calc-en" class="form-input" style="width:100%;" min="0" max="10" value="7">
               </div>
             </div>
@@ -454,16 +483,16 @@
           <!-- HISTÓRICO DE SIMULADOS -->
           <div class="card">
             <div class="card-title">
-              <span>📜 Histórico dos Meus Simulados</span>
+              <span>Histórico de Simulados Realizados</span>
             </div>
             <div class="table-responsive">
               <table class="data-table">
                 <thead>
                   <tr>
                     <th>Data</th>
-                    <th>Simulado</th>
-                    <th>Acertos</th>
-                    <th>%</th>
+                    <th>Modalidade</th>
+                    <th>Resultado</th>
+                    <th>Taxa</th>
                   </tr>
                 </thead>
                 <tbody id="simulado-history-tbody"></tbody>
@@ -479,8 +508,9 @@
       <section class="tab-section" id="tab-edital">
         <div class="section-header">
           <div>
-            <h2>📅 Guia do Edital Nº 04/2026, Cronograma Oficial & Checklist de Prova</h2>
-            <p>Todas as datas oficiais do Anexo V, quadro de vagas (RJ e SP), municípios de lotação, remuneração e regras de prova para <strong>Ênfase 23: Engenharia Elétrica</strong>.</p>
+            <div class="section-eyebrow">INFORMAÇÕES NORMATIVAS · EDITAL Nº 04/2026</div>
+            <h2>Parâmetros do Edital, Quadro de Vagas e Cronograma Oficial</h2>
+            <p>Síntese das datas oficiais (Anexo V), distribuição de vagas por polo (Anexo I), municípios de lotação e critérios de eliminação para <strong>Ênfase 23: Engenharia Elétrica</strong>.</p>
           </div>
         </div>
 
@@ -488,8 +518,8 @@
         <div class="grid-2">
           <div class="card">
             <div class="card-title">
-              <span>🏢 Quadro de Vagas, Cadastro de Reserva e Corte da Fase 1 (Anexo I)</span>
-              <span class="badge badge-green">Ênfase 23</span>
+              <span>Quadro de Vagas, Cadastro de Reserva e Limite da Fase 1</span>
+              <span class="badge badge-green">Anexo I</span>
             </div>
             <div class="table-responsive" style="margin-bottom:14px;">
               <table class="data-table">
@@ -498,7 +528,7 @@
                     <th>Polo de Trabalho</th>
                     <th>Vagas Imediatas</th>
                     <th>Total (Vagas + CR)</th>
-                    <th>Habilitados na Fase 1 (2x CR)</th>
+                    <th>Limite Fase 1 (2× CR)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -517,23 +547,23 @@
                 </tbody>
               </table>
             </div>
-            <div style="font-size:0.84rem;color:var(--text-secondary);">
-              <p style="margin-bottom:6px;">📍 <strong>Municípios de Lotação — Polo RJ:</strong> Angra dos Reis, Duque de Caxias, Japeri, Macaé, Rio das Flores, Rio de Janeiro ou Volta Redonda.</p>
-              <p>📍 <strong>Municípios de Lotação — Polo SP:</strong> Barueri, Caraguatatuba, Cubatão, Guararema, Guarulhos, Mauá, Paulínia, Porto Ferreira, Ribeirão Preto, Santos, São Caetano do Sul, São José dos Campos, São Paulo, São Sebastião ou Taubaté.</p>
+            <div style="font-size:0.83rem;color:var(--text-secondary);line-height:1.55;">
+              <p style="margin-bottom:6px;"><strong>Municípios de Lotação — Polo RJ:</strong> Angra dos Reis, Duque de Caxias, Japeri, Macaé, Rio das Flores, Rio de Janeiro ou Volta Redonda.</p>
+              <p><strong>Municípios de Lotação — Polo SP:</strong> Barueri, Caraguatatuba, Cubatão, Guararema, Guarulhos, Mauá, Paulínia, Porto Ferreira, Ribeirão Preto, Santos, São Caetano do Sul, São José dos Campos, São Paulo, São Sebastião ou Taubaté.</p>
             </div>
           </div>
 
           <div class="card">
             <div class="card-title">
-              <span>⚖️ Regras de Ouro da Prova e Critérios de Eliminação</span>
-              <span class="badge badge-danger">Atenção Máxima</span>
+              <span>Regras de Habilitação e Critérios de Eliminação</span>
+              <span class="badge badge-danger">Eliminatório</span>
             </div>
-            <ul style="margin-left:18px;font-size:0.89rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:8px;">
+            <ul style="margin-left:18px;font-size:0.87rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:8px;">
               <li><strong>Remuneração:</strong> Salário Básico de <strong>R$ 8.647,34</strong> com garantia de Remuneração Mínima de <strong>R$ 14.973,62</strong> (Regime CLT).</li>
-              <li><strong>Estrutura da Prova (06/12/2026 — 4h30min):</strong> 70 questões de múltipla escolha (A a E), valendo 1,0 ponto cada (50 de Conhecimentos Específicos + 10 de Português + 10 de Inglês).</li>
-              <li><strong>Fase 1 (Específicos — 50 pts):</strong> Eliminado quem fizer menos de <strong>25,0 pontos (50%)</strong>. Os candidatos aprovados são ranqueados <em>apenas</em> pela nota de Específicos até o limite de <strong>2x (Vagas + CR)</strong> (respeitada a paridade de 50% de mulheres habilitadas).</li>
-              <li><strong>Fase 2 (Gerais — 20 pts):</strong> Eliminado quem fizer menos de <strong>10,0 pontos (50%)</strong> na soma de Português + Inglês ou obtiver <strong>nota ZERO</strong> em qualquer uma das duas disciplinas.</li>
-              <li><strong>Nota Final Classificatória:</strong> Soma simples Fase 1 + Fase 2 (máximo 70,0 pontos) para os habilitados na Fase 1.</li>
+              <li><strong>Estrutura da Prova (06/12/2026 — 4h30min):</strong> 70 questões objetivas (A a E), valendo 1,0 ponto cada (50 de Conhecimentos Específicos + 10 de Português + 10 de Inglês).</li>
+              <li><strong>Fase 1 (Específicos — 50 pts):</strong> Eliminado quem obtiver menos de <strong>25,0 pontos (50%)</strong>. Os aprovados são classificados exclusivamente pela nota de Específicos até o limite de <strong>2× (Vagas + CR)</strong> (assegurada a proporção mínima de 50% de mulheres habilitadas).</li>
+              <li><strong>Fase 2 (Gerais — 20 pts):</strong> Eliminado quem obtiver menos de <strong>10,0 pontos (50%)</strong> na soma de Português + Inglês ou <strong>nota ZERO</strong> em qualquer uma das duas disciplinas.</li>
+              <li><strong>Nota Final:</strong> Soma simples Fase 1 + Fase 2 (máximo de 70,0 pontos) para os candidatos habilitados na Fase 1.</li>
             </ul>
           </div>
         </div>
@@ -542,7 +572,7 @@
           <!-- CRONOGRAMA OFICIAL (ANEXO V) -->
           <div class="card">
             <div class="card-title">
-              <span>🗓️ Cronograma Oficial Completo (Anexo V — Edital 2026.4)</span>
+              <span>Cronograma Oficial do Concurso (Anexo V)</span>
               <span class="badge badge-yellow">Datas Oficiais</span>
             </div>
             <div class="timeline" id="official-timeline-container"></div>
@@ -551,11 +581,11 @@
           <!-- CHECKLIST DE VÉSPERA E DIA DE PROVA -->
           <div class="card">
             <div class="card-title">
-              <span>🎒 Checklist Obrigatório para o Dia da Prova (06/12/2026)</span>
-              <span class="badge badge-green">Evite Eliminação</span>
+              <span>Verificação de Documentos e Materiais (06/12/2026)</span>
+              <span class="badge badge-green">Checklist</span>
             </div>
-            <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:12px;">
-              Marque os itens à medida que organizar seu material para o dia <strong>06/12/2026</strong>:
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Itens exigidos em edital para acesso à sala e realização da prova objetiva em <strong>06/12/2026</strong>:
             </p>
             <div id="exam-checklist-container"></div>
           </div>
@@ -568,27 +598,27 @@
   <!-- BARRA DE NAVEGAÇÃO INFERIOR PARA SMARTPHONES E TABLETS -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegação rápida mobile">
     <button class="mobile-nav-btn active" data-tab="dashboard">
-      <span class="mobile-nav-icon">📊</span>
-      <span class="mobile-nav-label">Hoje</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="mobile-nav-label">Painel</span>
     </button>
     <button class="mobile-nav-btn" data-tab="plano">
-      <span class="mobile-nav-icon">🗓️</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span class="mobile-nav-label">30 Dias</span>
     </button>
     <button class="mobile-nav-btn" data-tab="teoria">
-      <span class="mobile-nav-icon">📚</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       <span class="mobile-nav-label">Teoria</span>
     </button>
     <button class="mobile-nav-btn" data-tab="questoes">
-      <span class="mobile-nav-icon">✍️</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       <span class="mobile-nav-label">Questões</span>
     </button>
     <button class="mobile-nav-btn" data-tab="simulado">
-      <span class="mobile-nav-icon">🎯</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
       <span class="mobile-nav-label">Simulado</span>
     </button>
     <button class="mobile-nav-btn" data-tab="edital">
-      <span class="mobile-nav-icon">📅</span>
+      <svg class="mobile-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       <span class="mobile-nav-label">Edital</span>
     </button>
   </nav>
@@ -598,70 +628,70 @@
     <div class="cloud-modal">
       <div class="cloud-modal-header">
         <div>
-          <h3>☁️ Sincronização Automática na Nuvem (Auto-Save)</h3>
-          <p style="font-size:0.82rem;color:var(--text-secondary);">Salve suas questões resolvidas, dias concluídos, simulados e anotações na nuvem em tempo real entre computador, celular e Google Sites.</p>
+          <h3>Sincronização em Nuvem (Auto-Save)</h3>
+          <p style="font-size:0.82rem;color:var(--text-secondary);">Mantenha o histórico de questões, cronograma, simulados e notas sincronizado entre computador, smartphone e Google Sites.</p>
         </div>
-        <button class="btn btn-secondary btn-sm" id="btn-close-cloud-modal">✕ Fechar</button>
+        <button class="btn btn-secondary btn-sm" id="btn-close-cloud-modal">Fechar</button>
       </div>
 
       <!-- STATUS ATUAL -->
       <div class="cloud-status-box" id="cloud-modal-status-box">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
-            <div style="font-weight:700;font-size:0.92rem;" id="cloud-modal-status-title">⚪ Nuvem ainda não configurada</div>
-            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Configure abaixo em 30 segundos usando sua Conta Google ou GitHub.</div>
+            <div style="font-weight:700;font-size:0.9rem;" id="cloud-modal-status-title">Nuvem não configurada</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Configure abaixo utilizando Google Apps Script, GitHub Gist ou endpoint REST.</div>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">⬆️ Salvar na Nuvem Agora</button>
-            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">⬇️ Baixar da Nuvem Agora</button>
+            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">Enviar para Nuvem</button>
+            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">Baixar da Nuvem</button>
           </div>
         </div>
       </div>
 
       <!-- SELETOR DE PROVEDOR -->
       <div class="cloud-provider-tabs">
-        <button class="cloud-tab-btn active" data-cloud-provider="google">1️⃣ Google Script / Drive (Recomendado)</button>
-        <button class="cloud-tab-btn" data-cloud-provider="github">2️⃣ GitHub Gist Secreto</button>
-        <button class="cloud-tab-btn" data-cloud-provider="firebase">3️⃣ Firebase / REST JSON</button>
+        <button class="cloud-tab-btn active" data-cloud-provider="google">01 · Google Apps Script</button>
+        <button class="cloud-tab-btn" data-cloud-provider="github">02 · GitHub Gist Privado</button>
+        <button class="cloud-tab-btn" data-cloud-provider="firebase">03 · Endpoint REST / Firebase</button>
       </div>
 
       <!-- ABA 1: GOOGLE APPS SCRIPT -->
       <div class="cloud-provider-panel active" id="cloud-panel-google">
-        <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;">
-          <strong>Por que usar o Google Apps Script?</strong> É 100% gratuito na sua própria Conta Google, funciona dentro do <strong>Google Sites Restrito</strong> sem bloqueios e <strong>não pede permissões extras</strong>:
+        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
+          <strong>Google Apps Script (Conta Google Pessoal):</strong> Opera diretamente na sua conta Google sem exigir permissões de OAuth externas e funciona dentro do iframe do Google Sites:
           <ol style="margin:6px 0 10px 18px;">
-            <li>Clique no botão abaixo para copiar o código de 15 linhas e abra <a href="https://script.google.com/home/start" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:700;">script.google.com (Novo Projeto) ↗</a>.</li>
-            <li>Apague o texto inicial do editor, cole o código copiado e clique em <strong>Implantar (Deploy) &gt; Nova implantação</strong>.</li>
-            <li>Escolha o tipo <strong>App da Web</strong>, em <em>"Quem pode acessar"</em> selecione <strong>Qualquer pessoa (Anyone)</strong> e clique em <strong>Implantar</strong>.</li>
-            <li>Copie a <strong>URL do App da Web</strong> gerada (`https://script.google.com/macros/s/.../exec`) e cole abaixo:</li>
+            <li>Copie o script de 15 linhas no botão abaixo e acesse <a href="https://script.google.com/home/start" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">script.google.com (Novo Projeto)</a>.</li>
+            <li>Substitua o conteúdo do editor pelo código copiado e selecione <strong>Implantar &gt; Nova implantação</strong>.</li>
+            <li>Escolha o tipo <strong>App da Web</strong>, defina o acesso como <strong>Qualquer pessoa (Anyone)</strong> e confirme em <strong>Implantar</strong>.</li>
+            <li>Copie a <strong>URL do App da Web</strong> (`https://script.google.com/macros/s/.../exec`) e insira abaixo:</li>
           </ol>
-          <button class="btn btn-secondary btn-sm" id="btn-copy-gas-code" style="margin-bottom:10px;">📋 1. Copiar Código do Google Apps Script (15 linhas)</button>
+          <button class="btn btn-secondary btn-sm" id="btn-copy-gas-code" style="margin-bottom:10px;">Copiar Script Google (15 linhas)</button>
         </div>
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">URL do seu Google Apps Script (`.../exec`):</label>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Web App (`.../exec`):</label>
         <input type="url" class="form-input" id="input-cloud-gas-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" style="width:100%;margin-bottom:8px;">
       </div>
 
       <!-- ABA 2: GITHUB GIST SECRETO -->
       <div class="cloud-provider-panel" id="cloud-panel-github" style="display:none;">
-        <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;">
-          Salva automaticamente em um arquivo privado (<strong>Secret Gist</strong>) na sua própria conta do GitHub:
+        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
+          Armazena o estado da aplicação em um arquivo JSON privado (<strong>Secret Gist</strong>) na sua conta do GitHub:
           <ol style="margin:6px 0 8px 18px;">
-            <li>Gere um token com permissão <code>gist</code> clicando em <a href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:700;">Criar Token GitHub (escopo Gist) ↗</a>.</li>
-            <li>Cole o Token abaixo (o <em>Gist ID</em> será criado ou localizado automaticamente na sua conta!):</li>
+            <li>Gere um Personal Access Token com escopo <code>gist</code> em <a href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">github.com/settings/tokens</a>.</li>
+            <li>Insira o token abaixo (o <em>Gist ID</em> é localizado ou criado automaticamente):</li>
           </ol>
         </div>
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">GitHub Personal Access Token (`ghp_...`):</label>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">GitHub Personal Access Token (`ghp_...`):</label>
         <input type="password" class="form-input" id="input-cloud-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%;margin-bottom:8px;">
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">Gist ID (opcional — preenchido automaticamente após conectar):</label>
-        <input type="text" class="form-input" id="input-cloud-gh-gist" placeholder="Deixe em branco para localizar/criar automaticamente" style="width:100%;margin-bottom:8px;">
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Gist ID (opcional — preenchido automaticamente):</label>
+        <input type="text" class="form-input" id="input-cloud-gh-gist" placeholder="Localizado automaticamente após conectar" style="width:100%;margin-bottom:8px;">
       </div>
 
       <!-- ABA 3: FIREBASE / REST JSON -->
       <div class="cloud-provider-panel" id="cloud-panel-firebase" style="display:none;">
-        <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;">
-          Se você utiliza <strong>Firebase Realtime Database</strong> ou qualquer endpoint REST JSON que aceite <code>GET</code> e <code>PUT</code>:
+        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
+          Compatível com <strong>Firebase Realtime Database</strong> ou qualquer endpoint REST JSON com suporte a requisições <code>GET</code> e <code>PUT</code>:
         </div>
-        <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:4px;">URL do Endpoint JSON (ex: `https://seu-app-default-rtdb.firebaseio.com/transpetro.json`):</label>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Endpoint JSON:</label>
         <input type="url" class="form-input" id="input-cloud-fb-url" placeholder="https://seu-banco.firebaseio.com/transpetro.json" style="width:100%;margin-bottom:8px;">
       </div>
 
@@ -669,11 +699,11 @@
       <div class="cloud-modal-footer">
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;width:100%;">
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-primary" id="btn-save-cloud-config">✅ Conectar e Sincronizar Agora</button>
-            <button class="btn btn-secondary btn-sm" id="btn-disconnect-cloud">🔌 Desconectar</button>
+            <button class="btn btn-primary" id="btn-save-cloud-config">Conectar e Sincronizar</button>
+            <button class="btn btn-secondary btn-sm" id="btn-disconnect-cloud">Desconectar</button>
           </div>
-          <button class="btn btn-yellow btn-sm" id="btn-copy-bundle-with-cloud" title="Copia o código HTML completo já com sua nuvem pré-configurada para colar no Google Sites Restrito">
-            📦 Copiar HTML p/ Google Sites (Com Nuvem Embutida)
+          <button class="btn btn-yellow btn-sm" id="btn-copy-bundle-with-cloud" title="Copia o código HTML completo já com sua nuvem pré-configurada para colar no Google Sites">
+            Copiar HTML p/ Google Sites (Com Nuvem Embutida)
           </button>
         </div>
       </div>
@@ -688,4 +718,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
