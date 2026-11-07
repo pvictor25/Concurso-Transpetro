@@ -1,4 +1,4 @@
-﻿# Script para versionar automaticamente (Cache-Busting por Hash SHA-256), gerar version.json e criar o pacote único (plataforma_transpetro_bundle.html)
+# Script para versionar automaticamente (Cache-Busting por Hash SHA-256), gerar version.json e criar o pacote único (plataforma_transpetro_bundle.html)
 $ErrorActionPreference = "Stop"
 $dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $utf8 = New-Object System.Text.UTF8Encoding($false)
