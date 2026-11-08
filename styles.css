@@ -2544,18 +2544,18 @@ body {
   display: block;
 }
 .notes-content-container.mode-split .personal-notes-textarea {
-  min-height: 120px !important;
-  max-height: 180px;
+  min-height: 150px !important;
+  max-height: 280px;
 }
 .notes-content-container.mode-split .personal-notes-preview-box {
   display: block;
-  min-height: 130px !important;
-  max-height: 220px;
+  min-height: 160px !important;
+  max-height: 360px;
 }
 
 .personal-notes-textarea {
   width: 100%;
-  min-height: 220px;
+  min-height: 200px;
   resize: vertical;
   font-family: var(--font-mono);
   font-size: 0.82rem;
@@ -2565,8 +2565,8 @@ body {
 
 .personal-notes-preview-box {
   width: 100%;
-  min-height: 220px;
-  max-height: 380px;
+  min-height: 180px;
+  max-height: 420px;
   overflow-y: auto;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);

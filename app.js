@@ -65,7 +65,7 @@
   let showAllFlashcardsInGuided = false;
   let currentTheoryFlashcardIdx = 0;
   let theoryFlashcardShowingBack = false;
-  let personalNotesMode = "preview"; // "edit" | "preview" | "split"
+  let personalNotesMode = "split"; // "edit" | "preview" | "split"
 
   // Estado do Timer de 30 Minutos (1800 segundos)
   let timerSeconds = 1800;
@@ -87,10 +87,12 @@
           merged.personalNotes = merged.personalNotes.replace(/^📌\s*/, "");
         }
         // Migra notas padrão antigas em texto puro para a versão oficial com LaTeX nativo
-        if (
-          merged.personalNotes.includes("Fórmulas Rápidas para Revisar antes da Prova:") &&
-          merged.personalNotes.includes("I_cc1φ = 3·I_a0")
-        ) {
+        const hasOldFormulas =
+          merged.personalNotes.includes("Fórmulas Rápidas para Revisar") ||
+          merged.personalNotes.includes("Curto 1φ-Terra franco") ||
+          merged.personalNotes.includes("I_f = 3·E") ||
+          merged.personalNotes.includes("I_cc1φ = 3·I_a0");
+        if (hasOldFormulas && !merged.personalNotes.includes("$$")) {
           merged.personalNotes = defaultState.personalNotes;
         }
       }
@@ -553,35 +555,43 @@
     }
   }
 
-  // Formatação de texto matemático LaTeX e markdown nas explicações, enunciados e flashcards
+  // Formatação de texto matemático LaTeX e markdown nas explicações, enunciados, flashcards e notas pessoais
   function formatRichText(text) {
     if (!text) return "";
-    let html = String(text)
+    let str = String(text);
+
+    // Isola blocos e termos matemáticos em placeholders para não sofrerem escapes ou quebras de linha indevidas
+    const mathTokens = [];
+    str = str.replace(/\$\$([\s\S]*?)\$\$/g, function (_, math) {
+      const idx = mathTokens.length;
+      mathTokens.push('<div class="formula-box">' + renderLatexExpr(math, true) + "</div>");
+      return `___MATH_BLOCK_${idx}___`;
+    });
+
+    str = str.replace(/\$([^$\n]+)\$/g, function (_, math) {
+      const idx = mathTokens.length;
+      mathTokens.push('<span class="inline-math">' + renderLatexExpr(math, false) + "</span>");
+      return `___MATH_BLOCK_${idx}___`;
+    });
+
+    let html = str
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
-
-    // Blocos matemáticos $$...$$
-    html = html.replace(/\$\$([\s\S]*?)\$\$/g, function (_, math) {
-      return '<div class="formula-box">' + renderLatexExpr(math, true) + "</div>";
-    });
-
-    // Inline math $...$
-    html = html.replace(/\$([^$\n]+)\$/g, function (_, math) {
-      return (
-        '<span class="inline-math" style="padding:0 2px;">' +
-        renderLatexExpr(math, false) +
-        "</span>"
-      );
-    });
 
     // Negrito **...**
     html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     // Itálico *...*
     html = html.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
 
-    // Quebras de linha
+    // Quebras de linha normais de parágrafos/listas
     html = html.replace(/\n/g, "<br>");
+
+    // Restaura as fórmulas matemáticas intactas
+    mathTokens.forEach((token, idx) => {
+      html = html.replace(`___MATH_BLOCK_${idx}___`, token);
+    });
+
     return html;
   }
 
@@ -1637,84 +1647,84 @@
             <div style="margin-top:4px;"><strong>Resumo obrigatório para memorizar hoje:</strong> ${missionDay.focoRevisao}</div>
           </div>
 
-          <div class="grid-2" style="margin-bottom:8px;">
-            <div class="card" style="margin-bottom:0;">
-              <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                  <span>Flashcards da Seção</span>
-                  <span class="badge badge-blue" id="flashcard-section-badge"></span>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <button class="btn btn-secondary btn-sm" id="btn-fc-toggle-scope" style="font-size:0.72rem;padding:2px 8px;">
-                    ${showAllFlashcardsInGuided ? "Ver apenas da seção de hoje" : "Ver todos os flashcards"}
-                  </button>
-                  <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 01</span>
-                </div>
+          <!-- Flashcards da Seção (Card Superior) -->
+          <div class="card flashcards-card-section" style="margin-bottom:18px;">
+            <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span>Flashcards da Seção</span>
+                <span class="badge badge-blue" id="flashcard-section-badge"></span>
               </div>
-              <div class="flashcard-wrapper">
-                <div
-                  id="flashcard-box"
-                  class="flashcard-surface"
-                  title="Clique para girar o cartão (ver resposta / fórmula)"
-                >
-                  <div class="flashcard-flip-hint">
-                    <span class="flashcard-flip-icon">↻</span>
-                    <span>Girar</span>
-                  </div>
-                  <div class="flashcard-side-tag" id="flashcard-side-label">FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)</div>
-                  <div class="flashcard-body-text" id="flashcard-text"></div>
-                </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <button class="btn btn-secondary btn-sm" id="btn-fc-toggle-scope" style="font-size:0.72rem;padding:2px 8px;">
+                  ${showAllFlashcardsInGuided ? "Ver apenas da seção de hoje" : "Ver todos os flashcards"}
+                </button>
+                <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 01</span>
               </div>
-              <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
-                <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
-                <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">↻ Girar Cartão</button>
-                <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
+            </div>
+            <div class="flashcard-wrapper">
+              <div
+                id="flashcard-box"
+                class="flashcard-surface"
+                title="Clique para girar o cartão (ver resposta / fórmula)"
+              >
+                <div class="flashcard-flip-hint">
+                  <span class="flashcard-flip-icon">↻</span>
+                  <span>Girar</span>
+                </div>
+                <div class="flashcard-side-tag" id="flashcard-side-label">FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)</div>
+                <div class="flashcard-body-text" id="flashcard-text"></div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
+              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
+              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">↻ Girar Cartão</button>
+              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
+            </div>
+          </div>
+
+          <!-- Bloco de Notas e Fórmulas Pessoais (Abaixo dos Flashcards) -->
+          <div class="card notes-card-wrapper" style="margin-bottom:18px;">
+            <div class="card-title notes-header-bar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span>Bloco de Notas e Fórmulas</span>
+                <span class="badge badge-blue" id="notes-save-badge">Salvo Auto</span>
+              </div>
+              <div class="notes-mode-pills" role="tablist">
+                <button type="button" class="notes-pill-btn ${personalNotesMode === "edit" ? "active" : ""}" id="btn-notes-mode-edit" title="Modo de Edição (digitar texto e fórmulas)">✏️ Editar</button>
+                <button type="button" class="notes-pill-btn ${personalNotesMode === "preview" ? "active" : ""}" id="btn-notes-mode-preview" title="Modo Visualização Renderizada (KaTeX LaTeX)">👁️ Visualizar</button>
+                <button type="button" class="notes-pill-btn ${personalNotesMode === "split" ? "active" : ""}" id="btn-notes-mode-split" title="Modo Dividido (Editor + Preview em tempo real)">◫ Dividir</button>
               </div>
             </div>
 
-            <div class="card notes-card-wrapper" style="margin-bottom:0;">
-              <div class="card-title notes-header-bar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                  <span>Bloco de Notas e Fórmulas</span>
-                  <span class="badge badge-blue" id="notes-save-badge">Salvo Auto</span>
-                </div>
-                <div class="notes-mode-pills" role="tablist">
-                  <button type="button" class="notes-pill-btn ${personalNotesMode === "edit" ? "active" : ""}" id="btn-notes-mode-edit" title="Modo de Edição (digitar texto e fórmulas)">✏️ Editar</button>
-                  <button type="button" class="notes-pill-btn ${personalNotesMode === "preview" ? "active" : ""}" id="btn-notes-mode-preview" title="Modo Visualização Renderizada (KaTeX LaTeX)">👁️ Visualizar</button>
-                  <button type="button" class="notes-pill-btn ${personalNotesMode === "split" ? "active" : ""}" id="btn-notes-mode-split" title="Modo Dividido (Editor + Preview em tempo real)">◫ Dividir</button>
-                </div>
+            <!-- Barra Rápida de Inserção de LaTeX (visível ao editar) -->
+            <div class="notes-math-toolbar ${personalNotesMode === "preview" ? "hidden" : ""}" id="notes-math-toolbar">
+              <span class="math-tool-label">LATEX:</span>
+              <button type="button" class="btn-math-insert" data-snippet="$$ $$" title="Inserir Bloco de Fórmula Centralizada">$$ Bloco $$</button>
+              <button type="button" class="btn-math-insert" data-snippet="$ $" title="Inserir Fórmula em Linha">$ Linha $</button>
+              <button type="button" class="btn-math-insert" data-snippet="\\frac{a}{b}" title="Fração">\frac{a}{b}</button>
+              <button type="button" class="btn-math-insert" data-snippet="\\sqrt{x}" title="Raiz Quadrada">\sqrt{x}</button>
+              <button type="button" class="btn-math-insert" data-snippet="Z_{pu}" title="Subscrito">Z_{pu}</button>
+              <button type="button" class="btn-math-insert" data-snippet="\\cdot" title="Multiplicação">\cdot</button>
+              <button type="button" class="btn-math-insert" data-snippet="\\le" title="Menor ou Igual">\le</button>
+              <button type="button" class="btn-math-insert" data-snippet="\\angle 120^\\circ" title="Ângulo Fasorial">\angle 120°</button>
+            </div>
+
+            <!-- Container do Editor e da Visualização KaTeX -->
+            <div class="notes-content-container mode-${personalNotesMode}" id="notes-content-container">
+              <div class="notes-editor-pane" id="notes-editor-pane">
+                <textarea
+                  id="personal-notes-area"
+                  class="form-input personal-notes-textarea"
+                  placeholder="Anote aqui fórmulas e observações usando LaTeX:&#10;• Em linha: $Z_{pu} = 0,25$&#10;• Em bloco: $$P = \sqrt{3} \cdot V_L \cdot I_L \cdot \cos\varphi$$&#10;• Negrito: **termo**"
+                  spellcheck="false"
+                ></textarea>
               </div>
 
-              <!-- Barra Rápida de Inserção de LaTeX (visível ao editar) -->
-              <div class="notes-math-toolbar ${personalNotesMode === "preview" ? "hidden" : ""}" id="notes-math-toolbar">
-                <span class="math-tool-label">LATEX:</span>
-                <button type="button" class="btn-math-insert" data-snippet="$$ $$" title="Inserir Bloco de Fórmula Centralizada">$$ Bloco $$</button>
-                <button type="button" class="btn-math-insert" data-snippet="$ $" title="Inserir Fórmula em Linha">$ Linha $</button>
-                <button type="button" class="btn-math-insert" data-snippet="\\frac{a}{b}" title="Fração">\frac{a}{b}</button>
-                <button type="button" class="btn-math-insert" data-snippet="\\sqrt{x}" title="Raiz Quadrada">\sqrt{x}</button>
-                <button type="button" class="btn-math-insert" data-snippet="Z_{pu}" title="Subscrito">Z_{pu}</button>
-                <button type="button" class="btn-math-insert" data-snippet="\\cdot" title="Multiplicação">\cdot</button>
-                <button type="button" class="btn-math-insert" data-snippet="\\le" title="Menor ou Igual">\le</button>
-                <button type="button" class="btn-math-insert" data-snippet="\\angle 120^\\circ" title="Ângulo Fasorial">\angle 120°</button>
-              </div>
-
-              <!-- Container do Editor e da Visualização KaTeX -->
-              <div class="notes-content-container mode-${personalNotesMode}" id="notes-content-container">
-                <div class="notes-editor-pane" id="notes-editor-pane">
-                  <textarea
-                    id="personal-notes-area"
-                    class="form-input personal-notes-textarea"
-                    placeholder="Anote aqui fórmulas e observações usando LaTeX:&#10;• Em linha: $Z_{pu} = 0,25$&#10;• Em bloco: $$P = \sqrt{3} \cdot V_L \cdot I_L \cdot \cos\varphi$$&#10;• Negrito: **termo**"
-                    spellcheck="false"
-                  ></textarea>
-                </div>
-
-                <div
-                  class="personal-notes-preview-box"
-                  id="personal-notes-preview"
-                  title="Duplo clique para alternar para edição"
-                ></div>
-              </div>
+              <div
+                class="personal-notes-preview-box"
+                id="personal-notes-preview"
+                title="Duplo clique para alternar para edição"
+              ></div>
             </div>
           </div>
 
@@ -1833,6 +1843,18 @@
           state.personalNotes = this.value;
           saveState();
           updateNotesPreview();
+          const badge = document.getElementById("notes-save-badge");
+          if (badge) {
+            badge.textContent = "✓ Salvo";
+            badge.className = "badge badge-green";
+            clearTimeout(notesTextarea._badgeTimer);
+            notesTextarea._badgeTimer = setTimeout(() => {
+              if (badge) {
+                badge.textContent = "Salvo Auto";
+                badge.className = "badge badge-blue";
+              }
+            }, 1200);
+          }
         });
       }
 
@@ -1847,7 +1869,14 @@
         .getElementById("btn-notes-mode-split")
         ?.addEventListener("click", () => setPersonalNotesMode("split"));
 
-      // Duplo clique na área renderizada para abrir modo de edição rapidamente
+      // Clique na área renderizada para abrir modo de edição / divisão rapidamente
+      document
+        .getElementById("personal-notes-preview")
+        ?.addEventListener("click", () => {
+          if (personalNotesMode === "preview") {
+            setPersonalNotesMode("split");
+          }
+        });
       document
         .getElementById("personal-notes-preview")
         ?.addEventListener("dblclick", () => setPersonalNotesMode("edit"));
@@ -1861,7 +1890,7 @@
       });
 
       // Aplica o modo inicial e renderiza as fórmulas LaTeX
-      setPersonalNotesMode(personalNotesMode || (state.personalNotes ? "preview" : "edit"));
+      setPersonalNotesMode(personalNotesMode || "split");
       renderFlashcardUI();
       document
         .getElementById("flashcard-box")
@@ -3502,6 +3531,7 @@
     applyTheme();
     updateTimerUI();
     updateGlobalCounters();
+    switchTab(currentTab);
 
     // Botões de navegação lateral e barra inferior mobile/tablet
     document.querySelectorAll(".nav-btn, .mobile-nav-btn").forEach((btn) => {
@@ -3979,6 +4009,7 @@
     window.addEventListener("load", function () {
       switchTab(currentTab);
       setupVisualCardControls(document);
+      updateNotesPreview();
     });
   });
 })();
