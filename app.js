@@ -16,18 +16,24 @@
   // Estado padrão persistido no navegador
   const defaultState = {
     theme: "dark",
+    animationsPaused: false,
     completedDays: [],
     studiedTheory: [],
     answeredQuestions: {}, // { [id]: { selected: "A", correct: true } }
     bookmarkedQuestions: [],
     completedChecklist: [],
     personalNotes:
-      "Fórmulas Rápidas para Revisar antes da Prova:\n" +
-      "• Curto 1φ-Terra franco: I_f = 3·E / (Z1 + Z2 + Z0)\n" +
-      "• Mudança de base p.u.: Z_novo = Z_antigo · (S_novo/S_antigo) · (V_antigo/V_novo)²\n" +
-      "• NBR 5410 Sobrecarga: IL ≤ Id ≤ Ic\n" +
-      "• MIT Conjugado × Escorregamento: R2 / s1 = (R2 + R_ext) / s2\n" +
-      "• 2ª Ordem: G(s) = ωn² / (s² + 2·ζ·ωn·s + ωn²)\n",
+      "### Fórmulas Rápidas para Revisar antes da Prova\n\n" +
+      "• **Curto 1φ-Terra franco:**\n" +
+      "$$I_{cc1\\phi} = 3I_{a0} = \\frac{3E_a}{Z_1 + Z_2 + Z_0}$$\n\n" +
+      "• **Mudança de base em p.u.:**\n" +
+      "$$Z_{pu,\\text{novo}} = Z_{pu,\\text{antigo}} \\cdot \\left(\\frac{S_{\\text{base,novo}}}{S_{\\text{base,antigo}}}\\right) \\cdot \\left(\\frac{V_{\\text{base,antigo}}}{V_{\\text{base,novo}}}\\right)^2$$\n\n" +
+      "• **NBR 5410 — Coordenação contra Sobrecarga:**\n" +
+      "$$I_L \\le I_d \\le I_c \\qquad ; \\qquad I_2 \\le 1,45 \\cdot I_c$$\n\n" +
+      "• **MIT — Conjugado e Escorregamento:**\n" +
+      "$$\\frac{R_{r1}}{s_1} = \\frac{R_{r1} + R_{\\text{adic}}}{s_2}$$\n\n" +
+      "• **Sistemas de 2ª Ordem (Forma Canônica):**\n" +
+      "$$G(s) = \\frac{K \\cdot \\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2}$$\n",
     simuladoHistory: [],
     updatedAt: 0
   };
@@ -57,6 +63,10 @@
   let guidedDayNum = null;
   let guidedStep = 1; // 1 = Teoria, 2 = Questões do Conteúdo, 3 = Revisão & Conclusão
   let showFullBlockInGuided = false;
+  let showAllFlashcardsInGuided = false;
+  let currentTheoryFlashcardIdx = 0;
+  let theoryFlashcardShowingBack = false;
+  let personalNotesMode = "preview"; // "edit" | "preview" | "split"
 
   // Estado do Timer de 30 Minutos (1800 segundos)
   let timerSeconds = 1800;
@@ -73,8 +83,18 @@
       if (!raw) return JSON.parse(JSON.stringify(defaultState));
       const parsed = JSON.parse(raw);
       const merged = Object.assign({}, JSON.parse(JSON.stringify(defaultState)), parsed);
-      if (typeof merged.personalNotes === "string" && merged.personalNotes.startsWith("📌 ")) {
-        merged.personalNotes = merged.personalNotes.replace(/^📌\s*/, "");
+      merged.animationsPaused = !!merged.animationsPaused;
+      if (typeof merged.personalNotes === "string") {
+        if (merged.personalNotes.startsWith("📌 ")) {
+          merged.personalNotes = merged.personalNotes.replace(/^📌\s*/, "");
+        }
+        // Migra notas padrão antigas em texto puro para a versão oficial com LaTeX nativo
+        if (
+          merged.personalNotes.includes("Fórmulas Rápidas para Revisar antes da Prova:") &&
+          merged.personalNotes.includes("I_cc1φ = 3·I_a0")
+        ) {
+          merged.personalNotes = defaultState.personalNotes;
+        }
       }
       return merged;
     } catch (e) {
@@ -452,6 +472,7 @@
       }
 
       applyTheme();
+      updateAnimationsUI();
       updateGlobalCounters();
       switchTab(currentTab);
 
@@ -821,57 +842,506 @@
 
   // =========================================================================
   // ABA 1: DASHBOARD GERAL + RECUPERAÇÃO INTELIGENTE DE DIAS PERDIDOS
+  // FLASHCARDS INDEXADOS POR SUBTÓPICO TEÓRICO (22 SEÇÕES DO EDITAL)
   // =========================================================================
   const FLASHCARDS_REVISAO = [
+    // =========================================================================
+    // BLOCO 4: SEP (SISTEMAS ELÉTRICOS DE POTÊNCIA)
+    // =========================================================================
+    // --- DIA 1 (07/11): Tópicos 4.1 (PU & Unifilar) e 4.6 (Efeito Pelicular Q21) ---
     {
-      frente: "Bloco 4 (SEP) — Qual é a fórmula da Corrente de Falta Monofásica Franca (Fase-Terra) em p.u.?",
-      verso: "$$I_{cc1\\phi} = 3 I_{a0} = \\frac{3 E}{Z_1 + Z_2 + Z_0}$$ As três redes de sequência (positiva, negativa e zero) ficam conectadas em **SÉRIE**!"
+      id: "fc-4-1-1",
+      bloco: "bloco4",
+      secaoId: "sub-4-1",
+      secaoTitulo: "4.1 Sistema por Unidade (p.u.) e Diagrama Unifilar",
+      days: [1, 23],
+      frente: "4.1 Mudança de Base p.u. — Qual é a fórmula oficial para conversão de uma impedância em p.u. de uma base antiga para uma base nova?",
+      verso: "$$Z_{pu,\\text{novo}} = Z_{pu,\\text{antigo}} \\cdot \\left(\\frac{S_{\\text{base,novo}}}{S_{\\text{base,antigo}}}\\right) \\cdot \\left(\\frac{V_{\\text{base,antigo}}}{V_{\\text{base,novo}}}\\right)^2$$\n• A potência base varia **diretamente** ($S_{\\text{novo}}/S_{\\text{antigo}}$).\n• A tensão base varia com o **quadrado inverso** ($(V_{\\text{antigo}}/V_{\\text{novo}})^2$).\n• A impedância base ôhmica é $Z_{\\text{base}} = \\frac{V_{\\text{base}}^2}{S_{\\text{base}}}$."
     },
     {
-      frente: "Bloco 4 (SEP) — Na matriz de Fortescue $[\\dot{A}, \\dot{B}, \\dot{C}]^T = M \\cdot [\\dot{x}, \\dot{y}, \\dot{z}]^T$, como identificar as colunas de sequência positiva, negativa e zero?",
-      verso: "• Coluna $[1, 1, 1]^T \\implies$ **Sequência ZERO**\n• Coluna $[1, a^2, a]^T \\implies$ **Sequência POSITIVA**\n• Coluna $[1, a, a^2]^T \\implies$ **Sequência NEGATIVA** (onde $a = 1\\angle 120^\\circ$)."
+      id: "fc-4-1-2",
+      bloco: "bloco4",
+      secaoId: "sub-4-1",
+      secaoTitulo: "4.1 Sistema por Unidade (p.u.) e Diagrama Unifilar",
+      days: [1, 23],
+      frente: "4.1 Diagrama Unifilar e Carga Nominal — No diagrama unifilar, a quais grandezas os dados se referem e qual a impedância em p.u. de uma carga nominal na sua própria base (Q37, Q39 e Q56)?",
+      verso: "• **Diagrama Unifilar (Q39):** Representa a **tensão de linha**, a **corrente de linha** e a **impedância de uma fase na ligação estrela** (ou equivalente estrela $Z_Y = Z_\\Delta/3$).\n• **Carga na Própria Base (Q37 e Q56):** Qualquer carga operando na sua tensão e potência nominais tem **$Z_{pu} = 1,0\\text{ p.u.}$** na base própria! Ao converter para a base do sistema ($S_{\\text{base}}$): $Z_{pu} = 1,0 \\times \\frac{S_{\\text{base}}}{S_{\\text{nom}}} \\times \\left(\\frac{V_{\\text{nom}}}{V_{\\text{base}}}\\right)^2$."
     },
     {
-      frente: "Bloco 4 (SEP) — Como converter uma impedância em p.u. de uma base antiga $(S_v, V_v)$ para uma base nova $(S_n, V_n)$?",
-      verso: "$$Z_{pu,\\text{novo}} = Z_{pu,\\text{velho}} \\cdot \\left(\\frac{S_{\\text{base,novo}}}{S_{\\text{base,velho}}}\\right) \\cdot \\left(\\frac{V_{\\text{base,velho}}}{V_{\\text{base,novo}}}\\right)^2$$"
+      id: "fc-4-6-1",
+      bloco: "bloco4",
+      secaoId: "sub-4-6",
+      secaoTitulo: "4.6 Transmissão: Efeito Pelicular (Skin Effect — Q21)",
+      days: [1, 23],
+      frente: "4.6 Efeito Pelicular (Skin Effect) — Qual é a causa física do efeito pelicular em condutores CA, qual a fórmula da profundidade de penetração ($\\delta$) e o impacto na resistência da linha (Q21)?",
+      verso: "• **Causa Física:** Em CA, o maior enlace de fluxo magnético interno no centro do condutor eleva a reatância indutiva no eixo central, repelindo os elétrons para a periferia ('pele' do condutor).\n• **Profundidade de Penetração:**\n$$\\delta = \\frac{1}{\\sqrt{\\pi \\cdot f \\cdot \\mu \\cdot \\sigma}}$$\n• **Impacto (Q21):** O aumento da frequência ($f$) reduz a espessura útil $\\delta$, concentrando a corrente na borda e **AUMENTANDO a resistência aparente em CA ($R_{\\text{CA}} > R_{\\text{CC}}$)** da linha de transmissão."
+    },
+
+    // --- DIA 2 (08/11): Tópico 4.2 (Componentes Simétricas e Fortescue) ---
+    {
+      id: "fc-4-2-1",
+      bloco: "bloco4",
+      secaoId: "sub-4-2",
+      secaoTitulo: "4.2 Componentes Simétricas e Teorema de Fortescue",
+      days: [2, 23, 28],
+      frente: "4.2 Operador Fasorial $a$ — Quais são as propriedades essenciais do operador $a$ e como ele decompõe um sistema desequilibrado em três sequências?",
+      verso: "• $a = 1\\angle 120^\\circ = -\\frac{1}{2} + j\\frac{\\sqrt{3}}{2} \\approx -0,5 + j0,866$\n• $a^2 = 1\\angle 240^\\circ = 1\\angle -120^\\circ = -\\frac{1}{2} - j\\frac{\\sqrt{3}}{2}$\n• $a^3 = 1$ e $1 + a + a^2 = 0$\n• **Decomposição:**\n- **Sequência Positiva (1):** Fasores $ABC$ equilibrados, $B_1$ atrasa $120^\\circ$ ($B_1 = a^2 A_1$, $C_1 = a A_1$).\n- **Sequência Negativa (2):** Fasores $ACB$ invertidos, $B_2$ adianta $120^\\circ$ ($B_2 = a A_2$, $C_2 = a^2 A_2$).\n- **Sequência Zero (0):** Fasores idênticos em módulo e fase ($A_0 = B_0 = C_0$)."
     },
     {
-      frente: "Bloco 4 (SEP) — O que faz o relé ANSI 50BF (Breaker Failure / Falha de Disjuntor)?",
-      verso: "Se o disjuntor principal recebe comando de abertura sob falta e não interrompe a corrente no tempo ajustado, o **50BF** comanda a abertura de todos os disjuntores **ADJACENTES** que alimentam a mesma barra."
+      id: "fc-4-2-2",
+      bloco: "bloco4",
+      secaoId: "sub-4-2",
+      secaoTitulo: "4.2 Componentes Simétricas e Teorema de Fortescue",
+      days: [2, 23, 28],
+      frente: "4.2 Matriz de Fortescue — Na matriz de síntese de fases $[\\dot{V}_A, \\dot{V}_B, \\dot{V}_C]^T = [M] \\cdot [\\dot{V}_{A0}, \\dot{V}_{A1}, \\dot{V}_{A2}]^T$, como identificar imediatamente as colunas de cada sequência (Q38 da Cesgranrio)?",
+      verso: "• **Coluna de Sequência Zero (0):** Sempre $[1, 1, 1]^T$ (fasores colineares em fase).\n• **Coluna de Sequência Positiva (1):** Sempre $[1, a^2, a]^T$ (na fase B o fasor positivo atrasa $120^\\circ$, multiplicando por $a^2$).\n• **Coluna de Sequência Negativa (2):** Sempre $[1, a, a^2]^T$ (na fase B o fasor negativo adianta $120^\\circ$, multiplicando por $a$).\n$$\\begin{bmatrix} \\dot{V}_A \\\\ \\dot{V}_B \\\\ \\dot{V}_C \\end{bmatrix} = \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & a^2 & a \\\\ 1 & a & a^2 \\end{bmatrix} \\begin{bmatrix} \\dot{V}_{A0} \\\\ \\dot{V}_{A1} \\\\ \\dot{V}_{A2} \\end{bmatrix}$$"
+    },
+
+    // --- DIA 3 (09/11): Tópico 4.3 a 4.5 (Sequência Zero e Faltas Simétricas/Assimétricas) ---
+    {
+      id: "fc-4-3-1",
+      bloco: "bloco4",
+      secaoId: "sub-4-3",
+      secaoTitulo: "4.3 Sequência Zero e Faltas Simétricas/Assimétricas",
+      days: [3, 23, 28],
+      frente: "4.3 e 4.4 Curto Monofásico-Terra (1φ-T) — Como são associadas as redes de sequência e qual a expressão da corrente de curto-circuito franca para a terra (Q50)?",
+      verso: "As três redes de sequência (positiva, negativa e zero) ficam associadas em **SÉRIE**:\n$$I_{a1} = I_{a2} = I_{a0} = \\frac{E_a}{Z_1 + Z_2 + Z_0}$$\nA corrente total de falta na fase defeituosa ($A$) para a terra é a soma das 3 componentes:\n$$I_{cc1\\phi} = 3 \\cdot I_{a0} = \\frac{3E_a}{Z_1 + Z_2 + Z_0}$$"
     },
     {
-      frente: "Bloco 5 (NBR 5410) — Qual é a inequação obrigatória de coordenação para proteção de condutores contra sobrecarga?",
-      verso: "$$I_L \\le I_d \\le I_c \\quad (\\text{ou } I_B \\le I_N \\le I_Z)$$ onde $I_L$ é a corrente de projeto da carga, $I_d$ é a corrente nominal do disjuntor e $I_c$ é a capacidade de condução do cabo."
+      id: "fc-4-3-2",
+      bloco: "bloco4",
+      secaoId: "sub-4-3",
+      secaoTitulo: "4.3 Sequência Zero e Faltas Simétricas/Assimétricas",
+      days: [3, 23, 28],
+      frente: "4.4 e 4.5 Curtos 3φ, 2φ e 2φ-Terra — Como são associadas as redes de sequência nos curtos Trifásico ($3\\phi$), Bifásico ($2\\phi$) e Bifásico-Terra ($2\\phi\\text{-T}$)?",
+      verso: "• **Trifásica Simétrica ($3\\phi$):** Apenas sequência positiva atua ($I_{a2}=0, I_{a0}=0$). Corrente: $I_{cc3\\phi} = \\frac{E_a}{Z_1}$.\n• **Bifásica ($2\\phi$ entre B e C):** Sem contato com terra $\\implies I_{a0}=0$. Redes positiva e negativa em **oposição/paralelo**: $I_{a1} = -I_{a2} = \\frac{E_a}{Z_1 + Z_2}$ e $I_{cc2\\phi} = \\sqrt{3}I_{a1} = \\frac{\\sqrt{3}E_a}{Z_1 + Z_2}$.\n• **Bifásica-Terra ($2\\phi\\text{-T}$):** Redes positiva, negativa e zero em **PARALELO** ($V_{a1} = V_{a2} = V_{a0}$)."
     },
     {
-      frente: "Bloco 5 (NBR 5410) — O que caracteriza o esquema de aterramento TT?",
-      verso: "• **1ª letra T:** um ponto da alimentação (neutro) diretamente aterrado.\n• **2ª letra T:** massas da instalação aterradas em eletrodo(s) **ELETRICAMENTE DISTINTO(S)** do eletrodo da alimentação."
+      id: "fc-4-3-3",
+      bloco: "bloco4",
+      secaoId: "sub-4-3",
+      secaoTitulo: "4.3 Sequência Zero e Faltas Simétricas/Assimétricas",
+      days: [3, 23, 28],
+      frente: "4.3 Sequência Zero em Transformadores — Como as conexões Y-aterrado e Delta afetam a passagem da corrente de sequência zero e a impedância de aterramento de neutro ($Z_n$)?",
+      verso: "• **Aterramento com impedância $Z_n$:** A impedância inserida no circuito de sequência zero é multiplicada por 3: **$3Z_n$** (pois pelo neutro retorna $I_n = 3I_{a0}$).\n• **$Y_{\\text{aterrado}} - \\Delta$:** Corrente entra pelo lado estrela aterrada e circula internamente no delta fechado, conectando o lado estrela à barra de referência, mas deixando o enrolamento delta aberto para as linhas externas.\n• **$Y$ não aterrado:** Chave em circuito aberto (não há caminho para corrente zero)."
+    },
+
+    // --- DIA 4 (10/11): Tópico 4.7 (Proteção ANSI 50/51, 50BF, 87, 21 e TC) ---
+    {
+      id: "fc-4-7-1",
+      bloco: "bloco4",
+      secaoId: "sub-4-7",
+      secaoTitulo: "4.7 Proteção de Sistemas Elétricos (ANSI 50/51, 50BF, 87, 21)",
+      days: [4, 23, 29],
+      frente: "4.7 Relé 50BF (Breaker Failure) — O que é e como opera a função ANSI 50BF em subestações elétricas (Q29)?",
+      verso: "Se o disjuntor principal recebe comando de abertura por curto-circuito e **falha ao extinguir a corrente ou abrir seus polos** dentro do tempo ajustado do temporizador de retaguarda, o relé **ANSI 50BF** atua comandando a abertura imediata de **todos os disjuntores adjacentes** ligados ao mesmo barramento, isolando a barra e eliminando a corrente de falta com segurança."
     },
     {
-      frente: "Bloco 6 (Máquinas) — Em um Motor de Indução de Rotor Bobinado, como calcular a resistência externa $R_{\\text{adic}}$ para obter o mesmo torque num novo escorregamento $s_2$?",
-      verso: "O conjugado depende da razão $R_2 / s$. Logo:\n$$\\frac{R_2}{s_1} = \\frac{R_2 + R_{\\text{adic}}}{s_2}$$"
+      id: "fc-4-7-2",
+      bloco: "bloco4",
+      secaoId: "sub-4-7",
+      secaoTitulo: "4.7 Proteção de Sistemas Elétricos (ANSI 50/51, 50BF, 87, 21)",
+      days: [4, 23, 29],
+      frente: "4.7 Ajuste de Relé de Sobrecarga (ANSI 51) com TC — Como calcular a corrente ajustada no secundário do relé em um transformador trifásico alimentado via TC (Q54)?",
+      verso: "1º) Calcula-se a corrente nominal primária do transformador trifásico:\n$$I_{n,\\text{prim}} = \\frac{S_{3\\phi}}{\\sqrt{3} \\cdot V_L}$$\n2º) Multiplica-se pelo fator de sobrecarga admissível e divide-se pela RTC (relação de transformação do TC):\n$$I_{\\text{ajuste}} = \\frac{f_{\\text{sobrecarga}} \\cdot I_{n,\\text{prim}}}{\\text{RTC}}$$\nExemplo da prova: para $I_{n,\\text{prim}} = 200\\text{ A}$, sobrecarga de $1,25$ e TC $250/5\\text{ A}$ ($\\text{RTC}=50$): $I_{\\text{ajuste}} = \\frac{1,25 \\times 200}{50} = \\mathbf{5,0\\text{ A}}$."
+    },
+
+    // =========================================================================
+    // BLOCO 2: CIRCUITOS ELÉTRICOS
+    // =========================================================================
+    // --- DIA 5 (11/11): Tópico 2.1 (CC, Thévenin, Norton, Máxima Transferência, Malhas) ---
+    {
+      id: "fc-2-1-1",
+      bloco: "bloco2",
+      secaoId: "sub-2-1",
+      secaoTitulo: "2.1 Análise CC, Thévenin, Norton e Máxima Transferência",
+      days: [5, 22, 28],
+      frente: "2.1 Circuitos CC e Thévenin — Qual é o teorema da Máxima Transferência de Potência e qual o rendimento da fonte nesse ponto?",
+      verso: "• Para carga resistiva variável $R_L$ conectada a um bipolo linear:\n$$R_L = R_{Th}$$\n• Potência máxima fornecida à carga:\n$$P_{\\max} = \\frac{V_{Th}^2}{4 R_{Th}}$$\n• O rendimento da fonte no ponto de máxima transferência é de **exatamente 50%** (a outra metade da potência total gerada é dissipada internamente na resistência de Thévenin $R_{Th}$)."
     },
     {
-      frente: "Bloco 6 (Máquinas) — Qual a relação entre a potência nominal como Autotransformador ($S_{\\text{auto}}$) e como Transformador Isolado ($S_{\\text{isol}}$)?",
-      verso: "$$S_{\\text{isol}} = V_{\\text{série}} \\cdot I_{\\text{série}} = S_{\\text{auto}} \\cdot \\left(1 - \\frac{V_{\\text{menor}}}{V_{\\text{maior}}}\\right)$$ Em um autotrafo $300\\text{ V}/100\\text{ V}$ de $60\\text{ kVA}$, $S_{\\text{isol}} = 60 \\cdot (1 - 1/3) = 40\\text{ kVA}$."
+      id: "fc-2-1-2",
+      bloco: "bloco2",
+      secaoId: "sub-2-1",
+      secaoTitulo: "2.1 Análise CC, Thévenin, Norton e Malhas Infinitas",
+      days: [5, 22, 28],
+      frente: "2.1 Malhas e Escadas Infinitas — Como resolver associações infinitas periódicas de capacitores ou resistores (Q72)?",
+      verso: "Por autosimilaridade, se a cadeia for infinita, a impedância equivalente vista após o primeiro elo é idêntica à impedância equivalente total ($Z_{eq}$):\n1º) Corta-se a escada após o 1º módulo e substitui-se todo o ramo restante infinito pela incógnita $Z_{eq}$.\n2º) Monta-se a equação $Z_{eq} = Z_1 + (Z_2 \\parallel Z_{eq})$ (ou equivalente com capacitores em série/paralelo).\n3º) Resolve-se a equação do 2º grau e adota-se a raiz positiva real."
+    },
+
+    // --- DIA 6 (12/11): Tópico 2.2 (Fasores CA Monofásicos, Queda 2 condutores, RMS) ---
+    {
+      id: "fc-2-2-1",
+      bloco: "bloco2",
+      secaoId: "sub-2-2",
+      secaoTitulo: "2.2 Monofásico CA, Fasores, Queda de Tensão e RMS",
+      days: [6, 22],
+      frente: "2.2 Queda de Tensão Fasorial — Em um circuito monofásico a 2 condutores alimentando uma carga indutiva, qual é a queda de tensão e a defasagem angular da corrente (Q51)?",
+      verso: "• **Circuito a dois condutores (ida + retorno):**\n$$\\Delta\\dot{V} = 2 \\cdot \\dot{I} \\cdot Z_{\\text{cabo}} = 2 \\cdot \\dot{I} \\cdot (R + jX)$$\n• Se a carga é **indutiva**, a corrente $\\dot{I}$ está **atrasada** em relação à tensão na carga: $\\theta_i = \\theta_v - \\varphi$.\n• Potência complexa: $S = \\dot{V}\\dot{I}^* = P + jQ$."
     },
     {
-      frente: "Bloco 2 (Circuitos) — Na sequência de fases ACB (negativa), se $\\dot{V}_{AN} = V\\angle\\theta$, qual é o ângulo de $\\dot{V}_{BN}$?",
-      verso: "Na sequência ACB, a fase C atrasa $120^\\circ$ de A e a fase B **ADIANTA $120^\\circ$** de A:\n$$\\dot{V}_{BN} = V\\angle(\\theta + 120^\\circ)$$"
+      id: "fc-2-2-2",
+      bloco: "bloco2",
+      secaoId: "sub-2-2",
+      secaoTitulo: "2.2 Monofásico CA, Fasores, Queda de Tensão e RMS",
+      days: [6, 22],
+      frente: "2.2 Valor Eficaz (RMS) — Como calcular o valor eficaz RMS de ondas senoidais, quadradas e triangulares simétricas (Q63)?",
+      verso: "• **Onda Senoidal Pura ($V_p$):** $V_{\\text{rms}} = \\frac{V_p}{\\sqrt{2}} \\approx 0,707 V_p$.\n• **Onda Quadrada Simétrica (alternada $\\pm S$):** $V_{\\text{rms}} = S$ (o valor eficaz é igual ao próprio pico!). Logo, se comutar entre $+V_p$ e $-V_p$ de uma senóide, $V_{\\text{rms}} = V_p = \\sqrt{2}V_{\\text{rede}}$.\n• **Onda Triangular / Dente de Serra:** $V_{\\text{rms}} = \\frac{V_p}{\\sqrt{3}}$."
+    },
+
+    // --- DIA 7 (13/11): Tópico 2.3 (Trifásicos ABC/ACB, Correção de FP, Bode 1ª ordem) ---
+    {
+      id: "fc-2-3-1",
+      bloco: "bloco2",
+      secaoId: "sub-2-3",
+      secaoTitulo: "2.3 Trifásicos ABC/ACB, Correção de FP e Bode de 1ª Ordem",
+      days: [7, 22],
+      frente: "2.3 Sequência ABC vs. ACB — Se um gerador trifásico tem tensão $\\dot{V}_{AN} = V\\angle 0^\\circ$, quais são os fasores das tensões de fase na sequência inversa ACB (Q34)?",
+      verso: "• **Sequência Direta (ABC):** $\\dot{V}_{BN}$ ATRASA $120^\\circ$ e $\\dot{V}_{CN}$ ADIANTA $120^\\circ$:\n$$\\dot{V}_{AN} = V\\angle 0^\\circ, \\quad \\dot{V}_{BN} = V\\angle -120^\\circ, \\quad \\dot{V}_{CN} = V\\angle +120^\\circ$$\n• **Sequência Inversa (ACB):** Invertem-se B e C! $\\dot{V}_{BN}$ **ADIANTA $120^\\circ$** e $\\dot{V}_{CN}$ ATRASA $120^\\circ$:\n$$\\dot{V}_{AN} = V\\angle 0^\\circ, \\quad \\dot{V}_{BN} = V\\angle +120^\\circ, \\quad \\dot{V}_{CN} = V\\angle -120^\\circ$$"
     },
     {
-      frente: "Bloco 7 (Controle) — Dada $G(s) = \\frac{\\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2}$, cuidado com o coeficiente de $s^2$! Se $G(s) = \\frac{200}{2s^2 + 8s + 200}$, quanto vale $\\zeta$?",
-      verso: "Divida numerador e denominador por 2 primeiro!\n$$G(s) = \\frac{100}{s^2 + 4s + 100} \\implies \\omega_n = 10\\text{ rad/s} \\;\\text{ e }\\; 2\\zeta(10) = 4 \\implies \\zeta = 0,2$$"
+      id: "fc-2-3-2",
+      bloco: "bloco2",
+      secaoId: "sub-2-3",
+      secaoTitulo: "2.3 Trifásicos ABC/ACB, Correção de FP e Bode de 1ª Ordem",
+      days: [7, 22],
+      frente: "2.3 Correção de FP e Filtro de 1ª Ordem — Qual a fórmula do banco de capacitores $Q_C$ e a taxa de decaimento em alta frequência no Diagrama de Bode de 1ª ordem?",
+      verso: "• **Correção de Fator de Potência:**\n$$Q_C = P_{3\\phi} \\cdot (\\operatorname{tg}\\varphi_1 - \\operatorname{tg}\\varphi_2)$$\nonde $\\cos\\varphi_1 = FP_{\\text{antigo}}$ e $\\cos\\varphi_2 = FP_{\\text{novo}}$.\n• **Bode de 1ª Ordem:** Para polo simples em $\\omega_c$, acima da frequência de corte a curva assintótica de módulo decai com inclinação de **$-20\\text{ dB/década}$** (ou $-6\\text{ dB/oitava}$) e a fase tende a $-90^\\circ$."
+    },
+
+    // --- DIA 8 (14/11): Tópico 2.4 (Transitórios RC e RL ao Degrau) ---
+    {
+      id: "fc-2-4-1",
+      bloco: "bloco2",
+      secaoId: "sub-2-4",
+      secaoTitulo: "2.4 Regime Transitório (RL, RC e RLC)",
+      days: [8, 22],
+      frente: "2.4 Constantes de Tempo e Resposta ao Degrau — Quais as constantes de tempo ($\\tau$) para circuitos RC e RL e a equação da resposta temporal ao degrau de 1ª ordem?",
+      verso: "• Circuito RC: $\\tau = R \\cdot C$\n• Circuito RL: $\\tau = \\frac{L}{R}$\n• **Equação Geral de 1ª Ordem ao Degrau:**\n$$x(t) = x(\\infty) + [x(0^+) - x(\\infty)] \\cdot e^{-t/\\tau}$$\n• Em $t = \\tau$, $x(t)$ atinge $63,2\\%$ da transição;\n• Em $t = 3\\tau$, $x(t)$ atinge $95\\%$;\n• Em $t = 5\\tau$, atinge mais de $99\\%$ (considerado regime permanente na prática da Cesgranrio)."
     },
     {
-      frente: "Bloco 8 (NR-10) — Qual é a sequência oficial dos 6 passos de Desenergização (item 10.5.1)?",
-      verso: "Mnemônico **S-I-C-A-P-S**:\n1. **S**eccionamento\n2. **I**mpedimento de reenergização\n3. **C**onstatação da ausência de tensão\n4. Instalação de **A**terramento temporário com equipotencialização\n5. **P**roteção dos elementos energizados na zona controlada\n6. **S**inalização de impedimento de reenergização."
+      id: "fc-2-4-2",
+      bloco: "bloco2",
+      secaoId: "sub-2-4",
+      secaoTitulo: "2.4 Regime Transitório (RL, RC e RLC)",
+      days: [8, 22],
+      frente: "2.4 Continuidade em Transitórios — Como se comportam capacitores e indutores imediatamente após chaveamento ($t=0^+$) e em regime permanente CC ($t=\\infty$)?",
+      verso: "• **Tensão no capacitor:** Não varia bruscamente $\\implies v_C(0^+) = v_C(0^-)$. Se descarregado em $0^-$, comporta-se como **curto-circuito** em $0^+$; em $t=\\infty$ (CC), comporta-se como **circuito aberto**.\n• **Corrente no indutor:** Não varia bruscamente $\\implies i_L(0^+) = i_L(0^-)$. Se desenergizado em $0^-$, comporta-se como **circuito aberto** em $0^+$; em $t=\\infty$ (CC), comporta-se como **curto-circuito**."
+    },
+
+    // =========================================================================
+    // BLOCO 6: MÁQUINAS ELÉTRICAS
+    // =========================================================================
+    // --- DIA 9 (15/11): Tópico 6.1 e 6.2 (Transformadores Monofásicos, Autotrafos, Paralelismo) ---
+    {
+      id: "fc-6-2-1",
+      bloco: "bloco6",
+      secaoId: "sub-6-2",
+      secaoTitulo: "6.1 e 6.2 Transformadores Monofásicos e Trifásicos",
+      days: [9, 24],
+      frente: "6.2 Autotransformador — Como se relaciona a potência dimensionada dos enrolamentos ($S_{\\text{isol}}$) com a potência nominal do autotransformador ($S_{\\text{auto}}$) (Q23)?",
+      verso: "$$S_{\\text{isol}} = V_{\\text{série}} \\cdot I_{\\text{série}} = S_{\\text{auto}} \\cdot \\left(1 - \\frac{V_{\\text{menor}}}{V_{\\text{maior}}}\\right)$$\nExemplo da prova: para um autotransformador abaixador $300\\text{ V}/100\\text{ V}$ de $60\\text{ kVA}$, os enrolamentos são dimensionados para apenas $60 \\times (1 - 100/300) = \\mathbf{40\\text{ kVA}}$! A potência transmitida por condução é $60 - 40 = 20\\text{ kVA}$."
     },
     {
-      frente: "Bloco 8 (Lei 14.133/2021) — Qual a modalidade obrigatória para bens e serviços comuns (ex: EPIs, EPCs, ferramentas) e a diferença entre Contratação Integrada e Semi-integrada?",
-      verso: "• Bens/serviços comuns: **PREGÃO**.\n• **Contratação Integrada:** contratado elabora os projetos **BÁSICO e EXECUTIVO**.\n• **Semi-integrada:** contratado elabora apenas o projeto **EXECUTIVO**."
+      id: "fc-6-2-2",
+      bloco: "bloco6",
+      secaoId: "sub-6-2",
+      secaoTitulo: "6.1 e 6.2 Transformadores Monofásicos e Trifásicos",
+      days: [9, 24],
+      frente: "6.1 e 6.2 Ensaios de Trafo e Paralelismo — O que medem os ensaios a vazio e de curto-circuito e qual a regra do grupo angular para paralelismo trifásico (Q24)?",
+      verso: "• **Ensaio a Vazio (tensão nominal):** Mede perdas no ferro do núcleo ($P_{\\text{ferro}}$) e ramo em derivação ($R_c, X_m$).\n• **Ensaio em Curto-Circuito (corrente nominal):** Mede perdas Joule no cobre ($P_{cu}$) e parâmetros série ($R_{eq} = P_{cc}/I_{cc}^2, X_{eq} = \\sqrt{Z_{eq}^2 - R_{eq}^2}$).\n• **Paralelismo Trifásico:** Exige mesma relação de transformação, mesma sequência de fases e **mesmo deslocamento angular** (ex.: Dy1 com $-30^\\circ$ só paraleliza com grupos de mesmo ângulo; nunca com Yy0)."
+    },
+
+    // --- DIA 10 (16/11): Tópico 6.3 (Motores CC Shunt e Curvas V de Síncronas) ---
+    {
+      id: "fc-6-3-1",
+      bloco: "bloco6",
+      secaoId: "sub-6-3",
+      secaoTitulo: "6.3 Motores CC Shunt e Curvas V de Máquinas Síncronas",
+      days: [10, 24, 28],
+      frente: "6.3 Motor CC Shunt — Qual é a equação da tensão de armadura e como varia a rotação ($n$) com a corrente de armadura ($I_a$) e a tensão aplicada (Q25)?",
+      verso: "• Equação da armadura: $V_t = E_a + R_a I_a \\implies E_a = V_t - R_a I_a$.\n• Força contraeletromotriz: $E_a = k \\phi n$.\n• Rotação: $n = \\frac{V_t - R_a I_a}{k \\phi}$.\n• No motor shunt, o campo está em paralelo com a linha constante, logo o fluxo $\\phi$ é aproximadamente constante. Ao aumentar a carga no eixo, $I_a$ cresce, provocando ligeira queda na rotação devido à queda de tensão $R_a I_a$."
+    },
+    {
+      id: "fc-6-3-2",
+      bloco: "bloco6",
+      secaoId: "sub-6-3",
+      secaoTitulo: "6.3 Motores CC Shunt e Curvas V de Máquinas Síncronas",
+      days: [10, 24, 28],
+      frente: "6.3 Curvas V de Máquinas Síncronas — Pelas Curvas V ($I_a \\times I_f$), qual o comportamento de um Motor Síncrono quando opera Sobre-excitado e Sub-excitado?",
+      verso: "• **Sobre-excitado ($I_f > I_{f,\\text{normal}}$):** Corrente de armadura adianta da tensão $\\implies$ Fator de Potência **CAPACITIVO** (o motor injeta potência reativa capacitiva na rede, funcionando como compensador síncrono).\n• **Sub-excitado ($I_f < I_{f,\\text{normal}}$):** Corrente de armadura atrasa da tensão $\\implies$ Fator de Potência **INDUTIVO** (o motor absorve potência reativa indutiva da rede).\n• No ponto de corrente mínima de armadura, o fator de potência é **UNITÁRIO** ($FP = 1,0$)."
+    },
+
+    // --- DIA 11 (17/11): Tópico 6.4 (MIT: Escorregamento, Potências, R2/s e V/f) ---
+    {
+      id: "fc-6-4-1",
+      bloco: "bloco6",
+      secaoId: "sub-6-4",
+      secaoTitulo: "6.4 Motores de Indução Trifásicos (MIT): Escorregamento e Potências",
+      days: [11, 24, 28],
+      frente: "6.4 MIT — Quais são as fórmulas de velocidade síncrona ($n_s$), escorregamento ($s$) e a proporção de potências no rotor (Q28 e Q55)?",
+      verso: "• Velocidade síncrona: $n_s = \\frac{120 f}{p}$ [rpm].\n• Escorregamento: $s = \\frac{n_s - n_r}{n_s}$.\n• **Balanço de Ouro Cesgranrio no Rotor:**\n$$P_{\\text{entreferro}} : P_{\\text{Joule,rotor}} : P_{\\text{mecânica}} = 1 : s : (1 - s)$$\nLogo: $P_{jr} = s \\cdot P_{\\text{gap}}$ e $P_{\\text{mec}} = (1 - s) \\cdot P_{\\text{gap}} = \\frac{1 - s}{s} P_{jr}$."
+    },
+    {
+      id: "fc-6-4-2",
+      bloco: "bloco6",
+      secaoId: "sub-6-4",
+      secaoTitulo: "6.4 Motores de Indução Trifásicos (MIT): Escorregamento e Potências",
+      days: [11, 24, 28],
+      frente: "6.4 MIT: Inserção de Resistência Rotórica e Controle V/f — Como calcular a resistência adicional para manter o conjugado em outro escorregamento e como opera o controle V/f?",
+      verso: "• **Resistência Rotórica:** O conjugado do MIT é constante se a razão $\\frac{R_2}{s}$ for constante:\n$$\\frac{R_2}{s_1} = \\frac{R_2 + R_{\\text{adic}}}{s_2}$$\n• **Controle Escalar $V/f$ Constante:** Ao variar a frequência $f$ do inversor de frequência, ajusta-se a tensão $V$ na mesma proporção ($V/f = \\text{constante}$) para manter o fluxo magnético no entreferro $\\phi_m \\approx \\frac{V_1}{f_1}$ constante, assegurando a capacidade de produzir conjugado máximo nominal na partida."
+    },
+
+    // =========================================================================
+    // BLOCO 3: MEDIDAS ELÉTRICAS E SI
+    // =========================================================================
+    // --- DIA 12 (18/11): Tópico 3.1 a 3.5 (Medidas Elétricas, Blondel 2 Wattímetros, Shunt, TC) ---
+    {
+      id: "fc-3-1-1",
+      bloco: "bloco3",
+      secaoId: "sub-3-1",
+      secaoTitulo: "3.1 a 3.5 Medidas Elétricas, SI, TC/TP e Wattímetros",
+      days: [12, 22, 26],
+      frente: "3.4 Teorema de Blondel e Método dos 2 Wattímetros — Em sistema trifásico a 3 fios equilibrado, quais são as potências ativa ($P_{3\\phi}$) e reativa ($Q_{3\\phi}$) a partir das leituras $W_1$ e $W_2$ (Q41 e Q60)?",
+      verso: "Pelo Teorema de Blondel (exige $N-1 = 2$ elementos de medição para $N=3$ fios):\n$$P_{3\\phi} = W_1 + W_2$$\n$$Q_{3\\phi} = \\sqrt{3}(W_1 - W_2)$$\n• **Fator de Potência:** $\\operatorname{tg}\\varphi = \\sqrt{3}\\frac{W_1 - W_2}{W_1 + W_2}$.\n• Se a carga for puramente resistiva ($FP=1$), $W_1 = W_2$.\n• Se $FP = 0,5$ indutivo ($60^\\circ$), um wattímetro medirá zero ($W_2 = 0$) e toda a potência ativa será indicada pelo outro ($W_1 = P_{3\\phi}$).\n• Em carga equilibrada com neutro ($I_N = 0$), um 3º wattímetro inserido no neutro medirá zero (pegadinha clássica da Q60!)."
+    },
+    {
+      id: "fc-3-1-2",
+      bloco: "bloco3",
+      secaoId: "sub-3-1",
+      secaoTitulo: "3.1 a 3.5 Medidas Elétricas, SI, TC/TP e Wattímetros",
+      days: [12, 22, 26],
+      frente: "3.1 e 3.3 Medidas de Resistência e TC — Como se classifica o método volt-amperímetro e como calcular a potência média CA num osciloscópio usando resistor shunt (Q42 e Q52)?",
+      verso: "• **Método Volt-Amperímetro:** É uma medição **INDIRETA** de resistência ($R = V/I$), pois utiliza dois instrumentos para deduzir o valor por lei física.\n• **Medição de Potência com Shunt no Osciloscópio (Q42):**\nO shunt $R_s$ em série mede a corrente $i(t) = \\frac{v_s(t)}{R_s}$. A potência ativa média em CA com $v(t) = V_p\\cos(\\omega t + \\theta_v)$ e $i(t) = I_p\\cos(\\omega t + \\theta_i)$ é:\n$$P = \\frac{V_p \\cdot I_p}{2} \\cos(\\theta_v - \\theta_i) = V_{\\text{rms}} \\cdot I_{\\text{rms}} \\cdot \\cos(\\varphi)$$\nNão esqueça de dividir o produto das amplitudes de pico por 2!"
+    },
+
+    // =========================================================================
+    // CONHECIMENTOS BÁSICOS: LÍNGUA PORTUGUESA
+    // =========================================================================
+    // --- DIA 13 (19/11): Português Parte 1 (Compreensão, Pronome Relativo 'QUE', Aposto) ---
+    {
+      id: "fc-pt-1-1",
+      bloco: "portugues",
+      secaoId: "sub-pt-1",
+      secaoTitulo: "Português Parte 1: Compreensão, Pronome Relativo 'QUE' e Pontuação",
+      days: [13, 25],
+      frente: "Português (Coesão Referencial) — Quando o vocábulo 'QUE' atua como Pronome Relativo segundo o rigor da Cesgranrio (Q04 e Q06)?",
+      verso: "O vocábulo 'QUE' é **pronome relativo** se e somente se:\n1. Retoma um substantivo ou pronome antecedente na oração principal.\n2. Pode ser substituído exatamente por **o qual, a qual, os quais, as quais**.\n• Exemplo da prova: *'olhou a borboleta <u>que</u> [a qual] entrou na varanda'* $\\implies$ pronome relativo retomando *borboleta*.\n• Se vier após verbos de cognição/dizer introduzindo oração subordinada substantiva (*'disse <u>que</u> viria'*), é **conjunção integrante** (substituível por *'isso'*)."
+    },
+    {
+      id: "fc-pt-1-2",
+      bloco: "portugues",
+      secaoId: "sub-pt-1",
+      secaoTitulo: "Português Parte 1: Compreensão, Pronome Relativo 'QUE' e Pontuação",
+      days: [13, 25],
+      frente: "Português (Pontuação) — Qual a regra para pontuação de Aposto Explicativo e de Vocativo segundo a banca Cesgranrio (Q03)?",
+      verso: "• **Aposto Explicativo:** Termo substantivo que explica ou identifica um substantivo anterior. Deve vir **OBRIGATORIAMENTE ISOLADO POR DUPLA VÍRGULA** (ou travessões):\n*'A minha avó, <u>Pedrina Perucchi</u>, era italiana.'* equivale a *'Os poemas, <u>textos de imensa beleza</u>, comovem.'*\n• **Vocativo:** Termo de chamamento/invocação. Deve vir **SEMPRE ISOLADO POR VÍRGULA** (*'Venha cá, <u>meu amigo</u>, para conversarmos'*)."
+    },
+
+    // --- DIA 14 (20/11): Português Parte 2 (Crase, Regência, Concordância, Correlação Verbal) ---
+    {
+      id: "fc-pt-2-1",
+      bloco: "portugues",
+      secaoId: "sub-pt-2",
+      secaoTitulo: "Português Parte 2: Crase, Regência, Concordância e Correlação Verbal",
+      days: [14, 25],
+      frente: "Português (Correlação Verbal) — Qual a correlação em orações condicionais com hipótese contrafactual não realizada no passado (Q08)?",
+      verso: "A Cesgranrio cobra a harmonia verbal clássica:\n• **Oração Principal:** Futuro do Pretérito Composto do Indicativo (*teria sido / teria feito*)\n• **Oração Subordinada Condicional ('se'):** Pretérito Mais-Que-Perfeito Composto do Subjuntivo (*se tivesse escrito / se houvesse feito*)\n• Exemplo padrão da prova: *'A obra também <strong>teria sido lida</strong> se a autora <strong>tivesse escrito</strong> seus contos em inglês.'*"
+    },
+    {
+      id: "fc-pt-2-2",
+      bloco: "portugues",
+      secaoId: "sub-pt-2",
+      secaoTitulo: "Português Parte 2: Crase, Regência, Concordância e Correlação Verbal",
+      days: [14, 25],
+      frente: "Português (Crase e Concordância de Impessoais) — Quando ocorre crase em regência nominal e qual a regra para os verbos 'Haver' e 'Fazer' (Q05 e Q09)?",
+      verso: "• **Crase com Regência Nominal:** Ocorre fusão da preposição *a* (exigida por nome: *soneto dedicado a*) com o artigo feminino *a* (*a língua portuguesa*): *'soneto <u>à</u> língua portuguesa'*.\n• **Verbos Impessoais:** O verbo **Haver** (sentido de existir ou tempo transcorrido) e o verbo **Fazer** (tempo transcorrido ou clima) são estritamente **impessoais** e permanecem na **3ª pessoa do singular**:\n*'<u>Havia</u> muitos problemas'*, *'<u>Faz</u> cinco anos que me formei'*, *'<u>Deve haver</u> soluções'."
+    },
+
+    // =========================================================================
+    // BLOCO 5: INSTALAÇÕES ELÉTRICAS E SUBESTAÇÕES
+    // =========================================================================
+    // --- DIA 15 (21/11): Tópico 5.1 (NBR 5410: Condutores, Queda de Tensão, DPS, Esquema TT) ---
+    {
+      id: "fc-5-1-1",
+      bloco: "bloco5",
+      secaoId: "sub-5-1",
+      secaoTitulo: "5.1 a 5.3 NBR 5410: Condutores, Queda de Tensão, DPS e Esquema TT",
+      days: [15, 23],
+      frente: "5.1 NBR 5410: Proteção contra Sobrecarga — Qual é a regra normativa de coordenação entre a corrente de projeto ($I_L$), a corrente nominal do disjuntor ($I_d$) e a capacidade do condutor ($I_c$) (Q59)?",
+      verso: "Pelo item 5.3.4.1 da NBR 5410, para proteção eficaz contra sobrecargas:\n$$I_L \\le I_d \\le I_c \\qquad \\text{e} \\qquad I_2 \\le 1,45 \\cdot I_c$$\nonde:\n• $I_L$ (ou $I_B$): corrente de projeto do circuito alimentado;\n• $I_d$ (ou $I_n$): corrente nominal do dispositivo de proteção (disjuntor/fusível);\n• $I_c$ (ou $I_z$): capacidade de condução de corrente corrigida dos cabos;\n• $I_2$: corrente convencional de atuação da proteção no tempo nominal."
+    },
+    {
+      id: "fc-5-1-2",
+      bloco: "bloco5",
+      secaoId: "sub-5-1",
+      secaoTitulo: "5.1 a 5.3 NBR 5410: Condutores, Queda de Tensão, DPS e Esquema TT",
+      days: [15, 23],
+      frente: "5.3 NBR 5410: Esquema TT e DPS sem Neutro — O que define o Esquema TT e como conectar os Dispositivos de Proteção contra Surtos (DPS) num padrão trifásico sem neutro (Q22 e Q30)?",
+      verso: "• **Esquema TT:** O ponto de alimentação (neutro da concessionária/trafo) é aterrado em um eletrodo; e todas as massas metálicas da instalação consumidora são aterradas em um eletrodo **ELETRICAMENTE INDEPENDENTE** do eletrodo de alimentação.\n• **DPS em Sistema Trifásico sem Neutro (3 fases):** Conectam-se 3 DPS em paralelo, instalados cada um **entre cada fase e o BEP (Barramento de Equipotencialização Principal)** ou barra PE do quadro (Q30)."
+    },
+
+    // --- DIA 16 (22/11): Tópico 5.3 (Subestações AT, Wenner, SPDA NBR 5419) ---
+    {
+      id: "fc-5-3-1",
+      bloco: "bloco5",
+      secaoId: "sub-5-3",
+      secaoTitulo: "5.4 a 5.6 Subestações, Malha de Terra (Wenner) e SPDA",
+      days: [16, 23, 27],
+      frente: "5.4 e 5.5 Método de Wenner e Seccionadoras de AT — Qual a fórmula de Wenner para resistividade aparente e a função da seccionadora com lâmina de terra (Q32 e Q57)?",
+      verso: "• **Método dos 4 Eletrodos de Wenner:** Com 4 hastes alinhadas e igualmente espaçadas de distância $a$:\n$$\\rho(a) = 2 \\cdot \\pi \\cdot a \\cdot R \\; [\\Omega\\cdot\\text{m}]$$\nNa curva $\\rho(a) \\times a$, cada mudança de concavidade/patamar indica a transição para uma nova camada do solo estratificado.\n• **Seccionadora com Lâmina de Terra:** Manobrada **sem carga** após a abertura do disjuntor principal, com intertravamento mecânico/elétrico, garantindo isolamento visual e aterramento seguro dos condutores antes de intervenção de manutenção."
+    },
+    {
+      id: "fc-5-3-2",
+      bloco: "bloco5",
+      secaoId: "sub-5-3",
+      secaoTitulo: "5.4 a 5.6 Subestações, Malha de Terra (Wenner) e SPDA",
+      days: [16, 23, 27],
+      frente: "5.4 e 5.6 Arranjo 'Disjuntor e Meio' e SPDA NBR 5419 Nível I — Como é o arranjo Disjuntor e Meio e quais os parâmetros do SPDA Nível I (Q77 e Q78)?",
+      verso: "• **Barramento Disjuntor e Meio (1,5 disjuntor/circuito):** 2 barramentos principais e **3 disjuntores para cada 2 saídas**. Permite manutenção de qualquer disjuntor ou de um barramento sem desligar nenhum circuito.\n• **SPDA Nível I (NBR 5419-3):**\n- Raio da Esfera Rolante: **$R = 20\\text{ m}$**\n- Malha de Faraday (gaiola): **$5 \\times 5\\text{ m}$**\n- Espaçamento médio entre descidas: **$10\\text{ m}$**\n(Nível II: $R=30\\text{m}$, malha $10\\times 10\\text{m}$, descidas $10\\text{m}$; Nível III: $R=45\\text{m}$, malha $15\\times 15\\text{m}$, descidas $15\\text{m}$; Nível IV: $R=60\\text{m}$, malha $20\\times 20\\text{m}$, descidas $20\\text{m}$)."
+    },
+
+    // =========================================================================
+    // BLOCO 7: SISTEMAS DE CONTROLE
+    // =========================================================================
+    // --- DIA 17 (23/11): Tópico 7.1 (Sistemas 2ª ordem, Estabilidade SPE, Controlabilidade) ---
+    {
+      id: "fc-7-1-1",
+      bloco: "bloco7",
+      secaoId: "sub-7-1",
+      secaoTitulo: "7.1 a 7.4 Sistemas de 2ª Ordem, Estabilidade e Controlabilidade",
+      days: [17, 24, 28],
+      frente: "7.3 Sistemas de 2ª Ordem — Dada a função de transferência $G(s) = \\frac{200}{2s^2 + 8s + 200}$, como calcular $\\omega_n$ e $\\zeta$ e classificar o amortecimento (Q68)?",
+      verso: "1º) Normaliza-se o coeficiente de $s^2$ para 1 dividindo por 2:\n$$G(s) = \\frac{100}{s^2 + 4s + 100}$$\n2º) Compara-se com a forma padrão canônica mônica $\\frac{\\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2}$:\n$$\\omega_n^2 = 100 \\implies \\omega_n = 10\\text{ rad/s}$$\n$$2\\zeta\\omega_n = 4 \\implies 2\\zeta(10) = 4 \\implies \\zeta = 0,2$$\nComo $0 < \\zeta < 1$, a resposta temporal é oscilatória e **SUBAMORTECIDA**."
+    },
+    {
+      id: "fc-7-1-2",
+      bloco: "bloco7",
+      secaoId: "sub-7-1",
+      secaoTitulo: "7.1 a 7.4 Sistemas de 2ª Ordem, Estabilidade e Controlabilidade",
+      days: [17, 24, 28],
+      frente: "7.4 e 7.5 Estabilidade e Matriz de Controlabilidade — Qual a condição de estabilidade no plano $s$ e o critério de posto da matriz de controlabilidade $\\mathcal{C}$ (Q47 e Q69)?",
+      verso: "• **Estabilidade Linear:** Todos os polos de malha fechada devem situar-se estritamente no **Semiplano Esquerdo (SPE)** do plano complexo $s$ (parte real estritamente negativa, $\\operatorname{Re}(s) < 0$).\n• Um polo na origem ($s=0$) anula o termo independente da equação característica.\n• **Matriz de Controlabilidade:** $\\mathcal{C} = [B \\quad AB \\quad \\dots \\quad A^{n-1}B]$. O sistema é completamente controlável se e somente se o posto de $\\mathcal{C}$ for $n$ (ou seja, $\\det(\\mathcal{C}) \\neq 0$)."
+    },
+
+    // --- DIA 18 (24/11): Tópico 7.5 (Espaço de Estados para G(s), Transformada Z) ---
+    {
+      id: "fc-7-5-1",
+      bloco: "bloco7",
+      secaoId: "sub-7-5",
+      secaoTitulo: "7.5 e 7.6 Espaço de Estados e Transformada Z Discreta",
+      days: [18, 24, 28],
+      frente: "7.5 Espaço de Estados para Função de Transferência — Como obter $G(s)$ a partir das matrizes $(A, B, C, D)$ e o atalho para matriz companheira (Q45 e Q70)?",
+      verso: "$$G(s) = C(sI - A)^{-1}B + D = \\frac{C \\cdot \\operatorname{adj}(sI - A) \\cdot B}{\\det(sI - A)} + D$$\n• **Atalho Cesgranrio para Matriz Companheira $2\\times 2$:**\nPara $A = \\begin{bmatrix} a & b \\\\ 1 & 0 \\end{bmatrix}$, o polinômio característico no denominador é:\n$$\\det(sI - A) = s(s-a) - b = s^2 - as - b$$"
+    },
+    {
+      id: "fc-7-5-2",
+      bloco: "bloco7",
+      secaoId: "sub-7-5",
+      secaoTitulo: "7.5 e 7.6 Espaço de Estados e Transformada Z Discreta",
+      days: [18, 24, 28],
+      frente: "7.6 Transformada Z e Amostras Temporais — Dada $G(z) = \\frac{3z^2 - 3z}{z^2 - 6z + 5}$, como obter as primeiras amostras $y(0), y(1), y(2)$ à resposta ao impulso unitário (Q46)?",
+      verso: "1º) Fatorando numerador e denominador:\n$$G(z) = \\frac{3z(z-1)}{(z-1)(z-5)} = \\frac{3z}{z-5} = \\frac{3}{1 - 5z^{-1}}$$\n2º) Como $\\mathcal{Z}^{-1}\\left\\{\\frac{1}{1 - a z^{-1}}\\right\\} = a^n u(n)$:\n$$y(n) = 3 \\cdot 5^n u(n)$$\n3º) Calculando as primeiras amostras:\n• $n = 0 \\implies y(0) = 3 \\cdot 5^0 = \\mathbf{3}$\n• $n = 1 \\implies y(1) = 3 \\cdot 5^1 = \\mathbf{15}$\n• $n = 2 \\implies y(2) = 3 \\cdot 5^2 = \\mathbf{75}$"
+    },
+
+    // =========================================================================
+    // BLOCO 1: MATEMÁTICA APLICADA
+    // =========================================================================
+    // --- DIA 19 (25/11): Tópico 1.1 (Determinantes, Vetores, Fase 2j, Laplace) ---
+    {
+      id: "fc-1-1-1",
+      bloco: "bloco1",
+      secaoId: "sub-1-1",
+      secaoTitulo: "1.1 a 1.3 Laplace, Determinantes, Vetores e Complexos",
+      days: [19, 22, 28],
+      frente: "1.1 Propriedades de Determinantes — Se $A$ é matriz $n \\times n$ com $n=3$ e $\\det(A) = 4$, quanto valem $\\det(2A)$ e $\\det(A^{-1})$ (Q65)?",
+      verso: "Pelas propriedades clássicas cobradas pela Cesgranrio:\n• $\\det(k \\cdot A) = k^n \\cdot \\det(A) \\implies \\det(2A) = 2^3 \\cdot \\det(A) = 8 \\times 4 = \\mathbf{32}$\n• $\\det(A^{-1}) = \\frac{1}{\\det(A)} = \\frac{1}{4} = \\mathbf{0,25}$\n• $\\det(A^T) = \\det(A) = \\mathbf{4}$\n• $\\det(A \\cdot B) = \\det(A) \\cdot \\det(B)$"
+    },
+    {
+      id: "fc-1-1-2",
+      bloco: "bloco1",
+      secaoId: "sub-1-1",
+      secaoTitulo: "1.1 a 1.3 Laplace, Determinantes, Vetores e Complexos",
+      days: [19, 22, 28],
+      frente: "1.2 e 1.3 Vetores e Fase em Números Complexos — Quando $\\vec{A} = \\vec{B} \\times \\vec{v}$, qual a condição para órbita circular e como calcular a fase de $G(s) = \\frac{5(s-2)}{s+2}$ em $s=2j$ (Q64 e Q71)?",
+      verso: "• **Movimento Circular:** Se $\\vec{B} \\cdot \\vec{v}_0 = 0$ (perpendiculares), a aceleração gerada pelo produto vetorial é centrípeta pura, descrevendo trajetória circular com raio $R = \\frac{|\\vec{v}|}{|\\vec{B}|}$.\n• **Fase em $s = 2j$:**\n$$\\angle G(2j) = \\angle(5) + \\angle(-2 + 2j) - \\angle(2 + 2j)$$\nComo $(-2+2j)$ está no 2º quadrante ($\\theta = 135^\\circ$) e $(2+2j)$ está no 1º quadrante ($\\theta = 45^\\circ$):\n$$\\angle G(2j) = 0^\\circ + 135^\\circ - 45^\\circ = \\mathbf{+90^\\circ}$$\n(Não caia na pegadinha de achar que $\\operatorname{tg}(-1) = -45^\\circ$; considere o quadrante real!)."
+    },
+    {
+      id: "fc-1-1-3",
+      bloco: "bloco1",
+      secaoId: "sub-1-1",
+      secaoTitulo: "1.1 a 1.3 Laplace, Determinantes, Vetores e Complexos",
+      days: [19, 22, 28],
+      frente: "1.1 Transformada de Laplace Inversa por Frações Parciais — Como obter o coeficiente $K_1$ do polo simples $(s+a)$ em $F(s) = \\frac{N(s)}{(s+a)(s+b)}$?",
+      verso: "Aplica-se o método dos resíduos de Heaviside:\n$$K_1 = \\left. (s + a) \\cdot F(s) \\right|_{s = -a} = \\frac{N(-a)}{-a + b}$$\nE pela propriedade da transformada inversa:\n$$\\mathcal{L}^{-1}\\left\\{ \\frac{K_1}{s+a} + \\frac{K_2}{s+b} \\right\\} = (K_1 e^{-at} + K_2 e^{-bt}) \\cdot u(t)$$"
+    },
+
+    // =========================================================================
+    // BLOCO 8: NR-10 E LEI 14.133/2021
+    // =========================================================================
+    // --- DIA 20 (26/11): Tópico 8.1 (NR-10 SICAPS, Habilitação; Pregão Lei 14.133) ---
+    {
+      id: "fc-8-1-1",
+      bloco: "bloco8",
+      secaoId: "sub-8-1",
+      secaoTitulo: "8.1 e 8.2 NR-10 e Nova Lei de Licitações (Lei 14.133/2021)",
+      days: [20, 24, 29],
+      frente: "8.2 NR-10: Etapas de Desenergização — Qual é o mnemônico oficial dos 6 passos obrigatórios de desenergização da NR-10 (item 10.5.1)?",
+      verso: "Mnemônico **S-I-C-A-P-S**:\n1. **S**eccionamento (abertura dos dispositivos);\n2. **I**mpedimento de reenergização (travamento/bloqueio com cadeado e etiqueta);\n3. **C**onstatação da ausência de tensão com detector testado;\n4. Instalação de **A**terramento temporário com equipotencialização dos condutores;\n5. **P**roteção dos elementos energizados existentes na zona controlada adjacente;\n6. **S**inalização de impedimento de reenergização."
+    },
+    {
+      id: "fc-8-1-2",
+      bloco: "bloco8",
+      secaoId: "sub-8-1",
+      secaoTitulo: "8.1 e 8.2 NR-10 e Nova Lei de Licitações (Lei 14.133/2021)",
+      days: [20, 24, 29],
+      frente: "8.1 e 8.2 NR-10 e Lei 14.133/2021 — Quem pode ministrar treinamento da NR-10 e qual a modalidade licitatória obrigatória para bens e serviços comuns de engenharia (Q53 e Q58)?",
+      verso: "• **NR-10 (Treinamento - Q53):** Apenas o profissional **legalmente habilitado** (graduado com registro ativo no CREA/CFT) e **autorizado** pela empresa pode ministrar treinamentos e responsabilizar-se pelo prontuário.\n• **Lei 14.133/2021 (Pregão - Q58):** Modalidade **OBRIGATÓRIA** para aquisição de **bens e serviços comuns** (aqueles cujos padrões de desempenho e qualidade podem ser objetivamente definidos pelo edital por especificações usuais de mercado, como aquisição de EPIs, condutores padronizados e instrumentos normatizados).\n• **Concorrência:** Para obras e serviços especiais de engenharia."
+    },
+
+    // =========================================================================
+    // CONHECIMENTOS BÁSICOS: LÍNGUA INGLESA
+    // =========================================================================
+    // --- DIA 21 (27/11): Tópico Inglês Instrumental (Discourse Markers, Synonyms, Reference) ---
+    {
+      id: "fc-en-1-1",
+      bloco: "ingles",
+      secaoId: "sub-en-1",
+      secaoTitulo: "Língua Inglesa (Inglês Instrumental Cesgranrio)",
+      days: [21, 25],
+      frente: "Inglês (Conectivos e Discourse Markers) — Quais os valores semânticos de 'However', 'Although / Even though', 'Therefore / Thus' e 'Moreover' na banca Cesgranrio?",
+      verso: "• <code>However / Yet / Nonetheless</code> = **Opposition / Contrast** (Contudo, no entanto)\n• <code>Although / Even though / Whereas</code> = **Concession / Contrast** (Embora, ao passo que)\n• <code>Therefore / Thus / Hence / Thereby</code> = **Conclusion / Consequence / Result** (Portanto, dessa forma)\n• <code>Moreover / Furthermore / In addition</code> = **Addition** (Além disso, outrossim)\n• <code>Despite / In spite of</code> = **Concession** (+ substantivo ou verbo em -ing)."
+    },
+    {
+      id: "fc-en-1-2",
+      bloco: "ingles",
+      secaoId: "sub-en-1",
+      secaoTitulo: "Língua Inglesa (Inglês Instrumental Cesgranrio)",
+      days: [21, 25],
+      frente: "Inglês (Sinônimos Técnicos e Pronomes Relativos) — Quais são as equivalências semânticas de 'pivotal', 'state-of-the-art', 'low latency' e a quem se refere o pronome 'which'?",
+      verso: "• <code>pivotal</code> = **essential / crucial / vital**\n• <code>state-of-the-art</code> = **cutting-edge / up-to-date / advanced**\n• <code>low latency</code> = **minimal delay / high response speed**\n• <code>to curb</code> = **to restrain / to reduce / to limit**\n• **Pronome Relativo <code>which</code>:** Retoma o sintagma nominal antecedente imediato (ex.: *'...greenhouse gas emissions, <u>of which</u> 90% come from...'* $\\implies$ refere-se a *greenhouse gas emissions*)."
     }
   ];
+
+  function getFlashcardsForGuidedDay(dayNum) {
+    if (showAllFlashcardsInGuided) return FLASHCARDS_REVISAO;
+    const filtered = FLASHCARDS_REVISAO.filter(
+      (c) => Array.isArray(c.days) && c.days.includes(dayNum)
+    );
+    if (filtered.length > 0) return filtered;
+    const plano = window.PLANO_30_DIAS || [];
+    const dayObj = plano.find((d) => d.dia === dayNum);
+    if (dayObj && dayObj.teoriaId) {
+      const byBlock = FLASHCARDS_REVISAO.filter((c) => c.bloco === dayObj.teoriaId);
+      if (byBlock.length > 0) return byBlock;
+    }
+    return FLASHCARDS_REVISAO;
+  }
+
+  function getFlashcardsForTheoryBlock(blockId) {
+    const byBlock = FLASHCARDS_REVISAO.filter((c) => c.bloco === blockId);
+    return byBlock.length > 0 ? byBlock : FLASHCARDS_REVISAO;
+  }
 
   let currentFlashcardIdx = 0;
   let flashcardShowingBack = false;
@@ -1172,36 +1642,82 @@
 
           <div class="grid-2" style="margin-bottom:8px;">
             <div class="card" style="margin-bottom:0;">
-              <div class="card-title">
-                <span>Cartões Rápidos de Fórmulas (Flashcards)</span>
-                <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 12</span>
+              <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                  <span>Flashcards da Seção</span>
+                  <span class="badge badge-blue" id="flashcard-section-badge"></span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <button class="btn btn-secondary btn-sm" id="btn-fc-toggle-scope" style="font-size:0.72rem;padding:2px 8px;">
+                    ${showAllFlashcardsInGuided ? "Ver apenas da seção de hoje" : "Ver todos os flashcards"}
+                  </button>
+                  <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 01</span>
+                </div>
               </div>
-              <div
-                id="flashcard-box"
-                class="flashcard-surface"
-                title="Clique para alternar entre pergunta e resposta"
-              >
-                <div class="flashcard-side-tag" id="flashcard-side-label">FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)</div>
-                <div class="flashcard-body-text" id="flashcard-text"></div>
+              <div class="flashcard-wrapper">
+                <div
+                  id="flashcard-box"
+                  class="flashcard-surface"
+                  title="Clique para girar o cartão (ver resposta / fórmula)"
+                >
+                  <div class="flashcard-flip-hint">
+                    <span class="flashcard-flip-icon">↻</span>
+                    <span>Girar</span>
+                  </div>
+                  <div class="flashcard-side-tag" id="flashcard-side-label">FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)</div>
+                  <div class="flashcard-body-text" id="flashcard-text"></div>
+                </div>
               </div>
               <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
                 <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
-                <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">Virar Cartão</button>
+                <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">↻ Girar Cartão</button>
                 <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
               </div>
             </div>
 
-            <div class="card" style="margin-bottom:0;">
-              <div class="card-title">
-                <span>Bloco de Notas e Fórmulas Pessoais</span>
-                <span class="badge badge-blue">Salvo Automaticamente</span>
+            <div class="card notes-card-wrapper" style="margin-bottom:0;">
+              <div class="card-title notes-header-bar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                  <span>Bloco de Notas e Fórmulas</span>
+                  <span class="badge badge-blue" id="notes-save-badge">Salvo Auto</span>
+                </div>
+                <div class="notes-mode-pills" role="tablist">
+                  <button type="button" class="notes-pill-btn ${personalNotesMode === "edit" ? "active" : ""}" id="btn-notes-mode-edit" title="Modo de Edição (digitar texto e fórmulas)">✏️ Editar</button>
+                  <button type="button" class="notes-pill-btn ${personalNotesMode === "preview" ? "active" : ""}" id="btn-notes-mode-preview" title="Modo Visualização Renderizada (KaTeX LaTeX)">👁️ Visualizar</button>
+                  <button type="button" class="notes-pill-btn ${personalNotesMode === "split" ? "active" : ""}" id="btn-notes-mode-split" title="Modo Dividido (Editor + Preview em tempo real)">◫ Dividir</button>
+                </div>
               </div>
-              <textarea
-                id="personal-notes-area"
-                class="form-input"
-                style="width:100%;min-height:210px;resize:vertical;font-family:'IBM Plex Mono',monospace;font-size:0.82rem;line-height:1.55;"
-                placeholder="Anote aqui relações matemáticas ou observações das questões de hoje..."
-              ></textarea>
+
+              <!-- Barra Rápida de Inserção de LaTeX (visível ao editar) -->
+              <div class="notes-math-toolbar ${personalNotesMode === "preview" ? "hidden" : ""}" id="notes-math-toolbar">
+                <span class="math-tool-label">LATEX:</span>
+                <button type="button" class="btn-math-insert" data-snippet="$$ $$" title="Inserir Bloco de Fórmula Centralizada">$$ Bloco $$</button>
+                <button type="button" class="btn-math-insert" data-snippet="$ $" title="Inserir Fórmula em Linha">$ Linha $</button>
+                <button type="button" class="btn-math-insert" data-snippet="\\frac{a}{b}" title="Fração">\frac{a}{b}</button>
+                <button type="button" class="btn-math-insert" data-snippet="\\sqrt{x}" title="Raiz Quadrada">\sqrt{x}</button>
+                <button type="button" class="btn-math-insert" data-snippet="Z_{pu}" title="Subscrito">Z_{pu}</button>
+                <button type="button" class="btn-math-insert" data-snippet="\\cdot" title="Multiplicação">\cdot</button>
+                <button type="button" class="btn-math-insert" data-snippet="\\le" title="Menor ou Igual">\le</button>
+                <button type="button" class="btn-math-insert" data-snippet="\\angle 120^\\circ" title="Ângulo Fasorial">\angle 120°</button>
+              </div>
+
+              <!-- Container do Editor e da Visualização KaTeX -->
+              <div class="notes-content-container mode-${personalNotesMode}" id="notes-content-container">
+                <div class="notes-editor-pane" id="notes-editor-pane">
+                  <textarea
+                    id="personal-notes-area"
+                    class="form-input personal-notes-textarea"
+                    placeholder="Anote aqui fórmulas e observações usando LaTeX:&#10;• Em linha: $Z_{pu} = 0,25$&#10;• Em bloco: $$P = \sqrt{3} \cdot V_L \cdot I_L \cdot \cos\varphi$$&#10;• Negrito: **termo**"
+                    spellcheck="false"
+                  ></textarea>
+                </div>
+
+                <div
+                  class="personal-notes-preview-box"
+                  id="personal-notes-preview"
+                  title="Duplo clique para alternar para edição"
+                ></div>
+              </div>
             </div>
           </div>
 
@@ -1288,6 +1804,7 @@
     // Renderiza matemática LaTeX se estiver na Etapa 1
     if (guidedStep === 1) {
       typesetMathInElement(document.getElementById("guided-theory-body"));
+      setupVisualCardControls(document.getElementById("guided-theory-body"));
     }
 
     // Se estiver na Etapa 2, conecta os eventos das questões do dia
@@ -1318,33 +1835,54 @@
         notesTextarea.addEventListener("input", function () {
           state.personalNotes = this.value;
           saveState();
+          updateNotesPreview();
         });
       }
+
+      // Seletor de Modos do Bloco de Notas: Editar / Visualizar / Dividir
+      document
+        .getElementById("btn-notes-mode-edit")
+        ?.addEventListener("click", () => setPersonalNotesMode("edit"));
+      document
+        .getElementById("btn-notes-mode-preview")
+        ?.addEventListener("click", () => setPersonalNotesMode("preview"));
+      document
+        .getElementById("btn-notes-mode-split")
+        ?.addEventListener("click", () => setPersonalNotesMode("split"));
+
+      // Duplo clique na área renderizada para abrir modo de edição rapidamente
+      document
+        .getElementById("personal-notes-preview")
+        ?.addEventListener("dblclick", () => setPersonalNotesMode("edit"));
+
+      // Botões da barra rápida de snippets LaTeX
+      document.querySelectorAll(".btn-math-insert").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const snippet = this.getAttribute("data-snippet");
+          if (snippet) insertSnippetIntoNotes(snippet);
+        });
+      });
+
+      // Aplica o modo inicial e renderiza as fórmulas LaTeX
+      setPersonalNotesMode(personalNotesMode || (state.personalNotes ? "preview" : "edit"));
       renderFlashcardUI();
-      const toggleFlip = function () {
-        flashcardShowingBack = !flashcardShowingBack;
-        renderFlashcardUI();
-      };
       document
         .getElementById("flashcard-box")
-        ?.addEventListener("click", toggleFlip);
+        ?.addEventListener("click", flipGuidedFlashcardWithSpin);
       document
         .getElementById("btn-fc-flip")
-        ?.addEventListener("click", toggleFlip);
+        ?.addEventListener("click", flipGuidedFlashcardWithSpin);
       document
         .getElementById("btn-fc-prev")
-        ?.addEventListener("click", function () {
-          currentFlashcardIdx =
-            (currentFlashcardIdx - 1 + FLASHCARDS_REVISAO.length) %
-            FLASHCARDS_REVISAO.length;
-          flashcardShowingBack = false;
-          renderFlashcardUI();
-        });
+        ?.addEventListener("click", prevGuidedFlashcard);
       document
         .getElementById("btn-fc-next")
+        ?.addEventListener("click", nextGuidedFlashcard);
+      document
+        .getElementById("btn-fc-toggle-scope")
         ?.addEventListener("click", function () {
-          currentFlashcardIdx =
-            (currentFlashcardIdx + 1) % FLASHCARDS_REVISAO.length;
+          showAllFlashcardsInGuided = !showAllFlashcardsInGuided;
+          currentFlashcardIdx = 0;
           flashcardShowingBack = false;
           renderFlashcardUI();
         });
@@ -1516,20 +2054,87 @@
     });
   }
 
+  let isGuidedFlashcardSpinning = false;
+  function flipGuidedFlashcardWithSpin() {
+    if (isGuidedFlashcardSpinning) return;
+    const box = document.getElementById("flashcard-box");
+    if (!box) {
+      flashcardShowingBack = !flashcardShowingBack;
+      renderFlashcardUI();
+      return;
+    }
+    isGuidedFlashcardSpinning = true;
+    box.classList.remove("anim-slide-next", "anim-slide-prev");
+    box.classList.add("anim-spinning");
+
+    setTimeout(() => {
+      flashcardShowingBack = !flashcardShowingBack;
+      renderFlashcardUI();
+    }, 225);
+
+    setTimeout(() => {
+      box.classList.remove("anim-spinning");
+      isGuidedFlashcardSpinning = false;
+    }, 450);
+  }
+
+  function nextGuidedFlashcard() {
+    const deck = getFlashcardsForGuidedDay(guidedDayNum);
+    if (!deck || deck.length === 0) return;
+    currentFlashcardIdx = (currentFlashcardIdx + 1) % deck.length;
+    flashcardShowingBack = false;
+    renderFlashcardUI();
+    const box = document.getElementById("flashcard-box");
+    if (box) {
+      box.classList.remove("anim-slide-next", "anim-slide-prev", "anim-spinning");
+      void box.offsetWidth;
+      box.classList.add("anim-slide-next");
+    }
+  }
+
+  function prevGuidedFlashcard() {
+    const deck = getFlashcardsForGuidedDay(guidedDayNum);
+    if (!deck || deck.length === 0) return;
+    currentFlashcardIdx = (currentFlashcardIdx - 1 + deck.length) % deck.length;
+    flashcardShowingBack = false;
+    renderFlashcardUI();
+    const box = document.getElementById("flashcard-box");
+    if (box) {
+      box.classList.remove("anim-slide-next", "anim-slide-prev", "anim-spinning");
+      void box.offsetWidth;
+      box.classList.add("anim-slide-prev");
+    }
+  }
+
   function renderFlashcardUI() {
-    const card = FLASHCARDS_REVISAO[currentFlashcardIdx];
-    if (!card) return;
+    const deck = getFlashcardsForGuidedDay(guidedDayNum);
+    if (!deck || deck.length === 0) return;
+    if (currentFlashcardIdx >= deck.length) currentFlashcardIdx = 0;
+    if (currentFlashcardIdx < 0) currentFlashcardIdx = deck.length - 1;
+
+    const card = deck[currentFlashcardIdx];
     const badge = document.getElementById("flashcard-counter-badge");
+    const secBadge = document.getElementById("flashcard-section-badge");
     const sideLabel = document.getElementById("flashcard-side-label");
     const textEl = document.getElementById("flashcard-text");
     const box = document.getElementById("flashcard-box");
+    const toggleBtn = document.getElementById("btn-fc-toggle-scope");
 
-    if (badge)
-      badge.textContent = `Card ${currentFlashcardIdx + 1} / ${FLASHCARDS_REVISAO.length}`;
+    if (badge) {
+      badge.textContent = `Card ${String(currentFlashcardIdx + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
+    }
+    if (secBadge && card) {
+      secBadge.textContent = card.secaoTitulo || card.bloco;
+    }
+    if (toggleBtn) {
+      toggleBtn.textContent = showAllFlashcardsInGuided
+        ? "Ver apenas da seção de hoje"
+        : `Ver todos (${FLASHCARDS_REVISAO.length})`;
+    }
     if (sideLabel) {
       sideLabel.textContent = flashcardShowingBack
-        ? "VERSO · RESPOSTA / FÓRMULA OFICIAL"
-        : "FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)";
+        ? "VERSO · RESPOSTA / FÓRMULA OFICIAL (CLIQUE PARA GIRAR)"
+        : "FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA GIRAR)";
       sideLabel.style.color = flashcardShowingBack
         ? "var(--accent-green)"
         : "var(--accent-yellow)";
@@ -1538,11 +2143,210 @@
       box.style.borderColor = flashcardShowingBack
         ? "var(--accent-green)"
         : "var(--accent-blue)";
+      if (flashcardShowingBack) {
+        box.classList.add("is-back");
+      } else {
+        box.classList.remove("is-back");
+      }
     }
-    if (textEl) {
+    if (textEl && card) {
       textEl.innerHTML = formatRichText(
         flashcardShowingBack ? card.verso : card.frente
       );
+      typesetMathInElement(textEl);
+    }
+  }
+
+  // =========================================================================
+  // BLOCO DE NOTAS E FÓRMULAS PESSOAIS (MODOS: EDITAR / VISUALIZAR / DIVIDIR)
+  // SUPORTE COMPLETO A FÓRMULAS EM LATEX / KATEX ($...$ e $$...$$)
+  // =========================================================================
+  function setPersonalNotesMode(mode) {
+    personalNotesMode = mode || "preview";
+    const container = document.getElementById("notes-content-container");
+    const toolbar = document.getElementById("notes-math-toolbar");
+    const btnEdit = document.getElementById("btn-notes-mode-edit");
+    const btnPreview = document.getElementById("btn-notes-mode-preview");
+    const btnSplit = document.getElementById("btn-notes-mode-split");
+
+    if (!container) return;
+
+    container.classList.remove("mode-edit", "mode-preview", "mode-split");
+    container.classList.add(`mode-${personalNotesMode}`);
+
+    btnEdit?.classList.toggle("active", personalNotesMode === "edit");
+    btnPreview?.classList.toggle("active", personalNotesMode === "preview");
+    btnSplit?.classList.toggle("active", personalNotesMode === "split");
+
+    if (toolbar) {
+      if (personalNotesMode === "preview") {
+        toolbar.classList.add("hidden");
+      } else {
+        toolbar.classList.remove("hidden");
+      }
+    }
+
+    if (personalNotesMode === "edit" || personalNotesMode === "split") {
+      const ta = document.getElementById("personal-notes-area");
+      if (ta && personalNotesMode === "edit") {
+        ta.focus();
+      }
+    }
+
+    updateNotesPreview();
+  }
+
+  function updateNotesPreview() {
+    const previewEl = document.getElementById("personal-notes-preview");
+    const ta = document.getElementById("personal-notes-area");
+    if (!previewEl) return;
+
+    const raw = ta ? ta.value : (state.personalNotes || "");
+    if (!raw.trim()) {
+      previewEl.innerHTML = `
+        <div class="notes-empty-state">
+          <span class="notes-empty-icon">📝</span>
+          <p><strong>Nenhuma anotação pessoal ainda.</strong></p>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">
+            Clique em <strong>✏️ Editar</strong> para registrar suas fórmulas em LaTeX (ex.: <code>$Z_{pu} = \\frac{Z_\\Omega}{Z_{\\text{base}}}$</code> ou <code>$$P = \\sqrt{3} V_L I_L$$</code>).
+          </p>
+        </div>`;
+      return;
+    }
+
+    let html = formatRichText(raw);
+    html = html
+      .replace(/### (.*?)(?:<br>|$)/g, '<h4 class="notes-heading notes-h4">$1</h4>')
+      .replace(/## (.*?)(?:<br>|$)/g, '<h3 class="notes-heading notes-h3">$1</h3>')
+      .replace(/# (.*?)(?:<br>|$)/g, '<h2 class="notes-heading notes-h2">$1</h2>');
+
+    previewEl.innerHTML = html;
+    typesetMathInElement(previewEl);
+  }
+
+  function insertSnippetIntoNotes(snippet) {
+    const ta = document.getElementById("personal-notes-area");
+    if (!ta) return;
+    ta.focus();
+    const start = ta.selectionStart || 0;
+    const end = ta.selectionEnd || 0;
+    const val = ta.value;
+    let insertion = snippet;
+    let cursorOffset = snippet.length;
+
+    if (snippet === "$$ $$") {
+      cursorOffset = 3;
+    } else if (snippet === "$ $") {
+      cursorOffset = 2;
+    } else if (snippet === "\\frac{a}{b}") {
+      cursorOffset = 6;
+    } else if (snippet === "\\sqrt{x}") {
+      cursorOffset = 6;
+    }
+
+    ta.value = val.substring(0, start) + insertion + val.substring(end);
+    ta.selectionStart = ta.selectionEnd = start + cursorOffset;
+
+    state.personalNotes = ta.value;
+    saveState();
+    updateNotesPreview();
+  }
+
+  let isTheoryFlashcardSpinning = false;
+  function flipTheoryFlashcardWithSpin(blockId) {
+    if (isTheoryFlashcardSpinning) return;
+    const box = document.getElementById("theory-flashcard-box");
+    if (!box) {
+      theoryFlashcardShowingBack = !theoryFlashcardShowingBack;
+      renderTheoryFlashcardUI(blockId);
+      return;
+    }
+    isTheoryFlashcardSpinning = true;
+    box.classList.remove("anim-slide-next", "anim-slide-prev");
+    box.classList.add("anim-spinning");
+
+    setTimeout(() => {
+      theoryFlashcardShowingBack = !theoryFlashcardShowingBack;
+      renderTheoryFlashcardUI(blockId);
+    }, 225);
+
+    setTimeout(() => {
+      box.classList.remove("anim-spinning");
+      isTheoryFlashcardSpinning = false;
+    }, 450);
+  }
+
+  function nextTheoryFlashcard(blockId) {
+    const deck = getFlashcardsForTheoryBlock(blockId);
+    if (!deck || deck.length === 0) return;
+    currentTheoryFlashcardIdx = (currentTheoryFlashcardIdx + 1) % deck.length;
+    theoryFlashcardShowingBack = false;
+    renderTheoryFlashcardUI(blockId);
+    const box = document.getElementById("theory-flashcard-box");
+    if (box) {
+      box.classList.remove("anim-slide-next", "anim-slide-prev", "anim-spinning");
+      void box.offsetWidth;
+      box.classList.add("anim-slide-next");
+    }
+  }
+
+  function prevTheoryFlashcard(blockId) {
+    const deck = getFlashcardsForTheoryBlock(blockId);
+    if (!deck || deck.length === 0) return;
+    currentTheoryFlashcardIdx =
+      (currentTheoryFlashcardIdx - 1 + deck.length) % deck.length;
+    theoryFlashcardShowingBack = false;
+    renderTheoryFlashcardUI(blockId);
+    const box = document.getElementById("theory-flashcard-box");
+    if (box) {
+      box.classList.remove("anim-slide-next", "anim-slide-prev", "anim-spinning");
+      void box.offsetWidth;
+      box.classList.add("anim-slide-prev");
+    }
+  }
+
+  function renderTheoryFlashcardUI(activeModId) {
+    const deck = getFlashcardsForTheoryBlock(activeModId);
+    if (!deck || deck.length === 0) return;
+    if (currentTheoryFlashcardIdx >= deck.length) currentTheoryFlashcardIdx = 0;
+    if (currentTheoryFlashcardIdx < 0) currentTheoryFlashcardIdx = deck.length - 1;
+
+    const card = deck[currentTheoryFlashcardIdx];
+    const badge = document.getElementById("theory-fc-counter-badge");
+    const secBadge = document.getElementById("theory-fc-section-badge");
+    const sideLabel = document.getElementById("theory-fc-side-label");
+    const textEl = document.getElementById("theory-fc-text");
+    const box = document.getElementById("theory-flashcard-box");
+
+    if (badge) {
+      badge.textContent = `Card ${String(currentTheoryFlashcardIdx + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
+    }
+    if (secBadge && card) {
+      secBadge.textContent = card.secaoTitulo || card.bloco;
+    }
+    if (sideLabel) {
+      sideLabel.textContent = theoryFlashcardShowingBack
+        ? "VERSO · RESPOSTA / FÓRMULA OFICIAL (CLIQUE PARA GIRAR)"
+        : "FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA GIRAR)";
+      sideLabel.style.color = theoryFlashcardShowingBack
+        ? "var(--accent-green)"
+        : "var(--accent-yellow)";
+    }
+    if (box) {
+      box.style.borderColor = theoryFlashcardShowingBack
+        ? "var(--accent-green)"
+        : "var(--accent-blue)";
+      if (theoryFlashcardShowingBack) {
+        box.classList.add("is-back");
+      } else {
+        box.classList.remove("is-back");
+      }
+    }
+    if (textEl && card) {
+      textEl.innerHTML = formatRichText(
+        theoryFlashcardShowingBack ? card.verso : card.frente
+      );
+      typesetMathInElement(textEl);
     }
   }
 
@@ -1696,6 +2500,8 @@
     sidebarEl.querySelectorAll("[data-theory-id]").forEach((btn) => {
       btn.addEventListener("click", function () {
         currentTheoryId = this.getAttribute("data-theory-id");
+        currentTheoryFlashcardIdx = 0;
+        theoryFlashcardShowingBack = false;
         renderTeoria();
       });
     });
@@ -1743,6 +2549,38 @@
       <div class="theory-body">
         ${activeMod.conteudoHTML}
       </div>
+
+      <!-- FLASHCARDS DO BLOCO NO CADERNO TEÓRICO -->
+      <div class="card" style="margin-top:24px;border:1px solid var(--accent-blue);background:var(--bg-surface);">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span>Flashcards de Fixação deste Bloco (${activeMod.codigo})</span>
+            <span class="badge badge-blue" id="theory-fc-section-badge"></span>
+          </div>
+          <span class="badge badge-yellow" id="theory-fc-counter-badge">01 / 01</span>
+        </div>
+        <div class="flashcard-wrapper">
+          <div
+            id="theory-flashcard-box"
+            class="flashcard-surface"
+            style="cursor:pointer;"
+            title="Clique para girar o cartão (ver resposta / fórmula)"
+          >
+            <div class="flashcard-flip-hint">
+              <span class="flashcard-flip-icon">↻</span>
+              <span>Girar</span>
+            </div>
+            <div class="flashcard-side-tag" id="theory-fc-side-label">FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)</div>
+            <div class="flashcard-body-text" id="theory-fc-text"></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
+          <button class="btn btn-secondary btn-sm" id="btn-theory-fc-prev">← Anterior</button>
+          <button class="btn btn-yellow btn-sm" id="btn-theory-fc-flip" style="flex:1;">↻ Girar Cartão</button>
+          <button class="btn btn-primary btn-sm" id="btn-theory-fc-next">Próximo →</button>
+        </div>
+      </div>
+
       <div class="linear-next-cta-box">
         <div>
           <div class="linear-next-cta-label">Fim do Capítulo · ${activeMod.codigo}</div>
@@ -1761,6 +2599,29 @@
 
     // Renderiza todas as fórmulas LaTeX ($...$ e $$...$$) dentro da apostila teórica
     typesetMathInElement(contentEl);
+
+    // Inicializa os Flashcards específicos do bloco no Caderno Teórico
+    renderTheoryFlashcardUI(activeMod.id);
+    document
+      .getElementById("theory-flashcard-box")
+      ?.addEventListener("click", function () {
+        flipTheoryFlashcardWithSpin(activeMod.id);
+      });
+    document
+      .getElementById("btn-theory-fc-flip")
+      ?.addEventListener("click", function () {
+        flipTheoryFlashcardWithSpin(activeMod.id);
+      });
+    document
+      .getElementById("btn-theory-fc-prev")
+      ?.addEventListener("click", function () {
+        prevTheoryFlashcard(activeMod.id);
+      });
+    document
+      .getElementById("btn-theory-fc-next")
+      ?.addEventListener("click", function () {
+        nextTheoryFlashcard(activeMod.id);
+      });
 
     // Eventos dos botões "Resolver as X Questões deste Tópico →" ao final de cada subtópico
     contentEl.querySelectorAll("[data-practice-qids]").forEach((btn) => {
@@ -1819,6 +2680,8 @@
         renderTeoria();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
+
+    setupVisualCardControls(contentEl);
   }
 
   // =========================================================================
@@ -2579,10 +3442,148 @@
   }
 
   // =========================================================================
+  // CONTROLE DE ANIMAÇÕES VISUAIS (DIAGRAMAS SVG, FASORES, EFEITO PELICULAR)
+  // =========================================================================
+  function updateAnimationsUI() {
+    const isPaused = !!state.animationsPaused;
+    document.body.classList.toggle("animations-paused", isPaused);
+
+    // Pílula na Topbar
+    const pill = document.getElementById("btn-toggle-animations");
+    const icon = document.getElementById("anim-status-icon");
+    const label = document.getElementById("anim-status-label");
+    if (pill) {
+      pill.classList.toggle("is-paused", isPaused);
+      pill.setAttribute(
+        "title",
+        isPaused
+          ? "Retomar animações dos diagramas teóricos (Atalho: Tecla P)"
+          : "Pausar animações dos diagramas teóricos (Atalho: Tecla P)"
+      );
+      pill.setAttribute("aria-label", isPaused ? "Retomar animações" : "Pausar animações");
+    }
+    if (icon) {
+      icon.textContent = isPaused ? "▶" : "⏸";
+    }
+    if (label) {
+      label.textContent = isPaused ? "Animações: Pausadas" : "Animações: Ativas";
+    }
+
+    // Botão utilitário no rodapé da Sidebar
+    const btnSidebarAnim = document.getElementById("btn-sidebar-toggle-anim");
+    if (btnSidebarAnim) {
+      btnSidebarAnim.textContent = isPaused ? "▶ Retomar Animações" : "⏸ Pausar Animações";
+      btnSidebarAnim.classList.toggle("is-paused", isPaused);
+      btnSidebarAnim.setAttribute(
+        "title",
+        isPaused
+          ? "Retomar animações visuais dos diagramas (Atalho: P)"
+          : "Pausar animações visuais dos diagramas (Atalho: P)"
+      );
+    }
+
+    // Sincroniza o estado de botões em cada diagrama renderizado na tela
+    document.querySelectorAll(".visual-card").forEach((card) => {
+      syncVisualCardButton(card);
+    });
+  }
+
+  function toggleAnimations(explicitState) {
+    if (typeof explicitState === "boolean") {
+      state.animationsPaused = explicitState;
+    } else {
+      state.animationsPaused = !state.animationsPaused;
+    }
+
+    // Reseta overrides individuais para que a preferência global seja soberana
+    document
+      .querySelectorAll(".visual-card.anim-force-running, .visual-card.anim-paused")
+      .forEach((card) => {
+        card.classList.remove("anim-force-running");
+        card.classList.remove("anim-paused");
+      });
+
+    updateAnimationsUI();
+    saveState();
+    showCloudSaveToast(
+      state.animationsPaused
+        ? "⏸ Animações dos diagramas pausadas (Atalho: P)"
+        : "▶ Animações dos diagramas ativas (Atalho: P)",
+      state.animationsPaused ? "info" : "success"
+    );
+  }
+
+  function syncVisualCardButton(card) {
+    const btn = card.querySelector(".visual-anim-toggle");
+    if (!btn) return;
+    const isGloballyPaused = !!state.animationsPaused;
+    const isForceRunning = card.classList.contains("anim-force-running");
+    const isCardPaused = card.classList.contains("anim-paused");
+    const isEffectivePaused = (isGloballyPaused && !isForceRunning) || isCardPaused;
+
+    btn.classList.toggle("is-paused", isEffectivePaused);
+    const icon = btn.querySelector(".visual-anim-toggle-icon");
+    const text = btn.querySelector(".visual-anim-toggle-text");
+    if (icon) icon.textContent = isEffectivePaused ? "▶" : "⏸";
+    if (text) text.textContent = isEffectivePaused ? "Retomar" : "Pausar";
+    btn.setAttribute(
+      "title",
+      isEffectivePaused ? "Retomar esta animação" : "Pausar esta animação"
+    );
+  }
+
+  function setupVisualCardControls(container) {
+    const root = container || document;
+    const visualCards = root.querySelectorAll(".visual-card");
+    visualCards.forEach((card) => {
+      const hasAnim = card.querySelector(
+        ".anim-ccw, .anim-cw, .anim-ccw-slow, .anim-flow, .anim-pulse, .anim-trace, .anim-pole-shift, [class*='anim-']"
+      );
+      if (!hasAnim) return;
+
+      const header = card.querySelector(".visual-card-header");
+      if (!header) return;
+
+      if (header.querySelector(".visual-anim-toggle")) {
+        syncVisualCardButton(card);
+        return;
+      }
+
+      const toggleBtn = document.createElement("button");
+      toggleBtn.type = "button";
+      toggleBtn.className = "visual-anim-toggle";
+      toggleBtn.innerHTML =
+        '<span class="visual-anim-toggle-icon">⏸</span><span class="visual-anim-toggle-text">Pausar</span>';
+
+      toggleBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const isGloballyPaused = !!state.animationsPaused;
+        if (isGloballyPaused) {
+          card.classList.toggle("anim-force-running");
+          card.classList.remove("anim-paused");
+        } else {
+          card.classList.toggle("anim-paused");
+          card.classList.remove("anim-force-running");
+        }
+        syncVisualCardButton(card);
+      });
+
+      const badge = header.querySelector(".visual-card-badge");
+      if (badge) {
+        header.insertBefore(toggleBtn, badge);
+      } else {
+        header.appendChild(toggleBtn);
+      }
+      syncVisualCardButton(card);
+    });
+  }
+
+  // =========================================================================
   // INICIALIZAÇÃO DA APLICAÇÃO
   // =========================================================================
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
+    updateAnimationsUI();
     updateTimerUI();
     updateGlobalCounters();
 
@@ -2629,6 +3630,18 @@
         saveState();
       });
 
+    // Controle de animações nos diagramas (Topbar e Sidebar)
+    document
+      .getElementById("btn-toggle-animations")
+      ?.addEventListener("click", function () {
+        toggleAnimations();
+      });
+    document
+      .getElementById("btn-sidebar-toggle-anim")
+      ?.addEventListener("click", function () {
+        toggleAnimations();
+      });
+
     document
       .getElementById("btn-export-progress")
       ?.addEventListener("click", exportProgressJSON);
@@ -2654,6 +3667,7 @@
               imported
             );
             applyTheme();
+            updateAnimationsUI();
             saveState();
             switchTab(currentTab);
           } catch (err) {
@@ -2663,34 +3677,19 @@
         reader.readAsText(file);
       });
 
-    // Flashcards de Revisão Rápida (5 min finais)
-    const toggleFlip = function () {
-      flashcardShowingBack = !flashcardShowingBack;
-      renderFlashcardUI();
-    };
+    // Flashcards de Revisão Rápida (5 min finais) - delega para funções com giro 3D e escopo por dia
     document
       .getElementById("flashcard-box")
-      ?.addEventListener("click", toggleFlip);
+      ?.addEventListener("click", flipGuidedFlashcardWithSpin);
     document
       .getElementById("btn-fc-flip")
-      ?.addEventListener("click", toggleFlip);
+      ?.addEventListener("click", flipGuidedFlashcardWithSpin);
     document
       .getElementById("btn-fc-prev")
-      ?.addEventListener("click", function () {
-        currentFlashcardIdx =
-          (currentFlashcardIdx - 1 + FLASHCARDS_REVISAO.length) %
-          FLASHCARDS_REVISAO.length;
-        flashcardShowingBack = false;
-        renderFlashcardUI();
-      });
+      ?.addEventListener("click", prevGuidedFlashcard);
     document
       .getElementById("btn-fc-next")
-      ?.addEventListener("click", function () {
-        currentFlashcardIdx =
-          (currentFlashcardIdx + 1) % FLASHCARDS_REVISAO.length;
-        flashcardShowingBack = false;
-        renderFlashcardUI();
-      });
+      ?.addEventListener("click", nextGuidedFlashcard);
 
     // Notas pessoais no Dashboard
     document
@@ -2698,6 +3697,7 @@
       ?.addEventListener("input", function () {
         state.personalNotes = this.value;
         saveState();
+        updateNotesPreview();
       });
 
     // Filtros do Plano de 30 Dias
@@ -3059,6 +4059,23 @@
       }
     });
 
+    // Atalho global P para pausar / retomar animações dos diagramas
+    window.addEventListener("keydown", function (ev) {
+      if (!ev.ctrlKey && !ev.metaKey && !ev.altKey && (ev.key === "p" || ev.key === "P")) {
+        const active = document.activeElement;
+        const tag = active ? active.tagName.toLowerCase() : "";
+        if (
+          tag === "input" ||
+          tag === "textarea" ||
+          (active && active.isContentEditable)
+        ) {
+          return;
+        }
+        ev.preventDefault();
+        toggleAnimations();
+      }
+    });
+
     // Se a nuvem estiver configurada, busca progresso mais recente ao abrir e ao voltar para a aba
     if (isCloudConfigured()) {
       pullFromCloud({ silent: true });
@@ -3075,6 +4092,7 @@
     // Garante que após o carregamento assíncrono do KaTeX (defer), toda matemática seja re-renderizada
     window.addEventListener("load", function () {
       switchTab(currentTab);
+      setupVisualCardControls(document);
     });
   });
 })();

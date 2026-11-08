@@ -213,11 +213,13 @@ window.DADOS_TEORIA = [
         <strong>2) Curto-Circuito Fase-Terra Franco na Fase A ($1\\phi\\text{-T}$ — Q50 de 2023.2):</strong>
         $$\\dot{I}_{A1} = \\dot{I}_{A2} = \\dot{I}_{A0} = \\frac{\\dot{E}}{Z_1 + Z_2 + Z_0 + 3Z_f} \\implies \\mathbf{\\dot{I}_{\\text{falta}} = \\dot{I}_A = 3\\dot{I}_{A0} = \\frac{3\\dot{E}}{Z_1 + Z_2 + Z_0}}$$\n
         <strong>3) Curto-Circuito Fase-Fase Franco entre Fases B e C ($2\\phi$ — Q40 de 2023.2):</strong>
-        $$\\dot{I}_A = 0 \\;,\\; \\dot{I}_B = -\\dot{I}_C \\;,\\; \\dot{I}_{A0} = 0 \\;,\\; \\dot{I}_{A1} = -\\dot{I}_{A2} = \\frac{\\dot{E}}{Z_1 + Z_2} \\implies \\mathbf{|\\dot{I}_B| = \\frac{\\sqrt{3}|\\dot{E}|}{|Z_1 + Z_2|}}$$
+        $$\\dot{I}_A = 0 \\;,\\; \\dot{I}_B = -\\dot{I}_C \\;,\\; \\dot{I}_{A0} = 0 \\;,\\; \\dot{I}_{A1} = -\\dot{I}_{A2} = \\frac{\\dot{E}}{Z_1 + Z_2} \\implies \\mathbf{|\\dot{I}_B| = \\frac{\\sqrt{3}|\\dot{E}|}{|Z_1 + Z_2|}}$$\n
+        <strong>4) Curto-Circuito Bifásico-Terra Franco ($2\\phi\\text{-T}$ — Q75):</strong>
+        $$\\dot{V}_{A1} = \\dot{V}_{A2} = \\dot{V}_{A0} \\quad \\implies \\quad \\text{Redes de sequência } 1, 2 \\text{ e } 0 \\text{ conectadas todas em } \\mathbf{\\text{PARALELO}}!$$
       </div>
       <div class="subtopic-cta-bar">
         <span>Fim do tópico <strong>4.3 a 4.5 Sequência Zero e Cálculo de Curto-Circuito</strong></span>
-        <button class="btn btn-primary btn-sm" data-practice-qids="36,40,50" data-practice-label="4.3 a 4.5 Sequência Zero e Curto-Circuito" data-return-theory="bloco4">Resolver as 3 Questões deste Tópico (Q36, Q40, Q50) →</button>
+        <button class="btn btn-primary btn-sm" data-practice-qids="36,40,50,75" data-practice-label="4.3 a 4.5 Sequência Zero e Curto-Circuito" data-return-theory="bloco4">Resolver as 4 Questões deste Tópico (Q36, Q40, Q50, Q75) →</button>
       </div>
       </div>
 
@@ -266,7 +268,7 @@ window.DADOS_TEORIA = [
       </div>
 
       <div class="theory-subtopic" id="sub-4-7" data-days="4,23,29">
-      <h3>4.7 Proteção de Sistemas Elétricos (Tabela de Funções ANSI)</h3>
+      <h3>4.7 Proteção de Sistemas Elétricos (Tabela de Funções ANSI e Ajuste com TC)</h3>
       <div class="table-responsive">
         <table class="data-table">
           <thead>
@@ -283,9 +285,13 @@ window.DADOS_TEORIA = [
             <tr><td><strong>51 / 51N</strong></td><td>Sobrecorrente Temporizado (Fase / Neutro)</td><td>Atuação com curva de tempo inverso para coordenação de sobrecarga e faltas.</td></tr>
             <tr><td><strong>50BF</strong></td><td>Falha de Disjuntor (<em>Breaker Failure</em>)</td><td>Detecta que o disjuntor recebeu ordem de abertura mas não extinguiu a corrente, comandando a <strong>abertura dos disjuntores adjacentes</strong> para isolar a barra (Q29!).</td></tr>
             <tr><td><strong>67</strong></td><td>Sobrecorrente Direcional</td><td>Sistemas em anel ou com geração distribuída/paralela.</td></tr>
-            <tr><td><strong>87</strong></td><td>Proteção Diferencial (87T, 87B, 87G)</td><td>Compara correntes de entrada e saída da zona protegida; usa bloqueio por 2º harmônico (120 Hz) contra <em>inrush</em>.</td></tr>
+            <tr><td><strong>87</strong></td><td>Proteção Diferencial (87T, 87B, 87G)</td><td>Compara correntes de entrada e saída da zona protegida; usa bloqueio por <strong>2º harmônico (120 Hz)</strong> contra corrente transitória de magnetização (<em>inrush</em> — Q76!).</td></tr>
           </tbody>
         </table>
+      </div>
+      <div class="formula-box">
+        <strong>Ajuste de Corrente de Sobrecarga no Relé (ANSI 51) via TC em Transformador Trifásico (Q54 de 2023.2):</strong>
+        $$I_{n,\\text{AT}} = \\frac{S_{3\\phi}}{\\sqrt{3} \\cdot V_{L,\\text{AT}}} \\qquad ; \\qquad I_{\\text{sob,AT}} = f_{\\text{sobrecarga}} \\cdot I_{n,\\text{AT}} \\qquad ; \\qquad \\mathbf{I_{\\text{relé}} = \\frac{I_{\\text{sob,AT}}}{\\text{RTC}}}$$
       </div>
       <div class="subtopic-cta-bar">
         <span>Fim do tópico <strong>4.7 Proteção de Sistemas Elétricos (ANSI)</strong></span>
@@ -316,15 +322,24 @@ window.DADOS_TEORIA = [
       </div>
       </div>
 
-      <div class="theory-subtopic" id="sub-2-2" data-days="6,7,22">
-      <h3>2.2 e 2.3 Circuitos Senoidais, Fasores, Potência Complexa e Trifásicos</h3>
+      <div class="theory-subtopic" id="sub-2-2" data-days="6,22">
+      <h3>2.2 Circuitos Senoidais Monofásicos, Fasores, Potência Complexa e Valor Eficaz (RMS)</h3>
       <div class="formula-box">
-        <strong>Impedância e Potência Complexa Monofásica (Q33 e Q51):</strong>
+        <strong>Impedância, Queda de Tensão e Potência Complexa Monofásica (Q33 e Q51):</strong>
         $$Z = \\frac{\\dot{V}}{\\dot{I}} = \\frac{|V|}{|I|}\\angle(\\theta_v - \\theta_i) = |Z|\\angle\\varphi \\qquad ; \\qquad |S| = |V_{\\text{rms}}||I_{\\text{rms}}| = \\frac{|V_{\\text{rms}}|^2}{|Z|}$$
         $$S = P + jQ = \\dot{V}_{\\text{rms}} \\cdot \\dot{I}_{\\text{rms}}^* \\qquad ; \\qquad P = |S|\\cos\\varphi \\; [\\text{W}] \\qquad ; \\qquad Q = |S|\\operatorname{sen}\\varphi \\; [\\text{var}]$$
+        $$Z_{\\text{cabo}} = R + jX = \\frac{\\dot{E}_A - \\dot{V}_\\phi}{\\dot{I}_L} \\implies R = \\operatorname{Re}\\left\\{\\frac{\\dot{E}_A - \\dot{V}_\\phi}{\\dot{I}_L}\\right\\}$$
         <strong>Valor Eficaz (RMS) de Sinais Periódicos (Q63):</strong>
         $$V_{\\text{rms}} = \\sqrt{\\frac{1}{T}\\int_0^T v^2(t)\\,dt} \\qquad \\implies \\qquad V_{\\text{rms,onda quadrada}(\\pm S)} = S = \\sqrt{2}\\,V_{\\text{rede}}$$
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>2.2 Fasores CA Monofásicos, Potência Complexa e Valor Eficaz (RMS)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="33,51,63" data-practice-label="2.2 Fasores CA, Potência Complexa e Valor RMS" data-return-theory="bloco2">Resolver as 3 Questões deste Tópico (Q33, Q51, Q63) →</button>
+      </div>
+      </div>
+
+      <div class="theory-subtopic" id="sub-2-3" data-days="7,22">
+      <h3>2.3 Sistemas Trifásicos Equilibrados (Sequências ABC e ACB), Correção de FP e Bode</h3>
 
       <!-- ANIMAÇÃO 4: TRIÂNGULO DE POTÊNCIAS E CORREÇÃO DO FP -->
       <div class="visual-card">
@@ -362,11 +377,13 @@ window.DADOS_TEORIA = [
         <strong>Sistemas Trifásicos Equilibrados — Sequência Direta ($ABC$) vs. Inversa ($ACB$ — Q34):</strong>
         $$\\text{Seq. } ABC: \\quad \\dot{V}_{AN} = V_f\\angle\\theta_0 \\;,\\; \\dot{V}_{BN} = V_f\\angle(\\theta_0 - 120^\\circ) \\;,\\; \\dot{V}_{CN} = V_f\\angle(\\theta_0 + 120^\\circ)$$
         $$\\text{Seq. } ACB: \\quad \\dot{V}_{AN} = V_f\\angle\\theta_0 \\;,\\; \\mathbf{\\dot{V}_{BN} = V_f\\angle(\\theta_0 + 120^\\circ)} \\;,\\; \\dot{V}_{CN} = V_f\\angle(\\theta_0 - 120^\\circ)$$
+        <strong>Potência Trifásica, Correção do FP (Q73) e Filtro Passa-Baixas de 1ª Ordem em Bode (Q74):</strong>
         $$P_{3\\phi} = 3 V_f I_f \\cos\\varphi = \\sqrt{3} V_L I_L \\cos\\varphi \\qquad ; \\qquad Q_C = P_{3\\phi}\\left(\\operatorname{tg}\\varphi_1 - \\operatorname{tg}\\varphi_2\\right)$$
+        $$H(s) = \\frac{K}{1 + s/\\omega_c} \\implies \\text{Ganho DC} = 20\\log_{10}(K)\\text{ dB} \\quad ; \\quad \\text{Inclinação } (\\omega \\gg \\omega_c) = \\mathbf{-20\\text{ dB/década}}$$
       </div>
       <div class="subtopic-cta-bar">
-        <span>Fim do tópico <strong>2.2 e 2.3 Fasores CA, Valor RMS e Trifásicos (ABC/ACB)</strong></span>
-        <button class="btn btn-primary btn-sm" data-practice-qids="33,34,51,63,73,74" data-practice-label="2.2 e 2.3 Fasores CA, RMS e Sistemas Trifásicos" data-return-theory="bloco2">Resolver as 6 Questões deste Tópico (Q33, Q34, Q51, Q63, Q73, Q74) →</button>
+        <span>Fim do tópico <strong>2.3 Sistemas Trifásicos (ABC/ACB), Correção de FP e Bode</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="34,73,74" data-practice-label="2.3 Sistemas Trifásicos, Correção de FP e Bode" data-return-theory="bloco2">Resolver as 3 Questões deste Tópico (Q34, Q73, Q74) →</button>
       </div>
       </div>
 
@@ -470,23 +487,39 @@ window.DADOS_TEORIA = [
           Dos $60\\text{ kVA}$ entregues à carga, $20\\text{ kVA}$ passam por condução direta e apenas $S_{\\text{isolado}} = 200\\text{ V} \\times 200\\text{ A} = \\mathbf{40\\text{ kVA}}$ são transformados magneticamente pelos enrolamentos!
         </div>
       </div>
+      <div class="cesgranrio-tip">
+        <strong>PARALELISMO DE TRANSFORMADORES TRIFÁSICOS (Q79):</strong>
+        Exige obrigatoriamente o <strong>mesmo grupo de ligação (mesmo deslocamento angular entre primário e secundário)</strong>. Transformadores <strong>Dy1, Yd1 e Yz1</strong> pertencem ao Grupo I (defasagem de $-30^\\circ$) e podem operar em paralelo entre si, mas <strong>NÃO</strong> podem ser conectados em paralelo com um transformador <strong>Yy0</strong> (Grupo 0, defasagem de $0^\\circ$).
+      </div>
       <div class="subtopic-cta-bar">
         <span>Fim do tópico <strong>6.2 Transformadores e Autotransformadores</strong></span>
         <button class="btn btn-primary btn-sm" data-practice-qids="23,24,79" data-practice-label="6.2 Transformadores e Autotransformadores" data-return-theory="bloco6">Resolver as 3 Questões deste Tópico (Q23, Q24, Q79) →</button>
       </div>
       </div>
 
-      <div class="theory-subtopic" id="sub-6-3" data-days="10,11,24,28">
-      <h3>6.3 e 6.4 Máquinas de Corrente Contínua (CC) e Máquinas Síncronas</h3>
+      <div class="theory-subtopic" id="sub-6-3" data-days="10,24,28">
+      <h3>6.3 Máquinas de Corrente Contínua (CC) e Excitação de Máquinas Síncronas</h3>
       <div class="formula-box">
         <strong>Motor CC Shunt (Derivação) com Fluxo Constante (Q25 de 2023.2):</strong>
         $$E_a = k\\phi\\omega \\implies \\frac{E_a}{E_{a0}} = \\frac{n}{n_0} \\qquad ; \\qquad I_a = I_L - I_f \\qquad ; \\qquad V_t = E_a + R_a I_a \\implies R_a = \\frac{V_t - E_a}{I_a}$$
-        <strong>Velocidade Síncrona e Máquinas Síncronas Acopladas pelo Eixo (Q26 de 2023.2):</strong>
-        $$n_s = \\frac{120 \\cdot f}{P} \\; [\\text{rpm}] \\qquad ; \\qquad n_1 = n_2 \\implies \\frac{f_1}{P_1} = \\frac{f_2}{P_2} \\implies f_2 = f_1 \\cdot \\left(\\frac{P_2}{P_1}\\right)$$
+        <em>A vazio com torque induzido nulo ($\\tau_{\\text{ind}} = 0$):</em> $I_{a0} = 0 \\implies I_f = I_{L(\\text{vazio})}$ e $E_{a0} = V_t$.
+      </div>
+      <div class="cesgranrio-tip">
+        <strong>CURVAS V E CONTROLE DE POTÊNCIA REATIVA EM MOTORES SÍNCRONOS (Q80):</strong>
+        • <strong>Motor Síncrono Sobre-excitado ($|E_f|\\cos\\delta > V_t$):</strong> Opera com <strong>fator de potência adiantado</strong> (capacitivo), fornecendo potência reativa para a rede como um banco de capacitores / compensador síncrono.<br>
+        • <strong>Motor Síncrono Sub-excitado ($|E_f|\\cos\\delta < V_t$):</strong> Opera com <strong>fator de potência atrasado</strong> (indutivo), absorvendo potência reativa da rede.
+      </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>6.3 Máquinas de Corrente Contínua (CC) e Excitação Síncrona</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="25,80" data-practice-label="6.3 Máquinas CC e Excitação Síncrona" data-return-theory="bloco6">Resolver as 2 Questões deste Tópico (Q25, Q80) →</button>
+      </div>
       </div>
 
-      <h3>6.5 e 6.6 Motores de Indução Trifásicos (MIT) e Partida</h3>
+      <div class="theory-subtopic" id="sub-6-4" data-days="11,24,28">
+      <h3>6.4 a 6.6 Velocidade Síncrona, Motores de Indução Trifásicos (MIT) e Partida V/f</h3>
       <div class="formula-box">
+        <strong>Velocidade Síncrona e Máquinas Síncronas Acopladas pelo Eixo (Q26 de 2023.2):</strong>
+        $$n_s = \\frac{120 \\cdot f}{P} \\; [\\text{rpm}] \\qquad ; \\qquad n_1 = n_2 \\implies \\frac{f_1}{P_1} = \\frac{f_2}{P_2} \\implies f_2 = f_1 \\cdot \\left(\\frac{P_2}{P_1}\\right)$$
         <strong>Escorregamento ($s$), Balanço de Potências no Entreferro ($P_{\\text{ef}}$) e Resistência Rotórica (Q27 e Q55):</strong>
         $$s = \\frac{n_s - n}{n_s} \\qquad ; \\qquad n = n_s(1 - s) \\qquad ; \\qquad P_{jr} = s \\cdot P_{\\text{ef}} \\qquad ; \\qquad P_{\\text{mec}} = (1 - s) P_{\\text{ef}}$$
         $$\\text{Mesmo Torque em Rotor Bobinado:} \\quad \\frac{R_{r1}}{s_1} = \\frac{R_{r1} + R_{\\text{adic}}}{s_2} \\implies R_{\\text{adic}} = R_{r1}\\left(\\frac{s_2}{s_1} - 1\\right)$$
@@ -537,9 +570,13 @@ window.DADOS_TEORIA = [
           </svg>
         </div>
       </div>
+      <div class="cesgranrio-tip">
+        <strong>PARTIDA DE MIT COM CONTROLE ESCALAR $V/f$ CONSTANTE (Q28 de 2023.2):</strong>
+        O controle da razão entre a amplitude da tensão e a frequência de alimentação ($V/f$ constante) mantém o fluxo magnético nominal no entreferro e possibilita <strong>menor corrente de partida com maior torque de partida</strong> em relação à partida direta com tensão nominal.
+      </div>
       <div class="subtopic-cta-bar">
-        <span>Fim do tópico <strong>6.3 a 6.6 Máquinas CC, Síncronas e Motores de Indução (MIT)</strong></span>
-        <button class="btn btn-primary btn-sm" data-practice-qids="25,26,27,28,55,80" data-practice-label="6.3 a 6.6 Máquinas CC, Síncronas e MIT" data-return-theory="bloco6">Resolver as 6 Questões deste Tópico (Q25–Q28, Q55, Q80) →</button>
+        <span>Fim do tópico <strong>6.4 a 6.6 Máquinas Síncronas e Motores de Indução (MIT)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="26,27,28,55" data-practice-label="6.4 a 6.6 Máquinas Síncronas e MIT" data-return-theory="bloco6">Resolver as 4 Questões deste Tópico (Q26, Q27, Q28, Q55) →</button>
       </div>
       </div>
     `
@@ -553,30 +590,41 @@ window.DADOS_TEORIA = [
     subtopicosEdital: "5.1 Dimensionamento de condutores; 5.2 Proteção e coordenação; 5.3 Sistemas de aterramento; 5.4 Projeto de subestação e arranjos; 5.5 Barramentos, malhas de terra e equipamentos de manobra em AT; 5.6 SPDA (NBR 5419).",
     conteudoHTML: `
       <div class="theory-subtopic" id="sub-5-1" data-days="15,23">
-      <h3>5.1 e 5.2 Dimensionamento de Condutores e Coordenação de Proteção (NBR 5410)</h3>
+      <h3>5.1, 5.2 e 5.3 Dimensionamento de Condutores, Coordenação de Proteção, DPS e Esquemas de Aterramento (NBR 5410)</h3>
       <div class="formula-box">
-        <strong>Coordenação Obrigatória contra Sobrecargas (NBR 5410 item 5.3.4.1 — Q30 de 2023.2):</strong>
+        <strong>1) Coordenação Obrigatória contra Sobrecargas (NBR 5410 item 5.3.4.1 — Q30 de 2023.2):</strong>
         $$I_L \\le I_d \\le I_c \\qquad \\text{e} \\qquad I_2 \\le 1,45 \\cdot I_c$$
-        onde $I_L$ (ou $I_B$) é a corrente de projeto do circuito, $I_d$ (ou $I_N$) é a corrente nominal do dispositivo de proteção e $I_c$ (ou $I_Z$) é a capacidade de condução de corrente dos condutores.
+        onde $I_L$ (ou $I_B$) é a corrente de projeto do circuito, $I_d$ (ou $I_N$) é a corrente nominal do dispositivo de proteção, $I_c$ (ou $I_Z$) é a capacidade de condução de corrente dos condutores e $I_2$ é a corrente convencional de atuação.<br><br>
+        <strong>2) Dimensionamento por Queda de Tensão pelo Critério $\\text{Watt}\\times\\text{metro}$ (Q59 de 2023.2):</strong>
+        $$P_{1\\phi} = \\frac{P_{3\\phi}}{3} \\quad \\text{(em sistema trifásico a 4 fios } 220/127\\text{ V equilibrado)} \\implies \\sum \\left(P_{1\\phi,i} \\cdot L_i\\right) \\; [\\text{W}\\cdot\\text{m}]$$
       </div>
-      <p><strong>DPS na entrada sem neutro (Q22 de 2023.2):</strong> Os DPS conectam-se em <strong>paralelo</strong>, cada um entre um condutor de fase e o <strong>BEP (Barramento de Equipotencialização Principal)</strong> ou a <strong>barra PE</strong> do quadro.</p>
+      <ul>
+        <li><strong>DPS na Entrada sem Neutro (Q22 de 2023.2):</strong> Os Dispositivos de Proteção contra Surtos conectam-se em <strong>paralelo</strong>, cada um entre um condutor de fase e o <strong>BEP (Barramento de Equipotencialização Principal)</strong> ou a <strong>barra PE</strong> do quadro.</li>
+        <li><strong>Esquema de Aterramento TT (NBR 5410 — Q31 de 2023.2):</strong> 1ª letra (<strong>T</strong>) = alimentação com um ponto diretamente aterrado; 2ª letra (<strong>T</strong>) = massas da instalação ligadas a eletrodo(s) de aterramento <strong>eletricamente distinto(s)</strong> do eletrodo de aterramento da alimentação. (No esquema <strong>TN</strong>, as massas ligam-se ao ponto aterrado da fonte via condutor PE/PEN; no <strong>IT</strong>, a fonte é isolada ou aterrada por impedância).</li>
+      </ul>
       <div class="subtopic-cta-bar">
-        <span>Fim do tópico <strong>5.1 e 5.2 NBR 5410: Condutores, DPS e Sobrecarga</strong></span>
-        <button class="btn btn-primary btn-sm" data-practice-qids="22,30,31,59" data-practice-label="5.1 e 5.2 NBR 5410 (Condutores, DPS e Sobrecarga)" data-return-theory="bloco5">Resolver as 4 Questões deste Tópico (Q22, Q30, Q31, Q59) →</button>
+        <span>Fim do tópico <strong>5.1 a 5.3 NBR 5410: Condutores, Queda de Tensão, DPS e Esquema TT</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="22,30,31,59" data-practice-label="5.1 a 5.3 NBR 5410 (Condutores, DPS, Sobrecarga e TT)" data-return-theory="bloco5">Resolver as 4 Questões deste Tópico (Q22, Q30, Q31, Q59) →</button>
       </div>
       </div>
 
-      <div class="theory-subtopic" id="sub-5-3" data-days="15,16,23,27">
-      <h3>5.3 e 5.6 Esquemas de Aterramento (TT, TN, IT), Método de Wenner e SPDA (NBR 5419)</h3>
+      <div class="theory-subtopic" id="sub-5-3" data-days="16,23,27">
+      <h3>5.4 a 5.6 Subestações de Alta Tensão, Método de Wenner e SPDA (NBR 5419)</h3>
       <div class="formula-box">
-        <strong>Resistividade Aparente do Solo pelo Método de Wenner (4 Hastes Espaçadas de $a$):</strong>
+        <strong>Resistividade Aparente do Solo pelo Método de Wenner (4 Hastes Espaçadas de $a$ — Q57 de 2023.2):</strong>
         $$\\rho(a) = 2 \\cdot \\pi \\cdot a \\cdot R \\; [\\Omega\\cdot\\text{m}]$$
+        A quantidade de patamares e inflexões da curva $\\rho(a) \\times a$ define o número de <strong>camadas estratificadas</strong> do solo (ex.: 2 patamares com 1 transição = solo em 2 camadas).
       </div>
+      <ul>
+        <li><strong>Chaves Seccionadoras com Lâmina de Terra em Subestações AT (Q32 de 2023.2):</strong> Operam <strong>sem carga</strong> (após a abertura do disjuntor) para garantir isolamento visível à montante/jusante e prover <strong>aterramento temporário seguro</strong> do trecho desenergizado para manutenção.</li>
+        <li><strong>Arranjo de Barramento Disjuntor e Meio (Q77):</strong> Emprega 2 barramentos principais energizados e <strong>3 disjuntores para cada 2 circuitos (saídas)</strong> por vão (<em>bay</em>), permitindo manter qualquer circuito em operação mesmo durante falha ou manutenção de um disjuntor ou barra.</li>
+        <li><strong>Níveis de Proteção do SPDA (NBR 5419 — Q78):</strong> Para estruturas com risco de explosão/inflamáveis (<strong>Nível I</strong>), o raio da esfera rolante é $R = 20\\text{ m}$, a malha captora é $5 \\times 5\\text{ m}$ e o espaçamento médio entre condutores de descida é de <strong>$10\\text{ m}$</strong> (Nível II: $R=30\\text{ m}$, descidas $10\\text{ m}$; Nível III: $R=45\\text{ m}$, descidas $15\\text{ m}$; Nível IV: $R=60\\text{ m}$, descidas $20\\text{ m}$).</li>
+      </ul>
 
       <!-- ANIMAÇÃO 8: ESQUEMA TT E ESFERA ROLANTE SPDA -->
       <div class="visual-card">
         <div class="visual-card-header">
-          <span class="visual-card-title">FIGURA 5.1 — Esquema TT (NBR 5410 — Q31) & Esfera Rolante SPDA (NBR 5419)</span>
+          <span class="visual-card-title">FIGURA 5.1 — Esquema TT (NBR 5410 — Q31) & Esfera Rolante SPDA (NBR 5419 — Q78)</span>
           <span class="visual-card-badge">Segurança de Instalações</span>
         </div>
         <div class="visual-svg-wrap">
@@ -624,8 +672,8 @@ window.DADOS_TEORIA = [
         </div>
       </div>
       <div class="subtopic-cta-bar">
-        <span>Fim do tópico <strong>5.3 a 5.6 Subestações, Malha de Terra (Wenner) e SPDA</strong></span>
-        <button class="btn btn-primary btn-sm" data-practice-qids="32,57,77,78" data-practice-label="5.3 a 5.6 Subestações, Wenner e SPDA" data-return-theory="bloco5">Resolver as 4 Questões deste Tópico (Q32, Q57, Q77, Q78) →</button>
+        <span>Fim do tópico <strong>5.4 a 5.6 Subestações, Malha de Terra (Wenner) e SPDA</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="32,57,77,78" data-practice-label="5.4 a 5.6 Subestações, Wenner e SPDA" data-return-theory="bloco5">Resolver as 4 Questões deste Tópico (Q32, Q57, Q77, Q78) →</button>
       </div>
       </div>
     `
@@ -639,19 +687,23 @@ window.DADOS_TEORIA = [
     subtopicosEdital: "7.1 Modelo de Sistemas Lineares, Laplace, Função de Transferência; 7.2 Diagrama em Blocos, Malha aberta e fechada; 7.3 Sistemas de 2ª ordem; 7.4 Estabilidade, Lugar das Raízes e Diagrama de Bode; 7.5 Espaço de Estado, Polos e Zeros; 7.6 Sistemas Discretos e Transformada Z.",
     conteudoHTML: `
       <div class="theory-subtopic" id="sub-7-1" data-days="17,24,28">
-      <h3>7.1 a 7.4 Sistemas de 2ª Ordem, Estabilidade e Lugar das Raízes</h3>
+      <h3>7.1 a 7.4 Sistemas de 2ª Ordem, Estabilidade, Alocação de Polos e Controlabilidade</h3>
       <div class="formula-box">
-        <strong>Forma Canônica Mônica de 2ª Ordem (Q69 de 2023.2):</strong>
+        <strong>1) Forma Canônica Mônica de 2ª Ordem (Q69 de 2023.2):</strong>
         $$G(s) = \\frac{Y(s)}{U(s)} = \\frac{K \\cdot \\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2} \\qquad \\implies \\qquad s_{1,2} = -\\zeta\\omega_n \\pm j\\omega_n\\sqrt{1 - \\zeta^2}$$
         • $0 < \\zeta < 1$: <strong>Subamortecido</strong> (senoide exponencialmente amortecida com frequência $\\omega_d = \\omega_n\\sqrt{1-\\zeta^2}$).<br>
-        • $\\zeta = 1$: <strong>Criticamente amortecido</strong> &nbsp;|&nbsp; $\\zeta > 1$: <strong>Sobreamortecido</strong> &nbsp;|&nbsp; $\\zeta = 0$: <strong>Oscilador puro</strong>.
+        • $\\zeta = 1$: <strong>Criticamente amortecido</strong> &nbsp;|&nbsp; $\\zeta > 1$: <strong>Sobreamortecido</strong> &nbsp;|&nbsp; $\\zeta = 0$: <strong>Oscilador puro</strong>.<br>
+        <strong>Exemplo Q69:</strong> $G(s) = \\frac{200}{2s^2 + 8s + 200} = \\frac{100}{s^2 + 4s + 100} \\implies \\omega_n = \\sqrt{100} = 10\\text{ rad/s}$ e $2\\zeta(10) = 4 \\implies \\zeta = 0,2$ (subamortecido).<br><br>
+        <strong>2) Alocação de Polos em Malha Fechada (Q68 de 2023.2) e Matriz de Controlabilidade (Q81):</strong>
+        $$s^3 + 6s^2 + 25s + (3K - 75) = 0 \\xrightarrow{\\text{polo em } s=0} 3K - 75 = 0 \\implies K = 25 \\implies s(s^2 + 6s + 25) = 0 \\implies s_{1,2} = -3 \\pm j4$$
+        $$\\mathcal{C} = \\begin{bmatrix} B & AB & \\dots & A^{n-1}B \\end{bmatrix} \\quad \\text{(Sistema completamente controlável se } \\det(\\mathcal{C}) \\neq 0\\text{)}$$
       </div>
 
       <!-- ANIMAÇÃO 9: RESPOSTA SUBAMORTECIDA E PLANO S -->
       <div class="visual-card">
         <div class="visual-card-header">
           <span class="visual-card-title">FIGURA 7.1 — Resposta Subamortecida (ζ = 0,2) & Estabilização no Plano-s</span>
-          <span class="visual-card-badge">Q47, Q68 e Q69</span>
+          <span class="visual-card-badge">Q47, Q68, Q69 e Q81</span>
         </div>
         <div class="visual-svg-wrap">
           <svg viewBox="0 0 640 190" width="640" height="190">
@@ -698,10 +750,12 @@ window.DADOS_TEORIA = [
       <div class="theory-subtopic" id="sub-7-5" data-days="18,24,28">
       <h3>7.5 e 7.6 Espaço de Estados e Transformada Z Discreta</h3>
       <div class="formula-box">
-        <strong>Conversão Espaço de Estados $\\to$ Função de Transferência (Q45 e Q46):</strong>
+        <strong>1) Conversão Espaço de Estados $\\to$ Função de Transferência (Q45 e Q46 de 2023.2):</strong>
         $$\\begin{cases} \\dot{x}(t) = A x(t) + B u(t) \\\\ y(t) = C x(t) + D u(t) \\end{cases} \\implies G(s) = C(sI - A)^{-1}B + D = \\frac{C \\cdot \\operatorname{adj}(sI - A) \\cdot B}{\\det(sI - A)} + D$$
-        <strong>Transformada Z de Equação a Diferenças Causal (Q66 e Q70):</strong>
+        <strong>Atalho da Forma Companheira (Q46):</strong> Se $A = \\begin{bmatrix} a & b \\\\ 1 & 0 \\end{bmatrix}$, então o denominador é $\\det(sI - A) = s^2 - as - b$.<br><br>
+        <strong>2) Transformada Z de Equação a Diferenças Causal (Q66) e Resposta ao Impulso Discreto (Q70):</strong>
         $$x(n) - \\alpha x(n-1) - \\beta x(n-2) = \\delta(n) \\implies X(z) = \\frac{1}{1 - \\alpha z^{-1} - \\beta z^{-2}} = \\frac{z^2}{z^2 - \\alpha z - \\beta}$$
+        <strong>Exemplo Q70:</strong> $G(z) = \\frac{3z^2 - 3z}{z^2 - 6z + 5} = \\frac{3z(z-1)}{(z-1)(z-5)} = \\frac{3}{1 - 5z^{-1}} \\implies y(n) = 3 \\cdot 5^n u(n) \\implies y(0)=3, \\; y(1)=15, \\; y(2)=75$.
       </div>
       <div class="subtopic-cta-bar">
         <span>Fim do tópico <strong>7.5 e 7.6 Espaço de Estados e Controle Discreto (Transformada Z)</strong></span>
@@ -719,11 +773,13 @@ window.DADOS_TEORIA = [
     subtopicosEdital: "1.1 Matrizes, sistemas de equações, determinantes, Transformada de Laplace e aplicações; 1.2 Operações com vetores, produto escalar e produto vetorial; 1.3 Números complexos e funções de variáveis complexas.",
     conteudoHTML: `
       <div class="theory-subtopic" id="sub-1-1" data-days="19,22,28">
-      <h3>1.1 Transformada de Laplace e Expansão em Frações Parciais</h3>
+      <h3>1.1 Transformada de Laplace, Frações Parciais e Propriedades de Determinantes (Q64 e Q71)</h3>
       <div class="formula-box">
         $$\\mathcal{L}\\{\\delta(t)\\} = 1 \\quad ; \\quad \\mathcal{L}\\{u(t)\\} = \\frac{1}{s} \\quad ; \\quad \\mathcal{L}\\{e^{at}u(t)\\} = \\frac{1}{s - a} \\quad ; \\quad \\mathcal{L}\\{\\operatorname{sen}(\\omega t)\\} = \\frac{\\omega}{s^2 + \\omega^2}$$
-        <strong>Exemplo Q64 de 2023.2:</strong>
+        <strong>Exemplo Q64 de 2023.2 (Frações Parciais):</strong>
         $$G(s) = \\frac{1}{s^2 - 5s + 6} = \\frac{1}{(s - 3)(s - 2)} = \\frac{1}{s - 3} - \\frac{1}{s - 2} \\implies g(t) = e^{3t} - e^{2t}$$
+        <strong>Propriedades de Determinantes de Matrizes de Ordem $n$ (Q71):</strong>
+        $$\\det(k \\cdot A) = k^n \\cdot \\det(A) \\quad ; \\quad \\det(A \\cdot B) = \\det(A)\\cdot\\det(B) \\quad ; \\quad \\det(A^T) = \\det(A) \\quad ; \\quad \\det(A^{-1}) = \\frac{1}{\\det(A)}$$
       </div>
 
       <h3>1.2 Álgebra Vetorial: Produto Escalar, Produto Vetorial e Força Magnética (Q61)</h3>
@@ -764,12 +820,14 @@ window.DADOS_TEORIA = [
         </div>
       </div>
 
-      <h3>1.3 Funções de Variável Complexa $f(z) = u(x,y) + jv(x,y)$ (Q43 e Q65)</h3>
+      <h3>1.3 Funções de Variável Complexa $f(z) = u(x,y) + jv(x,y)$ e Fase em $s = j\\omega$ (Q43 e Q65)</h3>
       <div class="formula-box">
         $$f(z) = \\frac{1}{z + 1} = \\frac{1}{(x + 1) + jy} \\cdot \\frac{(x + 1) - jy}{(x + 1) - jy} = \\underbrace{\\frac{x + 1}{x^2 + y^2 + 2x + 1}}_{u(x,y)} + j\\underbrace{\\frac{-y}{x^2 + y^2 + 2x + 1}}_{v(x,y)}$$
+        <strong>Fase de Função de Transferência de Fase Não-Mínima em $s = 2j$ (Q43 de 2023.2):</strong>
+        $$G(s) = \\frac{5(s - 2)}{s + 2} \\implies \\angle G(2j) = \\angle(-2 + 2j) - \\angle(2 + 2j) = 135^\\circ - 45^\\circ = +90^\\circ$$
       </div>
       <div class="subtopic-cta-bar">
-        <span>Fim do tópico <strong>1.1 a 1.3 Laplace, Álgebra Vetorial e Variáveis Complexas</strong></span>
+        <span>Fim do tópico <strong>1.1 a 1.3 Laplace, Determinantes, Álgebra Vetorial e Variáveis Complexas</strong></span>
         <button class="btn btn-primary btn-sm" data-practice-qids="43,61,64,65,71" data-practice-label="Bloco 1: Matemática Aplicada" data-return-theory="bloco1">Resolver as 5 Questões deste Tópico (Q43, Q61, Q64, Q65, Q71) →</button>
       </div>
       </div>
@@ -784,14 +842,18 @@ window.DADOS_TEORIA = [
     subtopicosEdital: "3.1 Instrumentos (voltímetro, amperímetro, frequencímetro, ponte de Wheatstone, capacímetro, ohmímetro, analisador de espectro, osciloscópio); 3.2 Unidades SI; 3.3 TP e TC; 3.4 Medição de Potência em CA; 3.5 Medição de energia ativa e reativa.",
     conteudoHTML: `
       <div class="theory-subtopic" id="sub-3-1" data-days="12,22,26">
-      <h3>3.1 a 3.4 Instrumentos, Análise Dimensional (SI), TC/TP e Wattímetros</h3>
+      <h3>3.1 a 3.5 Instrumentos, Análise Dimensional (SI), TC/TP e Método dos Dois Wattímetros</h3>
       <div class="formula-box">
         <strong>1) Medição de Potência com Osciloscópio e Resistor Shunt (Q52 de 2023.2):</strong>
         $$v_{\\text{carga}}(t) = V_p\\cos(\\omega t + \\theta_v) \\quad , \\quad i(t) = I_p\\cos(\\omega t + \\theta_i) \\implies P = \\frac{V_p \\cdot I_p}{2}\\cos(\\theta_v - \\theta_i)$$
-        <strong>2) Transformador de Corrente (TC — Q41) e Equação Dimensional de Bond (Q60):</strong>
+        <strong>2) Transformador de Corrente (TC — Q41) e Equação Dimensional de Bond no SI (Q60):</strong>
         $$I_{\\text{primário}} = I_{\\text{secundário}} \\times \\left(\\frac{I_{1n}}{I_{2n}}\\right) \\qquad ; \\qquad [K] = \\frac{[E]}{[d^{-1/2}]} = \\frac{\\text{W}\\cdot\\text{s}\\cdot\\text{kg}^{-1}}{\\text{m}^{-1/2}} = \\text{m}^{1/2}\\cdot\\text{kg}^{-1}\\cdot\\text{W}\\cdot\\text{s}$$
-        <strong>3) Método dos Dois Wattímetros em Carga Trifásica Equilibrada (Q42):</strong>
+        <strong>3) Método dos Dois Wattímetros em Carga Trifásica Equilibrada (Teorema de Blondel — Q42):</strong>
         $$P_{3\\phi} = W_1 + W_2 \\qquad ; \\qquad Q_{3\\phi} = \\sqrt{3}\\left(W_1 - W_2\\right)$$
+        Em carga trifásica equilibrada ($I_N = 0$), um 3º wattímetro $W_3$ inserido no condutor neutro é <strong>distrator</strong> ($P_{3\\phi} = W_1 + W_2$).
+      </div>
+      <div class="cesgranrio-tip">
+        <strong>Medição Indireta de Resistência Elétrica (Q35 de 2023.2):</strong> Tanto nos ohmímetros analógicos/digitais quanto na Ponte de Wheatstone, a resistência elétrica não é comparada diretamente a um padrão mecânico: ela é determinada de forma <strong>indireta</strong> a partir dos efeitos da <strong>tensão aplicada</strong> e da <strong>corrente elétrica</strong> que percorre o resistor sob ensaio.
       </div>
 
       <!-- ANIMAÇÃO: OSCILOSCÓPIO + SHUNT (Q52) E MÉTODO DOS DOIS WATTÍMETROS (Q42) -->
@@ -922,11 +984,11 @@ window.DADOS_TEORIA = [
         </table>
       </div>
 
-      <h3>8.1 Lei nº 14.133/2021 — Modalidades e Regimes de Engenharia (Q58 de 2023.2)</h3>
+      <h3>8.1 Lei nº 14.133/2021 — Modalidades e Regimes de Engenharia (Q58 e Q83)</h3>
       <ul>
-        <li><strong>Pregão (Art. 6º, XLI e Art. 29):</strong> Obrigatório para aquisição de <strong>bens e serviços comuns</strong> (padrões objetivamente definidos no edital — ex.: EPIs, EPCs e ferramentas na Q58!).</li>
+        <li><strong>Pregão (Art. 6º, XLI e Art. 29):</strong> Obrigatório para aquisição de <strong>bens e serviços comuns</strong> (padrões de desempenho e qualidade objetivamente definidos no edital — ex.: EPIs, EPCs e ferramentas na Q58!).</li>
         <li><strong>Concorrência (Art. 6º, XXXVIII):</strong> Obras e serviços especiais de engenharia.</li>
-        <li><strong>Contratação Integrada vs. Semi-integrada:</strong> Na <strong>Integrada</strong>, o contratado elabora os projetos <strong>básico e executivo</strong>; na <strong>Semi-integrada</strong>, elabora apenas o projeto <strong>executivo</strong>.</li>
+        <li><strong>Contratação Integrada vs. Semi-integrada (Q83):</strong> Na <strong>Integrada</strong>, o contratado elabora e desenvolve os projetos <strong>básico e executivo</strong>; na <strong>Semi-integrada</strong>, a Administração fornece o projeto básico e o contratado elabora o projeto <strong>executivo</strong>.</li>
       </ul>
       <div class="subtopic-cta-bar">
         <span>Fim do tópico <strong>8.1 e 8.2 NR-10 e Nova Lei de Licitações (Lei 14.133/2021)</strong></span>
@@ -943,18 +1005,29 @@ window.DADOS_TEORIA = [
     prioridade: "Essencial",
     subtopicosEdital: "1. Compreensão de textos; 2. Ortografia; 3. Coesão textual; 4. Significação das palavras; 5. Tempos e modos verbais; 6. Classes de palavras; 7. Coordenação e subordinação; 8. Pontuação; 9. Concordância; 10. Regência; 11. Crase; 12. Colocação pronominal.",
     conteudoHTML: `
-      <div class="theory-subtopic" id="sub-pt-1" data-days="13,14,25">
-      <h3>Mapa das 10 Questões de Português da Cesgranrio (Prova 2023.2)</h3>
+      <div class="theory-subtopic" id="sub-pt-1" data-days="13,25">
+      <h3>Parte 1: Compreensão de Textos, Coesão Referencial (Pronome Relativo "QUE") e Pontuação (Aposto)</h3>
       <ul>
         <li><strong>Compreensão e Interpretação (Q1 a Q4):</strong> Identificar reminiscência (<em>"Estou me vendo..."</em>), marcas de insegurança (<em>"rodeios"</em> e <em>"gaguejar"</em>) e causa do receio da narradora.</li>
-        <li><strong>Crase e Regência (Q5):</strong> <em>"soneto à língua portuguesa"</em> = soneto escrito/dedicado <strong>para a</strong> língua portuguesa.</li>
-        <li><strong>Coesão Referencial — Pronome Relativo "QUE" (Q6):</strong> Só é pronome relativo quando retoma um substantivo antecedente e equivale a <em>o qual / a qual</em>: <em>"ficou olhando <u>a borboleta que</u> [a qual] entrou na varanda"</em>.</li>
-        <li><strong>Pontuação — Aposto Explicativo entre Vírgulas (Q7):</strong> <em>"a minha avó, <u>Pedrina Perucchi</u>, era italiana"</em> equivale a <em>"Os poemas, <u>textos de uma beleza sem igual</u>, encantam seus leitores"</em>.</li>
-        <li><strong>Correlação de Tempos e Modos Verbais (Q8):</strong> <em>"A autora também <strong>teria sido lida</strong> se <strong>tivesse escrito</strong> seus contos em outra língua"</em> (Futuro do Pretérito Composto $\\leftrightarrow$ Pretérito Mais-Que-Perfeito Composto do Subjuntivo).</li>
+        <li><strong>Coesão Referencial — Pronome Relativo "QUE" (Q6):</strong> Só é pronome relativo quando retoma um substantivo/pronome antecedente e pode ser substituído por <strong>o qual / a qual / os quais / as quais</strong>: <em>"ficou olhando <u>a borboleta que</u> [a qual] entrou na varanda"</em> (nas demais ocorrências após verbos como <em>dizer que</em>, <em>perceber que</em>, é conjunção integrante).</li>
+        <li><strong>Pontuação — Aposto Explicativo entre Vírgulas (Q7):</strong> Vírgulas duplas intercaladas após um substantivo isolam o <strong>aposto explicativo</strong>: <em>"a minha avó, <u>Pedrina Perucchi</u>, era italiana"</em> equivale a <em>"Os poemas, <u>textos de uma beleza sem igual</u>, encantam seus leitores"</em>.</li>
       </ul>
       <div class="subtopic-cta-bar">
-        <span>Fim do tópico <strong>Língua Portuguesa (Padrão Cesgranrio)</strong></span>
-        <button class="btn btn-primary btn-sm" data-practice-qids="1,2,3,4,5,6,7,8,9,10,84" data-practice-label="Língua Portuguesa (Cesgranrio)" data-return-theory="portugues">Resolver as 11 Questões de Português →</button>
+        <span>Fim do tópico <strong>Português Parte 1: Compreensão, Pronome Relativo "QUE" e Pontuação</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="1,2,3,4,6,7" data-practice-label="Português Parte 1 (Compreensão, Coesão e Pontuação)" data-return-theory="portugues">Resolver as 6 Questões deste Tópico (Q1 a Q4, Q6, Q7) →</button>
+      </div>
+      </div>
+
+      <div class="theory-subtopic" id="sub-pt-2" data-days="14,25">
+      <h3>Parte 2: Crase, Regência, Concordância Verbal/Nominal e Correlação de Tempos Verbais</h3>
+      <ul>
+        <li><strong>Crase e Regência Nominal/Verbal (Q5 e Q84):</strong> <em>"soneto à língua portuguesa"</em> = soneto escrito/dedicado <strong>para a</strong> língua portuguesa. Verbos transitivos indiretos como <em>obedecer a</em>, <em>assistir a</em> (presenciar) e <em>visar a</em> (almejar) exigem preposição <em>a</em>; diante de palavra feminina determinada, ocorre crase (ex.: <em>"obedecer <strong>às</strong> normas da NR-10"</em>).</li>
+        <li><strong>Correlação de Tempos e Modos Verbais (Q8):</strong> Hipótese no passado não realizada combina o <strong>Futuro do Pretérito Composto do Indicativo</strong> na oração principal com o <strong>Pretérito Mais-Que-Perfeito Composto do Subjuntivo</strong> na condicional: <em>"A autora também <strong>teria sido lida</strong> se <strong>tivesse escrito</strong> seus contos em outra língua"</em>.</li>
+        <li><strong>Concordância Verbal Impessoal (Q9, Q10 e Q84):</strong> O verbo <strong>Haver</strong> no sentido de <em>existir</em> ou <em>tempo decorrido</em> e o verbo <strong>Fazer</strong> indicando <em>tempo decorrido</em> são impessoais e permanecem na <strong>3ª pessoa do singular</strong> (ex.: <em>"Deve haver falhas"</em>; <em>"Faz dois anos"</em>).</li>
+      </ul>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>Português Parte 2: Crase, Regência, Concordância e Correlação Verbal</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="5,8,9,10,84" data-practice-label="Português Parte 2 (Crase, Regência, Concordância e Verbos)" data-return-theory="portugues">Resolver as 5 Questões deste Tópico (Q5, Q8, Q9, Q10, Q84) →</button>
       </div>
       </div>
     `
@@ -968,21 +1041,21 @@ window.DADOS_TEORIA = [
     subtopicosEdital: "1. Compreensão de texto escrito em língua inglesa; 2. Itens gramaticais relevantes para a compreensão dos conteúdos semânticos.",
     conteudoHTML: `
       <div class="theory-subtopic" id="sub-en-1" data-days="21,25">
-      <h3>Mapa das 10 Questões de Inglês da Cesgranrio (Prova 2023.2)</h3>
+      <h3>Mapa das Questões de Inglês da Cesgranrio (Prova 2023.2 e Inéditas)</h3>
       <div class="table-responsive">
         <table class="data-table">
           <thead>
             <tr>
               <th>Tópico Cobrado</th>
-              <th>Exemplo Real da Prova 2023.2</th>
+              <th>Exemplo Real da Prova 2023.2 e Simulados</th>
               <th>Bizu de Resolução</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Discourse Markers (Q12)</strong></td>
-              <td><code>However</code> = <strong>Opposition</strong> (Contudo, entretanto)</td>
-              <td><code>Although / Even though</code> = concessão; <code>Therefore / Thus</code> = conclusão; <code>Moreover</code> = adição.</td>
+              <td><strong>Discourse Markers (Q12 e Q85)</strong></td>
+              <td><code>However</code> = <strong>Opposition</strong> (Contudo, entretanto)<br><code>Although</code> = <strong>Even though</strong> (Embora, apesar de)</td>
+              <td><code>Although / Even though / Despite</code> = concessão/contraste; <code>Therefore / Thus</code> = conclusão; <code>Moreover</code> = adição.</td>
             </tr>
             <tr>
               <td><strong>Reference Pronouns (Q16)</strong></td>
@@ -990,8 +1063,8 @@ window.DADOS_TEORIA = [
               <td>O pronome relativo <code>which</code> retoma o sintagma nominal antecedente: <strong>greenhouse gas emissions</strong>.</td>
             </tr>
             <tr>
-              <td><strong>Technical Synonyms (Q15, Q18, Q20)</strong></td>
-              <td><code>pivotal</code> = <strong>essential</strong><br><code>state-of-the-art</code> = <strong>cutting-edge</strong><br><code>low latency</code> = <strong>minimal delay</strong></td>
+              <td><strong>Technical Synonyms (Q15, Q18, Q20, Q85)</strong></td>
+              <td><code>pivotal</code> = <strong>essential</strong><br><code>state-of-the-art</code> = <strong>cutting-edge</strong><br><code>low latency</code> = <strong>minimal delay</strong><br><code>to curb</code> = <strong>reduce / restrain</strong></td>
               <td>Leia a frase inteira substituindo a palavra pela alternativa para confirmar a coerência técnica.</td>
             </tr>
           </tbody>
