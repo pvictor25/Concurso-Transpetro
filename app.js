@@ -2986,6 +2986,79 @@
     renderDashboard();
     checkAndApplyAppUpdate();
 
+    // Feedback visual discreto (toast) para salvamento rápido via Ctrl+S
+    let cloudToastTimer = null;
+    function showCloudSaveToast(text, tone) {
+      let toast = document.getElementById("cloud-save-toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "cloud-save-toast";
+        toast.style.cssText =
+          "position:fixed;right:20px;bottom:24px;z-index:9999;padding:10px 16px;border-radius:4px;" +
+          "font-family:var(--font-mono);font-size:0.8rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.45);" +
+          "border:1px solid var(--border-strong);background:var(--bg-elevated);color:var(--text-primary);" +
+          "transition:opacity 0.2s ease,transform 0.2s ease;pointer-events:none;";
+        document.body.appendChild(toast);
+      }
+      if (tone === "success") {
+        toast.style.borderColor = "var(--accent-green)";
+        toast.style.color = "var(--accent-green)";
+      } else if (tone === "error") {
+        toast.style.borderColor = "var(--danger)";
+        toast.style.color = "var(--danger)";
+      } else {
+        toast.style.borderColor = "var(--accent-blue)";
+        toast.style.color = "var(--text-primary)";
+      }
+      toast.textContent = text;
+      toast.style.opacity = "1";
+      toast.style.transform = "translateY(0)";
+
+      if (cloudToastTimer) clearTimeout(cloudToastTimer);
+      cloudToastTimer = setTimeout(function () {
+        if (toast) {
+          toast.style.opacity = "0";
+          toast.style.transform = "translateY(6px)";
+        }
+      }, 2800);
+    }
+
+    // Atalho global Ctrl+S / Cmd+S para salvar imediatamente o estado na nuvem
+    window.addEventListener("keydown", async function (ev) {
+      if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && (ev.key === "s" || ev.key === "S")) {
+        ev.preventDefault();
+        const notesEl = document.getElementById("personal-notes-area");
+        if (notesEl) {
+          state.personalNotes = notesEl.value;
+        }
+        if (cloudSyncTimer) {
+          clearTimeout(cloudSyncTimer);
+          cloudSyncTimer = null;
+        }
+        saveState(true);
+
+        if (!isCloudConfigured()) {
+          showCloudSaveToast(
+            "Salvo localmente · Configure a nuvem para sincronizar (Ctrl+S)",
+            "info"
+          );
+          openCloudModal();
+          return;
+        }
+
+        showCloudSaveToast("Sincronizando estado na nuvem (Ctrl+S)...", "info");
+        const ok = await pushToCloud({ silent: true });
+        if (ok) {
+          showCloudSaveToast("✓ Estado salvo na nuvem com sucesso (Ctrl+S)", "success");
+        } else {
+          showCloudSaveToast(
+            "✗ Falha ao salvar na nuvem — salvo localmente",
+            "error"
+          );
+        }
+      }
+    });
+
     // Se a nuvem estiver configurada, busca progresso mais recente ao abrir e ao voltar para a aba
     if (isCloudConfigured()) {
       pullFromCloud({ silent: true });
