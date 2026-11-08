@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-  <script>window.APP_BUILD_HASH = "2fa5e58f83";</script>
+  <script>window.APP_BUILD_HASH = "e097e71d2e";</script>
   <style>
 :root {
   --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -1675,56 +1675,15 @@ body {
 .anim-trace { stroke-dasharray: 400; animation: traceCurve 4.5s ease-out infinite; }
 .anim-pole-shift { animation: moveDot 4s ease-in-out infinite; }
 
-/* Animation Controls (Pausar / Retomar Animações dos Diagramas) */
-.anim-status-pill {
-  font-family: var(--font-mono);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  padding: 5px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 0.72rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.anim-status-pill:hover {
-  border-color: var(--accent-blue);
-  color: var(--text-primary);
-  background: var(--bg-hover);
-}
-
-.anim-status-pill.is-paused {
-  border-color: rgba(235, 203, 139, 0.55);
-  background: rgba(235, 203, 139, 0.12);
-  color: var(--accent-yellow);
-}
-
-.anim-status-pill.is-paused:hover {
-  background: rgba(235, 203, 139, 0.2);
-  border-color: var(--accent-yellow);
-}
-
-.anim-status-icon {
-  font-size: 0.76rem;
-  line-height: 1;
-}
-
-/* Botão individual nos cabeçalhos dos cartões visuais (.visual-card) */
+/* Botão individual nos cabeçalhos dos diagramas visuais (.visual-card) */
 .visual-anim-toggle {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
+  gap: 5px;
+  padding: 3px 8px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid #3b4252;
@@ -1746,25 +1705,17 @@ body {
   color: var(--accent-yellow);
 }
 
-/* Regras de Pausa em Cascata */
-body.animations-paused .visual-svg-wrap *,
-body.animations-paused .anim-ccw,
-body.animations-paused .anim-ccw-slow,
-body.animations-paused .anim-cw,
-body.animations-paused .anim-flow,
-body.animations-paused .anim-pulse,
-body.animations-paused .anim-trace,
-body.animations-paused .anim-pole-shift,
-body.animations-paused svg [class*="anim-"],
+/* Regra de congelamento individual do diagrama */
 .visual-card.anim-paused .visual-svg-wrap *,
-.visual-card.anim-paused svg [class*="anim-"] {
+.visual-card.anim-paused svg [class*="anim-"],
+.visual-card.anim-paused .anim-ccw,
+.visual-card.anim-paused .anim-ccw-slow,
+.visual-card.anim-paused .anim-cw,
+.visual-card.anim-paused .anim-flow,
+.visual-card.anim-paused .anim-pulse,
+.visual-card.anim-paused .anim-trace,
+.visual-card.anim-paused .anim-pole-shift {
   animation-play-state: paused !important;
-}
-
-/* Permite forçar execução individual mesmo se global estiver pausado */
-body.animations-paused .visual-card.anim-force-running .visual-svg-wrap *,
-body.animations-paused .visual-card.anim-force-running svg [class*="anim-"] {
-  animation-play-state: running !important;
 }
 
 /* Cloud Sync Pill & Modal */
@@ -2081,15 +2032,9 @@ body.animations-paused .visual-card.anim-force-running svg [class*="anim-"] {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .cloud-status-pill,
-  .anim-status-pill {
+  .cloud-status-pill {
     padding: 5px 8px;
     font-size: 0.7rem;
-  }
-  @media (max-width: 580px) {
-    .anim-status-pill .anim-status-label {
-      display: none;
-    }
   }
   .content-container {
     padding: 14px 12px;
@@ -2801,7 +2746,6 @@ body.animations-paused .visual-card.anim-force-running svg [class*="anim-"] {
       </button>
       <div class="footer-actions">
         <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
-        <button class="btn-utility" id="btn-sidebar-toggle-anim" title="Pausar ou retomar animações visuais (Atalho: P)">⏸ Pausar Animações</button>
         <button class="btn-utility" id="btn-export-progress" title="Exportar backup do seu progresso em JSON">Exportar</button>
         <button class="btn-utility" id="btn-import-progress" title="Restaurar backup do progresso em JSON">Importar</button>
         <input type="file" id="input-import-json" accept=".json" style="display:none;">
@@ -2828,10 +2772,6 @@ body.animations-paused .visual-card.anim-force-running svg [class*="anim-"] {
         </div>
       </div>
       <div class="topbar-progress" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-        <button class="anim-status-pill" id="btn-toggle-animations" title="Pausar ou retomar animações dos diagramas (Atalho: Tecla P)">
-          <span class="anim-status-icon" id="anim-status-icon">⏸</span>
-          <span class="anim-status-label" id="anim-status-label">Animações: Ativas</span>
-        </button>
         <button class="mobile-timer-pill" id="btn-mobile-timer-pill" title="Iniciar ou pausar o ciclo de 30 minutos">
           <span id="mobile-timer-icon">▶</span>
           <span id="mobile-timer-text">30:00</span>
@@ -6745,7 +6685,6 @@ window.QUESTOES_PARTE2 = [
   // Estado padrão persistido no navegador
   const defaultState = {
     theme: "dark",
-    animationsPaused: false,
     completedDays: [],
     studiedTheory: [],
     answeredQuestions: {}, // { [id]: { selected: "A", correct: true } }
@@ -6812,7 +6751,6 @@ window.QUESTOES_PARTE2 = [
       if (!raw) return JSON.parse(JSON.stringify(defaultState));
       const parsed = JSON.parse(raw);
       const merged = Object.assign({}, JSON.parse(JSON.stringify(defaultState)), parsed);
-      merged.animationsPaused = !!merged.animationsPaused;
       if (typeof merged.personalNotes === "string") {
         if (merged.personalNotes.startsWith("📌 ")) {
           merged.personalNotes = merged.personalNotes.replace(/^📌\s*/, "");
@@ -7201,7 +7139,6 @@ window.QUESTOES_PARTE2 = [
       }
 
       applyTheme();
-      updateAnimationsUI();
       updateGlobalCounters();
       switchTab(currentTab);
 
@@ -10171,93 +10108,20 @@ window.QUESTOES_PARTE2 = [
   }
 
   // =========================================================================
-  // CONTROLE DE ANIMAÇÕES VISUAIS (DIAGRAMAS SVG, FASORES, EFEITO PELICULAR)
+  // CONTROLE INDIVIDUAL DE ANIMAÇÃO EM CADA DIAGRAMA VISUAL (.visual-card)
   // =========================================================================
-  function updateAnimationsUI() {
-    const isPaused = !!state.animationsPaused;
-    document.body.classList.toggle("animations-paused", isPaused);
-
-    // Pílula na Topbar
-    const pill = document.getElementById("btn-toggle-animations");
-    const icon = document.getElementById("anim-status-icon");
-    const label = document.getElementById("anim-status-label");
-    if (pill) {
-      pill.classList.toggle("is-paused", isPaused);
-      pill.setAttribute(
-        "title",
-        isPaused
-          ? "Retomar animações dos diagramas teóricos (Atalho: Tecla P)"
-          : "Pausar animações dos diagramas teóricos (Atalho: Tecla P)"
-      );
-      pill.setAttribute("aria-label", isPaused ? "Retomar animações" : "Pausar animações");
-    }
-    if (icon) {
-      icon.textContent = isPaused ? "▶" : "⏸";
-    }
-    if (label) {
-      label.textContent = isPaused ? "Animações: Pausadas" : "Animações: Ativas";
-    }
-
-    // Botão utilitário no rodapé da Sidebar
-    const btnSidebarAnim = document.getElementById("btn-sidebar-toggle-anim");
-    if (btnSidebarAnim) {
-      btnSidebarAnim.textContent = isPaused ? "▶ Retomar Animações" : "⏸ Pausar Animações";
-      btnSidebarAnim.classList.toggle("is-paused", isPaused);
-      btnSidebarAnim.setAttribute(
-        "title",
-        isPaused
-          ? "Retomar animações visuais dos diagramas (Atalho: P)"
-          : "Pausar animações visuais dos diagramas (Atalho: P)"
-      );
-    }
-
-    // Sincroniza o estado de botões em cada diagrama renderizado na tela
-    document.querySelectorAll(".visual-card").forEach((card) => {
-      syncVisualCardButton(card);
-    });
-  }
-
-  function toggleAnimations(explicitState) {
-    if (typeof explicitState === "boolean") {
-      state.animationsPaused = explicitState;
-    } else {
-      state.animationsPaused = !state.animationsPaused;
-    }
-
-    // Reseta overrides individuais para que a preferência global seja soberana
-    document
-      .querySelectorAll(".visual-card.anim-force-running, .visual-card.anim-paused")
-      .forEach((card) => {
-        card.classList.remove("anim-force-running");
-        card.classList.remove("anim-paused");
-      });
-
-    updateAnimationsUI();
-    saveState();
-    showCloudSaveToast(
-      state.animationsPaused
-        ? "⏸ Animações dos diagramas pausadas (Atalho: P)"
-        : "▶ Animações dos diagramas ativas (Atalho: P)",
-      state.animationsPaused ? "info" : "success"
-    );
-  }
-
-  function syncVisualCardButton(card) {
-    const btn = card.querySelector(".visual-anim-toggle");
+  function syncCardAnimButton(card, btn) {
     if (!btn) return;
-    const isGloballyPaused = !!state.animationsPaused;
-    const isForceRunning = card.classList.contains("anim-force-running");
-    const isCardPaused = card.classList.contains("anim-paused");
-    const isEffectivePaused = (isGloballyPaused && !isForceRunning) || isCardPaused;
-
-    btn.classList.toggle("is-paused", isEffectivePaused);
-    const icon = btn.querySelector(".visual-anim-toggle-icon");
-    const text = btn.querySelector(".visual-anim-toggle-text");
-    if (icon) icon.textContent = isEffectivePaused ? "▶" : "⏸";
-    if (text) text.textContent = isEffectivePaused ? "Retomar" : "Pausar";
+    const isPaused = card.classList.contains("anim-paused");
+    btn.classList.toggle("is-paused", isPaused);
+    btn.innerHTML = isPaused
+      ? '<span class="visual-anim-toggle-icon">▶</span><span class="visual-anim-toggle-text">Retomar</span>'
+      : '<span class="visual-anim-toggle-icon">⏸</span><span class="visual-anim-toggle-text">Pausar</span>';
     btn.setAttribute(
       "title",
-      isEffectivePaused ? "Retomar esta animação" : "Pausar esta animação"
+      isPaused
+        ? "Retomar animação deste diagrama"
+        : "Pausar animação deste diagrama"
     );
   }
 
@@ -10273,28 +10137,22 @@ window.QUESTOES_PARTE2 = [
       const header = card.querySelector(".visual-card-header");
       if (!header) return;
 
-      if (header.querySelector(".visual-anim-toggle")) {
-        syncVisualCardButton(card);
+      const existingBtn = header.querySelector(".visual-anim-toggle");
+      if (existingBtn) {
+        syncCardAnimButton(card, existingBtn);
         return;
       }
 
       const toggleBtn = document.createElement("button");
       toggleBtn.type = "button";
       toggleBtn.className = "visual-anim-toggle";
-      toggleBtn.innerHTML =
-        '<span class="visual-anim-toggle-icon">⏸</span><span class="visual-anim-toggle-text">Pausar</span>';
+      toggleBtn.setAttribute("aria-label", "Pausar ou retomar animação");
+      syncCardAnimButton(card, toggleBtn);
 
       toggleBtn.addEventListener("click", function (e) {
         e.stopPropagation();
-        const isGloballyPaused = !!state.animationsPaused;
-        if (isGloballyPaused) {
-          card.classList.toggle("anim-force-running");
-          card.classList.remove("anim-paused");
-        } else {
-          card.classList.toggle("anim-paused");
-          card.classList.remove("anim-force-running");
-        }
-        syncVisualCardButton(card);
+        card.classList.toggle("anim-paused");
+        syncCardAnimButton(card, toggleBtn);
       });
 
       const badge = header.querySelector(".visual-card-badge");
@@ -10303,7 +10161,6 @@ window.QUESTOES_PARTE2 = [
       } else {
         header.appendChild(toggleBtn);
       }
-      syncVisualCardButton(card);
     });
   }
 
@@ -10312,7 +10169,6 @@ window.QUESTOES_PARTE2 = [
   // =========================================================================
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
-    updateAnimationsUI();
     updateTimerUI();
     updateGlobalCounters();
 
@@ -10359,18 +10215,6 @@ window.QUESTOES_PARTE2 = [
         saveState();
       });
 
-    // Controle de animações nos diagramas (Topbar e Sidebar)
-    document
-      .getElementById("btn-toggle-animations")
-      ?.addEventListener("click", function () {
-        toggleAnimations();
-      });
-    document
-      .getElementById("btn-sidebar-toggle-anim")
-      ?.addEventListener("click", function () {
-        toggleAnimations();
-      });
-
     document
       .getElementById("btn-export-progress")
       ?.addEventListener("click", exportProgressJSON);
@@ -10396,7 +10240,6 @@ window.QUESTOES_PARTE2 = [
               imported
             );
             applyTheme();
-            updateAnimationsUI();
             saveState();
             switchTab(currentTab);
           } catch (err) {
@@ -10785,23 +10628,6 @@ window.QUESTOES_PARTE2 = [
             "error"
           );
         }
-      }
-    });
-
-    // Atalho global P para pausar / retomar animações dos diagramas
-    window.addEventListener("keydown", function (ev) {
-      if (!ev.ctrlKey && !ev.metaKey && !ev.altKey && (ev.key === "p" || ev.key === "P")) {
-        const active = document.activeElement;
-        const tag = active ? active.tagName.toLowerCase() : "";
-        if (
-          tag === "input" ||
-          tag === "textarea" ||
-          (active && active.isContentEditable)
-        ) {
-          return;
-        }
-        ev.preventDefault();
-        toggleAnimations();
       }
     });
 

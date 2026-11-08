@@ -16,7 +16,6 @@
   // Estado padrão persistido no navegador
   const defaultState = {
     theme: "dark",
-    animationsPaused: false,
     completedDays: [],
     studiedTheory: [],
     answeredQuestions: {}, // { [id]: { selected: "A", correct: true } }
@@ -83,7 +82,6 @@
       if (!raw) return JSON.parse(JSON.stringify(defaultState));
       const parsed = JSON.parse(raw);
       const merged = Object.assign({}, JSON.parse(JSON.stringify(defaultState)), parsed);
-      merged.animationsPaused = !!merged.animationsPaused;
       if (typeof merged.personalNotes === "string") {
         if (merged.personalNotes.startsWith("📌 ")) {
           merged.personalNotes = merged.personalNotes.replace(/^📌\s*/, "");
@@ -472,7 +470,6 @@
       }
 
       applyTheme();
-      updateAnimationsUI();
       updateGlobalCounters();
       switchTab(currentTab);
 
@@ -3442,93 +3439,20 @@
   }
 
   // =========================================================================
-  // CONTROLE DE ANIMAÇÕES VISUAIS (DIAGRAMAS SVG, FASORES, EFEITO PELICULAR)
+  // CONTROLE INDIVIDUAL DE ANIMAÇÃO EM CADA DIAGRAMA VISUAL (.visual-card)
   // =========================================================================
-  function updateAnimationsUI() {
-    const isPaused = !!state.animationsPaused;
-    document.body.classList.toggle("animations-paused", isPaused);
-
-    // Pílula na Topbar
-    const pill = document.getElementById("btn-toggle-animations");
-    const icon = document.getElementById("anim-status-icon");
-    const label = document.getElementById("anim-status-label");
-    if (pill) {
-      pill.classList.toggle("is-paused", isPaused);
-      pill.setAttribute(
-        "title",
-        isPaused
-          ? "Retomar animações dos diagramas teóricos (Atalho: Tecla P)"
-          : "Pausar animações dos diagramas teóricos (Atalho: Tecla P)"
-      );
-      pill.setAttribute("aria-label", isPaused ? "Retomar animações" : "Pausar animações");
-    }
-    if (icon) {
-      icon.textContent = isPaused ? "▶" : "⏸";
-    }
-    if (label) {
-      label.textContent = isPaused ? "Animações: Pausadas" : "Animações: Ativas";
-    }
-
-    // Botão utilitário no rodapé da Sidebar
-    const btnSidebarAnim = document.getElementById("btn-sidebar-toggle-anim");
-    if (btnSidebarAnim) {
-      btnSidebarAnim.textContent = isPaused ? "▶ Retomar Animações" : "⏸ Pausar Animações";
-      btnSidebarAnim.classList.toggle("is-paused", isPaused);
-      btnSidebarAnim.setAttribute(
-        "title",
-        isPaused
-          ? "Retomar animações visuais dos diagramas (Atalho: P)"
-          : "Pausar animações visuais dos diagramas (Atalho: P)"
-      );
-    }
-
-    // Sincroniza o estado de botões em cada diagrama renderizado na tela
-    document.querySelectorAll(".visual-card").forEach((card) => {
-      syncVisualCardButton(card);
-    });
-  }
-
-  function toggleAnimations(explicitState) {
-    if (typeof explicitState === "boolean") {
-      state.animationsPaused = explicitState;
-    } else {
-      state.animationsPaused = !state.animationsPaused;
-    }
-
-    // Reseta overrides individuais para que a preferência global seja soberana
-    document
-      .querySelectorAll(".visual-card.anim-force-running, .visual-card.anim-paused")
-      .forEach((card) => {
-        card.classList.remove("anim-force-running");
-        card.classList.remove("anim-paused");
-      });
-
-    updateAnimationsUI();
-    saveState();
-    showCloudSaveToast(
-      state.animationsPaused
-        ? "⏸ Animações dos diagramas pausadas (Atalho: P)"
-        : "▶ Animações dos diagramas ativas (Atalho: P)",
-      state.animationsPaused ? "info" : "success"
-    );
-  }
-
-  function syncVisualCardButton(card) {
-    const btn = card.querySelector(".visual-anim-toggle");
+  function syncCardAnimButton(card, btn) {
     if (!btn) return;
-    const isGloballyPaused = !!state.animationsPaused;
-    const isForceRunning = card.classList.contains("anim-force-running");
-    const isCardPaused = card.classList.contains("anim-paused");
-    const isEffectivePaused = (isGloballyPaused && !isForceRunning) || isCardPaused;
-
-    btn.classList.toggle("is-paused", isEffectivePaused);
-    const icon = btn.querySelector(".visual-anim-toggle-icon");
-    const text = btn.querySelector(".visual-anim-toggle-text");
-    if (icon) icon.textContent = isEffectivePaused ? "▶" : "⏸";
-    if (text) text.textContent = isEffectivePaused ? "Retomar" : "Pausar";
+    const isPaused = card.classList.contains("anim-paused");
+    btn.classList.toggle("is-paused", isPaused);
+    btn.innerHTML = isPaused
+      ? '<span class="visual-anim-toggle-icon">▶</span><span class="visual-anim-toggle-text">Retomar</span>'
+      : '<span class="visual-anim-toggle-icon">⏸</span><span class="visual-anim-toggle-text">Pausar</span>';
     btn.setAttribute(
       "title",
-      isEffectivePaused ? "Retomar esta animação" : "Pausar esta animação"
+      isPaused
+        ? "Retomar animação deste diagrama"
+        : "Pausar animação deste diagrama"
     );
   }
 
@@ -3544,28 +3468,22 @@
       const header = card.querySelector(".visual-card-header");
       if (!header) return;
 
-      if (header.querySelector(".visual-anim-toggle")) {
-        syncVisualCardButton(card);
+      const existingBtn = header.querySelector(".visual-anim-toggle");
+      if (existingBtn) {
+        syncCardAnimButton(card, existingBtn);
         return;
       }
 
       const toggleBtn = document.createElement("button");
       toggleBtn.type = "button";
       toggleBtn.className = "visual-anim-toggle";
-      toggleBtn.innerHTML =
-        '<span class="visual-anim-toggle-icon">⏸</span><span class="visual-anim-toggle-text">Pausar</span>';
+      toggleBtn.setAttribute("aria-label", "Pausar ou retomar animação");
+      syncCardAnimButton(card, toggleBtn);
 
       toggleBtn.addEventListener("click", function (e) {
         e.stopPropagation();
-        const isGloballyPaused = !!state.animationsPaused;
-        if (isGloballyPaused) {
-          card.classList.toggle("anim-force-running");
-          card.classList.remove("anim-paused");
-        } else {
-          card.classList.toggle("anim-paused");
-          card.classList.remove("anim-force-running");
-        }
-        syncVisualCardButton(card);
+        card.classList.toggle("anim-paused");
+        syncCardAnimButton(card, toggleBtn);
       });
 
       const badge = header.querySelector(".visual-card-badge");
@@ -3574,7 +3492,6 @@
       } else {
         header.appendChild(toggleBtn);
       }
-      syncVisualCardButton(card);
     });
   }
 
@@ -3583,7 +3500,6 @@
   // =========================================================================
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
-    updateAnimationsUI();
     updateTimerUI();
     updateGlobalCounters();
 
@@ -3630,18 +3546,6 @@
         saveState();
       });
 
-    // Controle de animações nos diagramas (Topbar e Sidebar)
-    document
-      .getElementById("btn-toggle-animations")
-      ?.addEventListener("click", function () {
-        toggleAnimations();
-      });
-    document
-      .getElementById("btn-sidebar-toggle-anim")
-      ?.addEventListener("click", function () {
-        toggleAnimations();
-      });
-
     document
       .getElementById("btn-export-progress")
       ?.addEventListener("click", exportProgressJSON);
@@ -3667,7 +3571,6 @@
               imported
             );
             applyTheme();
-            updateAnimationsUI();
             saveState();
             switchTab(currentTab);
           } catch (err) {
@@ -4056,23 +3959,6 @@
             "error"
           );
         }
-      }
-    });
-
-    // Atalho global P para pausar / retomar animações dos diagramas
-    window.addEventListener("keydown", function (ev) {
-      if (!ev.ctrlKey && !ev.metaKey && !ev.altKey && (ev.key === "p" || ev.key === "P")) {
-        const active = document.activeElement;
-        const tag = active ? active.tagName.toLowerCase() : "";
-        if (
-          tag === "input" ||
-          tag === "textarea" ||
-          (active && active.isContentEditable)
-        ) {
-          return;
-        }
-        ev.preventDefault();
-        toggleAnimations();
       }
     });
 

@@ -1653,56 +1653,15 @@ body {
 .anim-trace { stroke-dasharray: 400; animation: traceCurve 4.5s ease-out infinite; }
 .anim-pole-shift { animation: moveDot 4s ease-in-out infinite; }
 
-/* Animation Controls (Pausar / Retomar Animações dos Diagramas) */
-.anim-status-pill {
-  font-family: var(--font-mono);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  padding: 5px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 0.72rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.anim-status-pill:hover {
-  border-color: var(--accent-blue);
-  color: var(--text-primary);
-  background: var(--bg-hover);
-}
-
-.anim-status-pill.is-paused {
-  border-color: rgba(235, 203, 139, 0.55);
-  background: rgba(235, 203, 139, 0.12);
-  color: var(--accent-yellow);
-}
-
-.anim-status-pill.is-paused:hover {
-  background: rgba(235, 203, 139, 0.2);
-  border-color: var(--accent-yellow);
-}
-
-.anim-status-icon {
-  font-size: 0.76rem;
-  line-height: 1;
-}
-
-/* Botão individual nos cabeçalhos dos cartões visuais (.visual-card) */
+/* Botão individual nos cabeçalhos dos diagramas visuais (.visual-card) */
 .visual-anim-toggle {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
+  gap: 5px;
+  padding: 3px 8px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid #3b4252;
@@ -1724,25 +1683,17 @@ body {
   color: var(--accent-yellow);
 }
 
-/* Regras de Pausa em Cascata */
-body.animations-paused .visual-svg-wrap *,
-body.animations-paused .anim-ccw,
-body.animations-paused .anim-ccw-slow,
-body.animations-paused .anim-cw,
-body.animations-paused .anim-flow,
-body.animations-paused .anim-pulse,
-body.animations-paused .anim-trace,
-body.animations-paused .anim-pole-shift,
-body.animations-paused svg [class*="anim-"],
+/* Regra de congelamento individual do diagrama */
 .visual-card.anim-paused .visual-svg-wrap *,
-.visual-card.anim-paused svg [class*="anim-"] {
+.visual-card.anim-paused svg [class*="anim-"],
+.visual-card.anim-paused .anim-ccw,
+.visual-card.anim-paused .anim-ccw-slow,
+.visual-card.anim-paused .anim-cw,
+.visual-card.anim-paused .anim-flow,
+.visual-card.anim-paused .anim-pulse,
+.visual-card.anim-paused .anim-trace,
+.visual-card.anim-paused .anim-pole-shift {
   animation-play-state: paused !important;
-}
-
-/* Permite forçar execução individual mesmo se global estiver pausado */
-body.animations-paused .visual-card.anim-force-running .visual-svg-wrap *,
-body.animations-paused .visual-card.anim-force-running svg [class*="anim-"] {
-  animation-play-state: running !important;
 }
 
 /* Cloud Sync Pill & Modal */
@@ -2059,15 +2010,9 @@ body.animations-paused .visual-card.anim-force-running svg [class*="anim-"] {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .cloud-status-pill,
-  .anim-status-pill {
+  .cloud-status-pill {
     padding: 5px 8px;
     font-size: 0.7rem;
-  }
-  @media (max-width: 580px) {
-    .anim-status-pill .anim-status-label {
-      display: none;
-    }
   }
   .content-container {
     padding: 14px 12px;
