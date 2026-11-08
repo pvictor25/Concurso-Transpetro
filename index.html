@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-  <script>window.APP_BUILD_HASH = "576b410e3e";</script>
-  <link rel="stylesheet" id="main-stylesheet" href="styles.css?v=576b410e3e">
+  <script>window.APP_BUILD_HASH = "81f5fadd03";</script>
+  <link rel="stylesheet" id="main-stylesheet" href="styles.css?v=81f5fadd03">
 </head>
 <body>
 
@@ -59,8 +59,8 @@
       <li class="nav-item">
         <button class="nav-btn active" data-tab="dashboard">
           <span class="nav-btn-left">
-            <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-            <span>Visão Geral &amp; Sessão</span>
+            <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Estudo Guiado (Hoje)</span>
           </span>
         </button>
       </li>
@@ -95,7 +95,7 @@
         <button class="nav-btn" data-tab="simulado">
           <span class="nav-btn-left">
             <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-            <span>Simulados &amp; Corte</span>
+            <span>Simulados &amp; Desempenho</span>
           </span>
         </button>
       </li>
@@ -138,7 +138,6 @@
         </button>
         <div class="topbar-info">
           <span class="countdown-pill" id="countdown-days-text">PROVA: 06/12/2026</span>
-          <span class="salary-pill">REMUNERAÇÃO MÍNIMA: R$ 14.973,62 (BASE: R$ 8.647,34)</span>
         </div>
       </div>
       <div class="topbar-progress" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
@@ -165,138 +164,10 @@
     <main class="content-container">
 
       <!-- ===================================================================
-           ABA 1: DASHBOARD & MISSÃO DE HOJE
+           ABA 1: ESTUDO GUIADO LINEAR (TEORIA -> QUESTÕES DO TEMA -> REVISÃO)
            =================================================================== -->
       <section class="tab-section active" id="tab-dashboard">
-        <div class="section-header">
-          <div>
-            <div class="section-eyebrow">ENGENHARIA ELÉTRICA · ÊNFASE 23 · NÍVEL SUPERIOR JÚNIOR</div>
-            <h2>Painel de Controle e Estudo Diário</h2>
-            <p>Planejamento estruturado de <strong>30 minutos diários (10m Teoria + 15m Questões + 5m Revisão)</strong> até a prova objetiva em <strong>06/12/2026</strong>.</p>
-          </div>
-        </div>
-
-        <!-- HERO CARD: MISSÃO DO DIA -->
         <div id="hero-mission-container"></div>
-
-        <!-- KPI CARDS -->
-        <div class="grid-4">
-          <div class="stat-card">
-            <span class="stat-label">Progresso do Cronograma</span>
-            <div class="stat-value" id="stat-days-val">0 / 30</div>
-            <div class="stat-sub" id="stat-days-sub">0h acumuladas (meta: 15h)</div>
-          </div>
-          <div class="stat-card yellow">
-            <span class="stat-label">Questões Resolvidas</span>
-            <div class="stat-value" id="stat-questions-val">0 / 85</div>
-            <div class="stat-sub" id="stat-questions-sub">70 Prova 2023.2 + 15 Inéditas</div>
-          </div>
-          <div class="stat-card blue">
-            <span class="stat-label">Módulos Teóricos</span>
-            <div class="stat-value" id="stat-theory-val">0 / 10</div>
-            <div class="stat-sub" id="stat-theory-sub">8 Blocos Específicos + PT + EN</div>
-          </div>
-          <div class="stat-card purple">
-            <span class="stat-label">Critério de Corte (Fase 1)</span>
-            <div class="stat-value" style="font-size:1.25rem;">2× (Vagas + CR)</div>
-            <div class="stat-sub">50 Qs Específicas definem habilitação (44 RJ / 22 SP)</div>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <!-- RAIO-X ESTATÍSTICO DA PROVA ANTERIOR -->
-          <div class="card">
-            <div class="card-title">
-              <span>Distribuição Histórica — Prova Transpetro 2023.2 (Prova 22)</span>
-              <span class="badge badge-green">70 Questões</span>
-            </div>
-            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
-              Incidência real por bloco temático na última edição da banca Cesgranrio para priorização de estudo:
-            </p>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Bloco do Edital</th>
-                    <th>Qtd.</th>
-                    <th>Peso</th>
-                    <th>Prioridade</th>
-                    <th>Questões (2023.2)</th>
-                  </tr>
-                </thead>
-                <tbody id="raiox-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- CADERNO DE FÓRMULAS & ANOTAÇÕES PESSOAIS -->
-          <div class="card">
-            <div class="card-title">
-              <span>Caderno Técnico de Fórmulas e Notas Pessoais</span>
-              <span class="badge badge-blue">Auto-Save</span>
-            </div>
-            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:10px;">
-              Registre relações matemáticas, itens normativos (NR-10, NBR 5410, Lei 14.133) e observações de resolução durante os 5 minutos finais de cada sessão:
-            </p>
-            <textarea
-              id="personal-notes-area"
-              class="form-input"
-              style="width:100%;min-height:295px;resize:vertical;font-family:'IBM Plex Mono',monospace;font-size:0.83rem;line-height:1.6;"
-              placeholder="Registre suas notas técnicas e fórmulas de revisão..."
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <!-- DESEMPENHO POR BLOCO EM TEMPO REAL -->
-          <div class="card">
-            <div class="card-title">
-              <span>Rendimento por Bloco Temático</span>
-              <span class="badge badge-purple">Métricas</span>
-            </div>
-            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
-              Taxa de acerto consolidada por disciplina conforme resolução das 85 questões disponíveis:
-            </p>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Bloco / Disciplina</th>
-                    <th>Resolvidas</th>
-                    <th>Acertos</th>
-                    <th>Taxa</th>
-                    <th>Ação</th>
-                  </tr>
-                </thead>
-                <tbody id="block-performance-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- FLASHCARDS DE REVISÃO RÁPIDA (5 MINUTOS FINAIS) -->
-          <div class="card">
-            <div class="card-title">
-              <span>Cartões de Revisão Técnica (Etapa 3 · 5 min)</span>
-              <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 12</span>
-            </div>
-            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
-              Verificação rápida de fórmulas de curto-circuito, componentes simétricas, máquinas, controle e normas:
-            </p>
-            <div
-              id="flashcard-box"
-              class="flashcard-surface"
-              title="Clique para alternar entre pergunta e resposta"
-            >
-              <div class="flashcard-side-tag" id="flashcard-side-label">QUESTÃO DE REVISÃO · CLIQUE PARA REVELAR</div>
-              <div class="flashcard-body-text" id="flashcard-text"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
-              <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
-              <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">Alternar Frente / Verso</button>
-              <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
-            </div>
-          </div>
-        </div>
       </section>
 
       <!-- ===================================================================
@@ -438,6 +309,82 @@
 
         <!-- ÁREA DO SIMULADO EM EXECUÇÃO -->
         <div id="simulado-stage-container"></div>
+
+        <!-- KPI CARDS DE DESEMPENHO GERAL -->
+        <div class="grid-4" style="margin-top:8px;">
+          <div class="stat-card">
+            <span class="stat-label">Progresso do Cronograma</span>
+            <div class="stat-value" id="stat-days-val">0 / 30</div>
+            <div class="stat-sub" id="stat-days-sub">0h acumuladas (meta: 15h)</div>
+          </div>
+          <div class="stat-card yellow">
+            <span class="stat-label">Questões Resolvidas</span>
+            <div class="stat-value" id="stat-questions-val">0 / 85</div>
+            <div class="stat-sub" id="stat-questions-sub">70 Prova 2023.2 + 15 Inéditas</div>
+          </div>
+          <div class="stat-card blue">
+            <span class="stat-label">Módulos Teóricos</span>
+            <div class="stat-value" id="stat-theory-val">0 / 10</div>
+            <div class="stat-sub" id="stat-theory-sub">8 Blocos Específicos + PT + EN</div>
+          </div>
+          <div class="stat-card purple">
+            <span class="stat-label">Critério de Corte (Fase 1)</span>
+            <div class="stat-value" style="font-size:1.25rem;">2× (Vagas + CR)</div>
+            <div class="stat-sub">50 Qs Específicas definem habilitação (44 RJ / 22 SP)</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- DESEMPENHO POR BLOCO EM TEMPO REAL -->
+          <div class="card">
+            <div class="card-title">
+              <span>Rendimento por Bloco Temático</span>
+              <span class="badge badge-purple">Métricas</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Taxa de acerto consolidada por disciplina conforme resolução das 85 questões disponíveis:
+            </p>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bloco / Disciplina</th>
+                    <th>Resolvidas</th>
+                    <th>Acertos</th>
+                    <th>Taxa</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody id="block-performance-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- DISTRIBUIÇÃO HISTÓRICA DA PROVA 2023.2 -->
+          <div class="card">
+            <div class="card-title">
+              <span>Distribuição Histórica — Prova Transpetro 2023.2 (Prova 22)</span>
+              <span class="badge badge-green">70 Questões</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+              Incidência real por bloco temático na última edição da banca Cesgranrio:
+            </p>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bloco do Edital</th>
+                    <th>Qtd.</th>
+                    <th>Peso</th>
+                    <th>Prioridade</th>
+                    <th>Questões (2023.2)</th>
+                  </tr>
+                </thead>
+                <tbody id="raiox-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
         <div class="grid-2">
           <!-- CALCULADORA DE CORTE E ELIMINAÇÃO -->
@@ -602,8 +549,8 @@
   <!-- BARRA DE NAVEGAÇÃO INFERIOR PARA SMARTPHONES E TABLETS -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegação rápida mobile">
     <button class="mobile-nav-btn active" data-tab="dashboard">
-      <svg class="mobile-nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-      <span class="mobile-nav-label">Painel</span>
+      <svg class="mobile-nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span class="mobile-nav-label">Estudar</span>
     </button>
     <button class="mobile-nav-btn" data-tab="plano">
       <svg class="mobile-nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -715,10 +662,10 @@
   </div>
 
   <!-- SCRIPTS LOCAIS (FUNCIONA 100% OFFLINE DIRETO NO NAVEGADOR) -->
-  <script src="dados_edital_plano.js?v=576b410e3e"></script>
-  <script src="dados_teoria.js?v=576b410e3e"></script>
-  <script src="dados_questoes_parte1.js?v=576b410e3e"></script>
-  <script src="dados_questoes_parte2.js?v=576b410e3e"></script>
-  <script src="app.js?v=576b410e3e"></script>
+  <script src="dados_edital_plano.js?v=81f5fadd03"></script>
+  <script src="dados_teoria.js?v=81f5fadd03"></script>
+  <script src="dados_questoes_parte1.js?v=81f5fadd03"></script>
+  <script src="dados_questoes_parte2.js?v=81f5fadd03"></script>
+  <script src="app.js?v=81f5fadd03"></script>
 </body>
 </html>

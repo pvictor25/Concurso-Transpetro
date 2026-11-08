@@ -10,6 +10,7 @@ window.DADOS_TEORIA = [
     prioridade: "Altíssima",
     subtopicosEdital: "4.1 Valores por unidade (p.u.); 4.2 Componentes simétricas; 4.3 Diagramas Sequenciais (Linhas, Trafos, Geradores e Motores); 4.4 Faltas simétricas e assimétricas; 4.5 Cálculo de correntes de curto-circuito; 4.6 Geração, transmissão e distribuição; 4.7 Proteção de sistemas elétricos.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-4-1" data-days="1,23">
       <h3>4.1 Sistema por Unidade (p.u.) e Diagrama Unifilar</h3>
       <p>O sistema <strong>por unidade (p.u.)</strong> normaliza grandezas elétricas (tensão, corrente, potência e impedância) em relação a valores de base escolhidos por setor do sistema elétrico, eliminando a necessidade de referir impedâncias entre lados de alta e baixa tensão de transformadores.</p>
       <div class="formula-box">
@@ -23,7 +24,13 @@ window.DADOS_TEORIA = [
         1) Se um equipamento conectado em estrela tem potência nominal $S_{\\text{nom}} = 400\\text{ kVA}$ e tensão $10\\text{ kV}$ sem especificar impedância interna percentual, a impedância nominal da própria carga é $1,0\\text{ p.u.}$ na sua própria base! Mudando para $S_{\\text{base}} = 100\\text{ kVA}$ (mesma tensão $10\\text{ kV}$): $Z_{\\text{pu}} = 1,0 \\times \\frac{100}{400} = \\mathbf{0,25\\text{ p.u.}}$<br>
         2) No <strong>diagrama unifilar</strong> (Q39), as grandezas representadas fazem referência à <strong>tensão de linha</strong>, <strong>corrente de linha</strong> e à <strong>impedância de uma das fases na ligação estrela (ou do equivalente estrela $Z_Y = Z_\\Delta / 3$ se a carga for delta)</strong>!
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>4.1 Sistema por Unidade (p.u.) e Diagrama Unifilar</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="37,39,56" data-practice-label="4.1 Sistema p.u. e Diagrama Unifilar" data-return-theory="bloco4">Resolver as 3 Questões deste Tópico (Q37, Q39, Q56) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-4-2" data-days="2,23,28">
       <h3>4.2 Componentes Simétricas e Teorema de Fortescue</h3>
       <p>Pelo <strong>Teorema de Fortescue</strong>, qualquer sistema trifásico desequilibrado de fasores ($\\dot{V}_A, \\dot{V}_B, \\dot{V}_C$ ou $\\dot{I}_A, \\dot{I}_B, \\dot{I}_C$) pode ser decomposto em três sistemas equilibrados de sequência:</p>
       <ul>
@@ -112,7 +119,13 @@ window.DADOS_TEORIA = [
         • A coluna $[1, a^2, a]^T$ é SEMPRE a <strong>Sequência Positiva</strong> (pois na fase B o fasor positivo atrasa $120^\\circ$, multiplicando por $a^2 = 1\\angle -120^\\circ$).<br>
         • A coluna $[1, a, a^2]^T$ é SEMPRE a <strong>Sequência Negativa</strong>.
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>4.2 Componentes Simétricas e Teorema de Fortescue</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="38,49,75" data-practice-label="4.2 Componentes Simétricas (Fortescue)" data-return-theory="bloco4">Resolver as 3 Questões deste Tópico (Q38, Q49, Q75) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-4-3" data-days="3,23,28">
       <h3>4.3 Diagramas de Sequência Zero de Transformadores</h3>
       <p>A corrente de sequência zero só circula se houver caminho de retorno pela terra/neutro (em estrela aterrada) ou se puder circular em malha fechada interna (em delta).</p>
       <div class="table-responsive">
@@ -202,7 +215,13 @@ window.DADOS_TEORIA = [
         <strong>3) Curto-Circuito Fase-Fase Franco entre Fases B e C ($2\\phi$ — Q40 de 2023.2):</strong>
         $$\\dot{I}_A = 0 \\;,\\; \\dot{I}_B = -\\dot{I}_C \\;,\\; \\dot{I}_{A0} = 0 \\;,\\; \\dot{I}_{A1} = -\\dot{I}_{A2} = \\frac{\\dot{E}}{Z_1 + Z_2} \\implies \\mathbf{|\\dot{I}_B| = \\frac{\\sqrt{3}|\\dot{E}|}{|Z_1 + Z_2|}}$$
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>4.3 a 4.5 Sequência Zero e Cálculo de Curto-Circuito</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="36,40,50" data-practice-label="4.3 a 4.5 Sequência Zero e Curto-Circuito" data-return-theory="bloco4">Resolver as 3 Questões deste Tópico (Q36, Q40, Q50) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-4-6" data-days="1,23">
       <h3>4.6 Transmissão: Efeito Pelicular (Skin Effect — Q21 de 2023.2)</h3>
       <p>Em corrente alternada (CA), o maior enlaçamento de fluxo magnético interno no eixo central do condutor eleva a reatância indutiva no centro, forçando a corrente elétrica a concentrar-se na periferia ("pele" do condutor):</p>
       <div class="formula-box">
@@ -240,7 +259,13 @@ window.DADOS_TEORIA = [
           Em CA, a redução da densidade de corrente $J$ no centro do condutor diminui a seção transversal útil, <strong>aumentando a resistência aparente $R_{\\text{CA}}$</strong> da linha de transmissão (Gabarito da Q21!).
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>4.6 Efeito Pelicular em Linhas CA</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="21" data-practice-label="4.6 Efeito Pelicular (Skin Effect)" data-return-theory="bloco4">Resolver a Questão deste Tópico (Q21) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-4-7" data-days="4,23,29">
       <h3>4.7 Proteção de Sistemas Elétricos (Tabela de Funções ANSI)</h3>
       <div class="table-responsive">
         <table class="data-table">
@@ -262,6 +287,11 @@ window.DADOS_TEORIA = [
           </tbody>
         </table>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>4.7 Proteção de Sistemas Elétricos (ANSI)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="29,54,76" data-practice-label="4.7 Proteção de Sistemas Elétricos (ANSI)" data-return-theory="bloco4">Resolver as 3 Questões deste Tópico (Q29, Q54, Q76) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -272,6 +302,7 @@ window.DADOS_TEORIA = [
     prioridade: "Altíssima",
     subtopicosEdital: "2.1 Circuitos CC e CA (RL, RC, RLC), Kirchhoff, Norton e Thevenin; 2.2 Circuitos senoidais monofásicos e trifásicos equilibrados, Potência e Fator de Potência; 2.3 Fasores, Indutância, Capacitância, Potência e Energia; 2.4 Funções Singulares, Resposta livre, ao impulso e ao degrau.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-2-1" data-days="5,22,28">
       <h3>2.1 Teoremas de Thévenin e Norton, Máxima Transferência e Malhas Infinitas</h3>
       <div class="formula-box">
         <strong>Equivalente de Thévenin ($V_{Th}, Z_{Th}$) e Máxima Transferência de Potência Ativa em CA:</strong>
@@ -279,7 +310,13 @@ window.DADOS_TEORIA = [
         <strong>Malha Infinita de Capacitores (Q62 de 2023.2):</strong>
         $$C_{eq} = C + \\frac{C \\cdot C_{eq}}{C + 2C_{eq}} \\implies 2C_{eq}^2 - 2C\\cdot C_{eq} - C^2 = 0 \\implies C_{eq} = \\frac{C(1 + \\sqrt{3})}{2}$$
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>2.1 Thévenin, Norton e Malhas Infinitas</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="44,62,72" data-practice-label="2.1 Thévenin e Associação de Circuitos" data-return-theory="bloco2">Resolver as 3 Questões deste Tópico (Q44, Q62, Q72) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-2-2" data-days="6,7,22">
       <h3>2.2 e 2.3 Circuitos Senoidais, Fasores, Potência Complexa e Trifásicos</h3>
       <div class="formula-box">
         <strong>Impedância e Potência Complexa Monofásica (Q33 e Q51):</strong>
@@ -327,7 +364,13 @@ window.DADOS_TEORIA = [
         $$\\text{Seq. } ACB: \\quad \\dot{V}_{AN} = V_f\\angle\\theta_0 \\;,\\; \\mathbf{\\dot{V}_{BN} = V_f\\angle(\\theta_0 + 120^\\circ)} \\;,\\; \\dot{V}_{CN} = V_f\\angle(\\theta_0 - 120^\\circ)$$
         $$P_{3\\phi} = 3 V_f I_f \\cos\\varphi = \\sqrt{3} V_L I_L \\cos\\varphi \\qquad ; \\qquad Q_C = P_{3\\phi}\\left(\\operatorname{tg}\\varphi_1 - \\operatorname{tg}\\varphi_2\\right)$$
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>2.2 e 2.3 Fasores CA, Valor RMS e Trifásicos (ABC/ACB)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="33,34,51,63,73,74" data-practice-label="2.2 e 2.3 Fasores CA, RMS e Sistemas Trifásicos" data-return-theory="bloco2">Resolver as 6 Questões deste Tópico (Q33, Q34, Q51, Q63, Q73, Q74) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-2-4" data-days="8,22">
       <h3>2.4 Transitórios de 1ª Ordem (Circuitos RC e RL ao Degrau)</h3>
       <div class="formula-box">
         <strong>1) Circuito RC Série (Carga do Capacitor — Q48 de 2023.2):</strong>
@@ -368,6 +411,11 @@ window.DADOS_TEORIA = [
           </svg>
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>2.4 Transitórios de 1ª Ordem (RC e RL)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="48,67" data-practice-label="2.4 Transitórios de 1ª Ordem (RC e RL)" data-return-theory="bloco2">Resolver as 2 Questões deste Tópico (Q48, Q67) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -378,6 +426,7 @@ window.DADOS_TEORIA = [
     prioridade: "Alta",
     subtopicosEdital: "6.1 Princípios de Conversão de Energia; 6.2 Transformadores monofásicos e trifásicos e Autotransformadores; 6.3 Máquinas de corrente contínua (CC); 6.4 Máquinas trifásicas síncronas; 6.5 Motores trifásicos assíncronos (MIT) e partida; 6.6 Estratégias de acionamento e controle.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-6-2" data-days="9,24">
       <h3>6.2 Transformadores e Autotransformadores</h3>
       <div class="formula-box">
         <strong>Ensaio de Curto-Circuito e Rendimento (Q23 de 2023.2):</strong>
@@ -421,7 +470,13 @@ window.DADOS_TEORIA = [
           Dos $60\\text{ kVA}$ entregues à carga, $20\\text{ kVA}$ passam por condução direta e apenas $S_{\\text{isolado}} = 200\\text{ V} \\times 200\\text{ A} = \\mathbf{40\\text{ kVA}}$ são transformados magneticamente pelos enrolamentos!
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>6.2 Transformadores e Autotransformadores</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="23,24,79" data-practice-label="6.2 Transformadores e Autotransformadores" data-return-theory="bloco6">Resolver as 3 Questões deste Tópico (Q23, Q24, Q79) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-6-3" data-days="10,11,24,28">
       <h3>6.3 e 6.4 Máquinas de Corrente Contínua (CC) e Máquinas Síncronas</h3>
       <div class="formula-box">
         <strong>Motor CC Shunt (Derivação) com Fluxo Constante (Q25 de 2023.2):</strong>
@@ -482,6 +537,11 @@ window.DADOS_TEORIA = [
           </svg>
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>6.3 a 6.6 Máquinas CC, Síncronas e Motores de Indução (MIT)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="25,26,27,28,55,80" data-practice-label="6.3 a 6.6 Máquinas CC, Síncronas e MIT" data-return-theory="bloco6">Resolver as 6 Questões deste Tópico (Q25–Q28, Q55, Q80) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -492,6 +552,7 @@ window.DADOS_TEORIA = [
     prioridade: "Alta",
     subtopicosEdital: "5.1 Dimensionamento de condutores; 5.2 Proteção e coordenação; 5.3 Sistemas de aterramento; 5.4 Projeto de subestação e arranjos; 5.5 Barramentos, malhas de terra e equipamentos de manobra em AT; 5.6 SPDA (NBR 5419).",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-5-1" data-days="15,23">
       <h3>5.1 e 5.2 Dimensionamento de Condutores e Coordenação de Proteção (NBR 5410)</h3>
       <div class="formula-box">
         <strong>Coordenação Obrigatória contra Sobrecargas (NBR 5410 item 5.3.4.1 — Q30 de 2023.2):</strong>
@@ -499,7 +560,13 @@ window.DADOS_TEORIA = [
         onde $I_L$ (ou $I_B$) é a corrente de projeto do circuito, $I_d$ (ou $I_N$) é a corrente nominal do dispositivo de proteção e $I_c$ (ou $I_Z$) é a capacidade de condução de corrente dos condutores.
       </div>
       <p><strong>DPS na entrada sem neutro (Q22 de 2023.2):</strong> Os DPS conectam-se em <strong>paralelo</strong>, cada um entre um condutor de fase e o <strong>BEP (Barramento de Equipotencialização Principal)</strong> ou a <strong>barra PE</strong> do quadro.</p>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>5.1 e 5.2 NBR 5410: Condutores, DPS e Sobrecarga</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="22,30,31,59" data-practice-label="5.1 e 5.2 NBR 5410 (Condutores, DPS e Sobrecarga)" data-return-theory="bloco5">Resolver as 4 Questões deste Tópico (Q22, Q30, Q31, Q59) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-5-3" data-days="15,16,23,27">
       <h3>5.3 e 5.6 Esquemas de Aterramento (TT, TN, IT), Método de Wenner e SPDA (NBR 5419)</h3>
       <div class="formula-box">
         <strong>Resistividade Aparente do Solo pelo Método de Wenner (4 Hastes Espaçadas de $a$):</strong>
@@ -556,6 +623,11 @@ window.DADOS_TEORIA = [
           </svg>
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>5.3 a 5.6 Subestações, Malha de Terra (Wenner) e SPDA</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="32,57,77,78" data-practice-label="5.3 a 5.6 Subestações, Wenner e SPDA" data-return-theory="bloco5">Resolver as 4 Questões deste Tópico (Q32, Q57, Q77, Q78) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -566,6 +638,7 @@ window.DADOS_TEORIA = [
     prioridade: "Alta",
     subtopicosEdital: "7.1 Modelo de Sistemas Lineares, Laplace, Função de Transferência; 7.2 Diagrama em Blocos, Malha aberta e fechada; 7.3 Sistemas de 2ª ordem; 7.4 Estabilidade, Lugar das Raízes e Diagrama de Bode; 7.5 Espaço de Estado, Polos e Zeros; 7.6 Sistemas Discretos e Transformada Z.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-7-1" data-days="17,24,28">
       <h3>7.1 a 7.4 Sistemas de 2ª Ordem, Estabilidade e Lugar das Raízes</h3>
       <div class="formula-box">
         <strong>Forma Canônica Mônica de 2ª Ordem (Q69 de 2023.2):</strong>
@@ -616,13 +689,24 @@ window.DADOS_TEORIA = [
           </svg>
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>7.1 a 7.4 Sistemas de 2ª Ordem, Estabilidade e Root Locus</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="47,68,69,81" data-practice-label="7.1 a 7.4 Sistemas de 2ª Ordem e Estabilidade" data-return-theory="bloco7">Resolver as 4 Questões deste Tópico (Q47, Q68, Q69, Q81) →</button>
+      </div>
+      </div>
 
+      <div class="theory-subtopic" id="sub-7-5" data-days="18,24,28">
       <h3>7.5 e 7.6 Espaço de Estados e Transformada Z Discreta</h3>
       <div class="formula-box">
         <strong>Conversão Espaço de Estados $\\to$ Função de Transferência (Q45 e Q46):</strong>
         $$\\begin{cases} \\dot{x}(t) = A x(t) + B u(t) \\\\ y(t) = C x(t) + D u(t) \\end{cases} \\implies G(s) = C(sI - A)^{-1}B + D = \\frac{C \\cdot \\operatorname{adj}(sI - A) \\cdot B}{\\det(sI - A)} + D$$
         <strong>Transformada Z de Equação a Diferenças Causal (Q66 e Q70):</strong>
         $$x(n) - \\alpha x(n-1) - \\beta x(n-2) = \\delta(n) \\implies X(z) = \\frac{1}{1 - \\alpha z^{-1} - \\beta z^{-2}} = \\frac{z^2}{z^2 - \\alpha z - \\beta}$$
+      </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>7.5 e 7.6 Espaço de Estados e Controle Discreto (Transformada Z)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="45,46,66,70" data-practice-label="7.5 e 7.6 Espaço de Estados e Transformada Z" data-return-theory="bloco7">Resolver as 4 Questões deste Tópico (Q45, Q46, Q66, Q70) →</button>
+      </div>
       </div>
     `
   },
@@ -634,6 +718,7 @@ window.DADOS_TEORIA = [
     prioridade: "Média-Alta",
     subtopicosEdital: "1.1 Matrizes, sistemas de equações, determinantes, Transformada de Laplace e aplicações; 1.2 Operações com vetores, produto escalar e produto vetorial; 1.3 Números complexos e funções de variáveis complexas.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-1-1" data-days="19,22,28">
       <h3>1.1 Transformada de Laplace e Expansão em Frações Parciais</h3>
       <div class="formula-box">
         $$\\mathcal{L}\\{\\delta(t)\\} = 1 \\quad ; \\quad \\mathcal{L}\\{u(t)\\} = \\frac{1}{s} \\quad ; \\quad \\mathcal{L}\\{e^{at}u(t)\\} = \\frac{1}{s - a} \\quad ; \\quad \\mathcal{L}\\{\\operatorname{sen}(\\omega t)\\} = \\frac{\\omega}{s^2 + \\omega^2}$$
@@ -683,6 +768,11 @@ window.DADOS_TEORIA = [
       <div class="formula-box">
         $$f(z) = \\frac{1}{z + 1} = \\frac{1}{(x + 1) + jy} \\cdot \\frac{(x + 1) - jy}{(x + 1) - jy} = \\underbrace{\\frac{x + 1}{x^2 + y^2 + 2x + 1}}_{u(x,y)} + j\\underbrace{\\frac{-y}{x^2 + y^2 + 2x + 1}}_{v(x,y)}$$
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>1.1 a 1.3 Laplace, Álgebra Vetorial e Variáveis Complexas</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="43,61,64,65,71" data-practice-label="Bloco 1: Matemática Aplicada" data-return-theory="bloco1">Resolver as 5 Questões deste Tópico (Q43, Q61, Q64, Q65, Q71) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -693,6 +783,7 @@ window.DADOS_TEORIA = [
     prioridade: "Média-Alta",
     subtopicosEdital: "3.1 Instrumentos (voltímetro, amperímetro, frequencímetro, ponte de Wheatstone, capacímetro, ohmímetro, analisador de espectro, osciloscópio); 3.2 Unidades SI; 3.3 TP e TC; 3.4 Medição de Potência em CA; 3.5 Medição de energia ativa e reativa.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-3-1" data-days="12,22,26">
       <h3>3.1 a 3.4 Instrumentos, Análise Dimensional (SI), TC/TP e Wattímetros</h3>
       <div class="formula-box">
         <strong>1) Medição de Potência com Osciloscópio e Resistor Shunt (Q52 de 2023.2):</strong>
@@ -744,6 +835,11 @@ window.DADOS_TEORIA = [
           </svg>
         </div>
       </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>3.1 a 3.5 Medidas Elétricas, SI, TC/TP e Wattímetros</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="35,41,42,52,60" data-practice-label="Bloco 3: Medidas Elétricas e SI" data-return-theory="bloco3">Resolver as 5 Questões deste Tópico (Q35, Q41, Q42, Q52, Q60) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -754,6 +850,7 @@ window.DADOS_TEORIA = [
     prioridade: "Garantir 100%",
     subtopicosEdital: "8.1 Noções da Lei nº 14.133/2021, no que se refere a obras e serviços de engenharia; 8.2 NR10, Segurança em instalações e serviços em eletricidade.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-8-1" data-days="20,24,29">
       <h3>8.2 NR-10: Habilitação, Qualificação, Capacitação e Zonas de Risco</h3>
 
       <!-- ANIMAÇÃO 11: ZONAS DE RISCO E CONTROLADA DA NR-10 -->
@@ -831,6 +928,11 @@ window.DADOS_TEORIA = [
         <li><strong>Concorrência (Art. 6º, XXXVIII):</strong> Obras e serviços especiais de engenharia.</li>
         <li><strong>Contratação Integrada vs. Semi-integrada:</strong> Na <strong>Integrada</strong>, o contratado elabora os projetos <strong>básico e executivo</strong>; na <strong>Semi-integrada</strong>, elabora apenas o projeto <strong>executivo</strong>.</li>
       </ul>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>8.1 e 8.2 NR-10 e Nova Lei de Licitações (Lei 14.133/2021)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="53,58,82,83" data-practice-label="Bloco 8: NR-10 e Lei 14.133/2021" data-return-theory="bloco8">Resolver as 4 Questões deste Tópico (Q53, Q58, Q82, Q83) →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -841,6 +943,7 @@ window.DADOS_TEORIA = [
     prioridade: "Essencial",
     subtopicosEdital: "1. Compreensão de textos; 2. Ortografia; 3. Coesão textual; 4. Significação das palavras; 5. Tempos e modos verbais; 6. Classes de palavras; 7. Coordenação e subordinação; 8. Pontuação; 9. Concordância; 10. Regência; 11. Crase; 12. Colocação pronominal.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-pt-1" data-days="13,14,25">
       <h3>Mapa das 10 Questões de Português da Cesgranrio (Prova 2023.2)</h3>
       <ul>
         <li><strong>Compreensão e Interpretação (Q1 a Q4):</strong> Identificar reminiscência (<em>"Estou me vendo..."</em>), marcas de insegurança (<em>"rodeios"</em> e <em>"gaguejar"</em>) e causa do receio da narradora.</li>
@@ -849,6 +952,11 @@ window.DADOS_TEORIA = [
         <li><strong>Pontuação — Aposto Explicativo entre Vírgulas (Q7):</strong> <em>"a minha avó, <u>Pedrina Perucchi</u>, era italiana"</em> equivale a <em>"Os poemas, <u>textos de uma beleza sem igual</u>, encantam seus leitores"</em>.</li>
         <li><strong>Correlação de Tempos e Modos Verbais (Q8):</strong> <em>"A autora também <strong>teria sido lida</strong> se <strong>tivesse escrito</strong> seus contos em outra língua"</em> (Futuro do Pretérito Composto $\\leftrightarrow$ Pretérito Mais-Que-Perfeito Composto do Subjuntivo).</li>
       </ul>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>Língua Portuguesa (Padrão Cesgranrio)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="1,2,3,4,5,6,7,8,9,10,84" data-practice-label="Língua Portuguesa (Cesgranrio)" data-return-theory="portugues">Resolver as 11 Questões de Português →</button>
+      </div>
+      </div>
     `
   },
   {
@@ -859,6 +967,7 @@ window.DADOS_TEORIA = [
     prioridade: "Essencial",
     subtopicosEdital: "1. Compreensão de texto escrito em língua inglesa; 2. Itens gramaticais relevantes para a compreensão dos conteúdos semânticos.",
     conteudoHTML: `
+      <div class="theory-subtopic" id="sub-en-1" data-days="21,25">
       <h3>Mapa das 10 Questões de Inglês da Cesgranrio (Prova 2023.2)</h3>
       <div class="table-responsive">
         <table class="data-table">
@@ -887,6 +996,11 @@ window.DADOS_TEORIA = [
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="subtopic-cta-bar">
+        <span>Fim do tópico <strong>Língua Inglesa (Inglês Instrumental)</strong></span>
+        <button class="btn btn-primary btn-sm" data-practice-qids="11,12,13,14,15,16,17,18,19,20,85" data-practice-label="Língua Inglesa (Cesgranrio)" data-return-theory="ingles">Resolver as 11 Questões de Inglês →</button>
+      </div>
       </div>
     `
   }

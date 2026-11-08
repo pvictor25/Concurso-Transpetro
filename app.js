@@ -49,8 +49,14 @@
   let currentTab = "dashboard";
   let currentTheoryId = "bloco4";
   let currentPlanFilter = "todos";
-  let customQuestionIdsFilter = null; // Array de IDs quando filtrado a partir de um Dia do Plano
+  let customQuestionIdsFilter = null; // Array de IDs quando filtrado a partir de um Tópico/Dia
   let customFilterLabel = "";
+  let returnToTheoryId = "bloco4";
+
+  // Estado da Trilha de Estudo Guiado Linear (Passo 1: Teoria -> Passo 2: Questões -> Passo 3: Revisão)
+  let guidedDayNum = null;
+  let guidedStep = 1; // 1 = Teoria, 2 = Questões do Conteúdo, 3 = Revisão & Conclusão
+  let showFullBlockInGuided = false;
 
   // Estado do Timer de 30 Minutos (1800 segundos)
   let timerSeconds = 1800;
@@ -893,7 +899,28 @@
     toggleTimer();
   }
 
-  function renderDashboard() {
+  function extractTheoryForDay(modObj, dayNum) {
+    if (!modObj || !modObj.conteudoHTML) return "";
+    if (showFullBlockInGuided) return modObj.conteudoHTML;
+    try {
+      const temp = document.createElement("div");
+      temp.innerHTML = modObj.conteudoHTML;
+      const sections = Array.from(temp.querySelectorAll(".theory-subtopic"));
+      if (sections.length === 0) return modObj.conteudoHTML;
+      const matched = sections.filter((sec) => {
+        const daysAttr = (sec.getAttribute("data-days") || "")
+          .split(",")
+          .map((x) => parseInt(x.trim(), 10));
+        return daysAttr.includes(dayNum);
+      });
+      if (matched.length === 0) return modObj.conteudoHTML;
+      return matched.map((sec) => sec.outerHTML).join("\n");
+    } catch (e) {
+      return modObj.conteudoHTML;
+    }
+  }
+
+  function updateKPIStatsAndTables() {
     const plano = window.PLANO_30_DIAS || [];
     const daysDone = state.completedDays.length;
     const hoursStudied = (daysDone * 0.5).toFixed(1).replace(".0", "");
@@ -904,7 +931,6 @@
     const accuracy =
       totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
 
-    // Atualiza cards de estatísticas
     const statDays = document.getElementById("stat-days-val");
     const statDaysSub = document.getElementById("stat-days-sub");
     if (statDays) statDays.textContent = daysDone + " / " + plano.length;
@@ -927,83 +953,6 @@
       statTSub.textContent =
         "8 Blocos de Eng. Elétrica + Português + Inglês";
 
-    // Card da Missão de Hoje (30 minutos) + Detector de Dias Perdidos
-    const missionDay = getTodayOrNextPlanDay();
-    const overdueDays = getOverdueDays();
-    const heroContainer = document.getElementById("hero-mission-container");
-    if (heroContainer && missionDay) {
-      const isDone = state.completedDays.includes(missionDay.dia);
-      const overdueBannerHTML =
-        overdueDays.length > 0
-          ? `<div style="background:rgba(217,119,6,0.12);border:1px solid var(--accent-yellow);border-radius:4px;padding:10px 14px;margin-bottom:14px;font-size:0.84rem;">
-               <strong>REPLANEJAMENTO AUTOMÁTICO ATIVO (${overdueDays.length} dia(s) pendente(s)):</strong>
-               Nenhum conteúdo foi perdido. O sistema alocou o <strong>Dia ${missionDay.dia}</strong> na fila atual e utilizará os <strong>4 Dias de Margem (Dias 27 a 30)</strong>, ou você pode acionar o <strong>Modo Express (15m)</strong> ou <strong>Diluição (40m)</strong>.
-             </div>`
-          : "";
-
-      heroContainer.innerHTML = `
-        <div class="hero-mission">
-          <div class="hero-mission-content">
-            ${overdueBannerHTML}
-            <span class="mission-tag"> SESSÃO ATUAL · DIA ${missionDay.dia} DE 30 · REF: ${missionDay.data} (${missionDay.diaSemana})</span>
-            <h3>${missionDay.titulo}</h3>
-            <p><strong>${missionDay.bloco}</strong> · ${missionDay.fase}</p>
-            <div class="mission-steps-pills">
-              <div class="step-pill"><strong>10 min Teoria:</strong> ${missionDay.focoTeoria}</div>
-              <div class="step-pill"><strong>15 min Questões:</strong> Questões ${missionDay.questoesIds.map((id) => "#" + id).join(", ")}</div>
-              <div class="step-pill"><strong>05 min Revisão:</strong> ${missionDay.focoRevisao}</div>
-            </div>
-          </div>
-          <div class="hero-mission-actions">
-            <button class="btn btn-yellow" id="hero-btn-start-timer">Iniciar Sessão Padrão (30 min)</button>
-            <div style="display:flex;gap:6px;">
-              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-express-15" title="Executar apenas os 15 min de questões comentadas">Modo Express (15m)</button>
-              <button class="btn btn-secondary btn-sm" style="flex:1;" id="hero-btn-recover-40" title="Recuperar atraso diluindo +10 min na sessão (40 min)">Diluir Atraso (40m)</button>
-            </div>
-            <button class="btn btn-primary" id="hero-btn-open-theory">1. Abrir Apostila Teórica (10 min)</button>
-            <button class="btn btn-secondary" id="hero-btn-open-questions">2. Resolver ${missionDay.questoesIds.length} Questões (15 min)</button>
-            <button class="btn ${isDone ? "btn-secondary" : "btn-primary"}" id="hero-btn-toggle-day">
-              ${isDone ? "Dia " + missionDay.dia + " Concluído (Desmarcar)" : "Marcar Dia " + missionDay.dia + " como Concluído"}
-            </button>
-          </div>
-        </div>
-      `;
-
-      document
-        .getElementById("hero-btn-start-timer")
-        .addEventListener("click", function () {
-          startCustomTimer(30);
-        });
-      document
-        .getElementById("hero-btn-express-15")
-        .addEventListener("click", function () {
-          startCustomTimer(15);
-          openQuestionsForDay(missionDay);
-        });
-      document
-        .getElementById("hero-btn-recover-40")
-        .addEventListener("click", function () {
-          startCustomTimer(40);
-        });
-      document
-        .getElementById("hero-btn-open-theory")
-        .addEventListener("click", function () {
-          openTheoryModule(missionDay.teoriaId);
-        });
-      document
-        .getElementById("hero-btn-open-questions")
-        .addEventListener("click", function () {
-          openQuestionsForDay(missionDay);
-        });
-      document
-        .getElementById("hero-btn-toggle-day")
-        .addEventListener("click", function () {
-          toggleDayCompletion(missionDay.dia);
-          renderDashboard();
-        });
-    }
-
-    // Tabela Raio-X da Prova Anterior (2023.2)
     const raioxTbody = document.getElementById("raiox-tbody");
     if (raioxTbody && window.DADOS_EDITAL) {
       raioxTbody.innerHTML = window.DADOS_EDITAL.raioxProva2023
@@ -1033,14 +982,440 @@
         .join("");
     }
 
-    // Bloco de notas pessoais
-    const notesTextarea = document.getElementById("personal-notes-area");
-    if (notesTextarea && notesTextarea.value !== state.personalNotes) {
-      notesTextarea.value = state.personalNotes || "";
+    renderBlockPerformance();
+  }
+
+  function bindQuestionCardEvents(containerEl, onUpdateCallback) {
+    if (!containerEl) return;
+    containerEl.querySelectorAll("[data-q-option]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const qId = parseInt(this.getAttribute("data-q-id"), 10);
+        const letter = this.getAttribute("data-q-option");
+        handleAnswerQuestion(qId, letter, onUpdateCallback);
+      });
+    });
+
+    containerEl.querySelectorAll("[data-q-bookmark]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const qId = parseInt(this.getAttribute("data-q-bookmark"), 10);
+        const idx = state.bookmarkedQuestions.indexOf(qId);
+        if (idx >= 0) state.bookmarkedQuestions.splice(idx, 1);
+        else state.bookmarkedQuestions.push(qId);
+        saveState();
+        if (typeof onUpdateCallback === "function") onUpdateCallback();
+        else renderQuestoes();
+      });
+    });
+
+    containerEl.querySelectorAll("[data-q-toggle-exp]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const qId = this.getAttribute("data-q-toggle-exp");
+        const expBox = document.getElementById("exp-box-" + qId);
+        if (expBox) expBox.classList.toggle("visible");
+      });
+    });
+
+    containerEl.querySelectorAll("[data-q-reset]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const qId = parseInt(this.getAttribute("data-q-reset"), 10);
+        delete state.answeredQuestions[qId];
+        saveState();
+        if (typeof onUpdateCallback === "function") onUpdateCallback();
+        else renderQuestoes();
+      });
+    });
+  }
+
+  function renderDashboard() {
+    const plano = window.PLANO_30_DIAS || [];
+    const modulos = window.DADOS_TEORIA || [];
+    const heroContainer = document.getElementById("hero-mission-container");
+    if (!heroContainer || plano.length === 0) return;
+
+    if (!guidedDayNum) {
+      const nextDayObj = getTodayOrNextPlanDay();
+      guidedDayNum = nextDayObj ? nextDayObj.dia : 1;
     }
 
-    renderBlockPerformance();
-    renderFlashcardUI();
+    const missionDay =
+      plano.find((d) => d.dia === guidedDayNum) || getTodayOrNextPlanDay();
+    guidedDayNum = missionDay.dia;
+
+    const isDone = state.completedDays.includes(missionDay.dia);
+    const activeMod =
+      modulos.find((m) => m.id === missionDay.teoriaId) || modulos[0];
+
+    const dayQuestions = TODAS_QUESTOES.filter((q) =>
+      (missionDay.questoesIds || []).includes(q.id)
+    );
+    const solvedInDay = dayQuestions.filter(
+      (q) => state.answeredQuestions[q.id]
+    ).length;
+    const correctInDay = dayQuestions.filter(
+      (q) =>
+        state.answeredQuestions[q.id] && state.answeredQuestions[q.id].correct
+    ).length;
+
+    let stageHTML = "";
+
+    if (guidedStep === 1) {
+      // PASSO 1: LEITURA TEÓRICA FOCADA NO CONTEÚDO DO DIA
+      const extractedHTML = extractTheoryForDay(activeMod, missionDay.dia);
+      const qCount = dayQuestions.length;
+
+      stageHTML = `
+        <div class="linear-stage-card">
+          <div class="linear-focus-banner">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
+              <strong>ETAPA 1 DE 3 · LEITURA TEÓRICA DIRIGIDA (10 MINUTOS)</strong>
+              <button class="btn btn-secondary btn-sm" id="btn-guided-toggle-full-theory" style="padding:3px 9px;font-size:0.74rem;">
+                ${showFullBlockInGuided ? "Mostrar apenas o recorte de hoje" : "Ver capítulo completo do bloco"}
+              </button>
+            </div>
+            <div><strong>O que focar nesta leitura:</strong> ${missionDay.focoTeoria}</div>
+          </div>
+
+          <div class="theory-body guided-theory-extract" id="guided-theory-body">
+            ${extractedHTML}
+          </div>
+
+          <div class="linear-next-cta-box">
+            <div class="linear-next-cta-text">
+              <h4>Fim da Leitura Teórica — Vamos praticar este conteúdo?</h4>
+              <p>${
+                qCount > 0
+                  ? `Avance agora para as <strong>${qCount} questões selecionadas</strong> especificamente sobre <em>${missionDay.titulo}</em>.`
+                  : "Avance para a síntese final de revisão deste dia."
+              }</p>
+            </div>
+            <button class="btn btn-primary btn-lg" id="btn-guided-goto-step2">
+              ${
+                qCount > 0
+                  ? `Ir para as ${qCount} Questões deste Conteúdo →`
+                  : "Ir para a Revisão Final →"
+              }
+            </button>
+          </div>
+        </div>
+      `;
+    } else if (guidedStep === 2) {
+      // PASSO 2: QUESTÕES PRÁTICAS RELATIVAS AO CONTEÚDO LIDO
+      stageHTML = `
+        <div class="linear-stage-card">
+          <div class="linear-focus-banner" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div>
+              <strong>ETAPA 2 DE 3 · QUESTÕES RELATIVAS AO CONTEÚDO LIDO (15 MINUTOS)</strong>
+              <div id="guided-q-progress-label">Progresso neste assunto: <strong>${solvedInDay} de ${dayQuestions.length} respondidas</strong> (${correctInDay} acertos). Clique em uma alternativa (A–E) para ver a resolução passo a passo.</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-guided-back-step1">← Rever Leitura Teórica</button>
+          </div>
+
+          <div id="guided-questions-list">
+            ${
+              dayQuestions.length > 0
+                ? dayQuestions.map((q) => buildQuestionCardHTML(q)).join("")
+                : `<p style="color:var(--text-secondary);">Dia dedicado à execução da Prova Oficial (sem questões avulsas pendentes).</p>`
+            }
+          </div>
+
+          <div class="linear-next-cta-box">
+            <div class="linear-next-cta-text">
+              <h4>Questões do Assunto Finalizadas (${solvedInDay}/${dayQuestions.length} respondidas)</h4>
+              <p>Avance para os 5 minutos finais de fixação das fórmulas-chave e conclusão do Dia ${missionDay.dia}.</p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-secondary" id="btn-guided-back-step1-bottom">← Voltar à Teoria</button>
+              <button class="btn btn-primary btn-lg" id="btn-guided-goto-step3">
+                Ir para a Revisão Rápida (Passo 3) →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      // PASSO 3: REVISÃO DE FÓRMULAS (5 MIN) E CONCLUSÃO DO DIA
+      const nextDayNum = missionDay.dia < plano.length ? missionDay.dia + 1 : 1;
+      stageHTML = `
+        <div class="linear-stage-card">
+          <div class="linear-focus-banner">
+            <strong>ETAPA 3 DE 3 · SÍNTESE DE FIXAÇÃO E FECHAMENTO (5 MINUTOS)</strong>
+            <div style="margin-top:4px;"><strong>Resumo obrigatório para memorizar hoje:</strong> ${missionDay.focoRevisao}</div>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div class="card" style="margin-bottom:0;">
+              <div class="card-title">
+                <span>Cartões Rápidos de Fórmulas (Flashcards)</span>
+                <span class="badge badge-yellow" id="flashcard-counter-badge">01 / 12</span>
+              </div>
+              <div
+                id="flashcard-box"
+                class="flashcard-surface"
+                title="Clique para alternar entre pergunta e resposta"
+              >
+                <div class="flashcard-side-tag" id="flashcard-side-label">FRENTE · PERGUNTA TÉCNICA (CLIQUE PARA VIRAR)</div>
+                <div class="flashcard-body-text" id="flashcard-text"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;">
+                <button class="btn btn-secondary btn-sm" id="btn-fc-prev">Anterior</button>
+                <button class="btn btn-yellow btn-sm" id="btn-fc-flip" style="flex:1;">Virar Cartão</button>
+                <button class="btn btn-primary btn-sm" id="btn-fc-next">Próximo</button>
+              </div>
+            </div>
+
+            <div class="card" style="margin-bottom:0;">
+              <div class="card-title">
+                <span>Bloco de Notas e Fórmulas Pessoais</span>
+                <span class="badge badge-blue">Salvo Automaticamente</span>
+              </div>
+              <textarea
+                id="personal-notes-area"
+                class="form-input"
+                style="width:100%;min-height:210px;resize:vertical;font-family:'IBM Plex Mono',monospace;font-size:0.82rem;line-height:1.55;"
+                placeholder="Anote aqui relações matemáticas ou observações das questões de hoje..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="linear-next-cta-box">
+            <div class="linear-next-cta-text">
+              <h4>Pronto para concluir o Dia ${missionDay.dia} (${missionDay.titulo})?</h4>
+              <p>Desempenho nas questões do tema: <strong>${correctInDay} acertos em ${solvedInDay} respondidas</strong> (total de ${dayQuestions.length} questões).</p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-secondary" id="btn-guided-back-step2">← Rever Questões</button>
+              <button class="btn btn-primary btn-lg" id="btn-guided-complete-and-next">
+                ✓ Concluir Dia ${missionDay.dia} e Ir para o Dia ${nextDayNum} →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    heroContainer.innerHTML = `
+      <div class="guided-shell">
+        <!-- CABEÇALHO DO DIA ATUAL -->
+        <div class="guided-top-bar">
+          <div>
+            <div class="guided-day-meta">
+              <span class="guided-day-kicker">DIA ${String(missionDay.dia).padStart(2, "0")} DE 30 · ${missionDay.data} (${missionDay.diaSemana})</span>
+              <span class="badge badge-blue">${missionDay.bloco}</span>
+              <span class="badge ${isDone ? "badge-green" : "badge-yellow"}">${isDone ? "✓ Dia Concluído" : "Em Estudo"}</span>
+            </div>
+            <div class="guided-day-title">${missionDay.titulo}</div>
+          </div>
+          <div class="guided-day-nav">
+            <button class="btn btn-secondary btn-sm" id="btn-guided-prev-day" ${missionDay.dia <= 1 ? "disabled" : ""}>← Dia Anterior</button>
+            <button class="btn btn-secondary btn-sm" id="btn-guided-open-calendar">Ver 30 Dias</button>
+            <button class="btn btn-secondary btn-sm" id="btn-guided-next-day" ${missionDay.dia >= plano.length ? "disabled" : ""}>Próximo Dia →</button>
+          </div>
+        </div>
+
+        <!-- BARRA LINEAR DE 3 ETAPAS (STEPPER) -->
+        <div class="linear-stepper">
+          <button class="linear-step-btn ${guidedStep === 1 ? "active" : "done"}" data-guided-step="1">
+            <span class="linear-step-num">${guidedStep > 1 ? "✓" : "1"}</span>
+            <span class="linear-step-info">
+              <span class="linear-step-title">1. Leitura Teórica</span>
+              <span class="linear-step-sub">10 min · Conceitos e Fórmulas</span>
+            </span>
+          </button>
+          <button class="linear-step-btn ${guidedStep === 2 ? "active" : guidedStep > 2 ? "done" : ""}" data-guided-step="2">
+            <span class="linear-step-num">${guidedStep > 2 ? "✓" : "2"}</span>
+            <span class="linear-step-info">
+              <span class="linear-step-title">2. Questões do Conteúdo</span>
+              <span class="linear-step-sub">15 min · ${solvedInDay}/${dayQuestions.length} respondidas</span>
+            </span>
+          </button>
+          <button class="linear-step-btn ${guidedStep === 3 ? "active" : isDone ? "done" : ""}" data-guided-step="3">
+            <span class="linear-step-num">${isDone ? "✓" : "3"}</span>
+            <span class="linear-step-info">
+              <span class="linear-step-title">3. Revisão &amp; Conclusão</span>
+              <span class="linear-step-sub">5 min · Fixar e Avançar</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- CONTEÚDO DA ETAPA ATIVA -->
+        ${stageHTML}
+      </div>
+    `;
+
+    // Renderiza matemática LaTeX se estiver na Etapa 1
+    if (guidedStep === 1) {
+      typesetMathInElement(document.getElementById("guided-theory-body"));
+    }
+
+    // Se estiver na Etapa 2, conecta os eventos das questões do dia
+    if (guidedStep === 2) {
+      const qListEl = document.getElementById("guided-questions-list");
+      bindQuestionCardEvents(qListEl, function () {
+        // Atualiza contadores no topo do Passo 2 sem perder posição de rolagem
+        const updatedSolved = dayQuestions.filter(
+          (q) => state.answeredQuestions[q.id]
+        ).length;
+        const updatedCorrect = dayQuestions.filter(
+          (q) =>
+            state.answeredQuestions[q.id] &&
+            state.answeredQuestions[q.id].correct
+        ).length;
+        const lbl = document.getElementById("guided-q-progress-label");
+        if (lbl) {
+          lbl.innerHTML = `Progresso neste assunto: <strong>${updatedSolved} de ${dayQuestions.length} respondidas</strong> (${updatedCorrect} acertos). Clique em uma alternativa (A–E) para ver a resolução passo a passo.`;
+        }
+      });
+    }
+
+    // Se estiver na Etapa 3, conecta Flashcards e Notas Pessoais
+    if (guidedStep === 3) {
+      const notesTextarea = document.getElementById("personal-notes-area");
+      if (notesTextarea) {
+        notesTextarea.value = state.personalNotes || "";
+        notesTextarea.addEventListener("input", function () {
+          state.personalNotes = this.value;
+          saveState();
+        });
+      }
+      renderFlashcardUI();
+      const toggleFlip = function () {
+        flashcardShowingBack = !flashcardShowingBack;
+        renderFlashcardUI();
+      };
+      document
+        .getElementById("flashcard-box")
+        ?.addEventListener("click", toggleFlip);
+      document
+        .getElementById("btn-fc-flip")
+        ?.addEventListener("click", toggleFlip);
+      document
+        .getElementById("btn-fc-prev")
+        ?.addEventListener("click", function () {
+          currentFlashcardIdx =
+            (currentFlashcardIdx - 1 + FLASHCARDS_REVISAO.length) %
+            FLASHCARDS_REVISAO.length;
+          flashcardShowingBack = false;
+          renderFlashcardUI();
+        });
+      document
+        .getElementById("btn-fc-next")
+        ?.addEventListener("click", function () {
+          currentFlashcardIdx =
+            (currentFlashcardIdx + 1) % FLASHCARDS_REVISAO.length;
+          flashcardShowingBack = false;
+          renderFlashcardUI();
+        });
+    }
+
+    // Eventos de navegação entre Passos (1 -> 2 -> 3) e entre Dias
+    heroContainer.querySelectorAll("[data-guided-step]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        guidedStep = parseInt(this.getAttribute("data-guided-step"), 10) || 1;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    document
+      .getElementById("btn-guided-toggle-full-theory")
+      ?.addEventListener("click", function () {
+        showFullBlockInGuided = !showFullBlockInGuided;
+        renderDashboard();
+      });
+
+    document
+      .getElementById("btn-guided-goto-step2")
+      ?.addEventListener("click", function () {
+        guidedStep = dayQuestions.length > 0 ? 2 : 3;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    document
+      .getElementById("btn-guided-back-step1")
+      ?.addEventListener("click", function () {
+        guidedStep = 1;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    document
+      .getElementById("btn-guided-back-step1-bottom")
+      ?.addEventListener("click", function () {
+        guidedStep = 1;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    document
+      .getElementById("btn-guided-goto-step3")
+      ?.addEventListener("click", function () {
+        guidedStep = 3;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    document
+      .getElementById("btn-guided-back-step2")
+      ?.addEventListener("click", function () {
+        guidedStep = 2;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    document
+      .getElementById("btn-guided-complete-and-next")
+      ?.addEventListener("click", function () {
+        if (!state.completedDays.includes(missionDay.dia)) {
+          state.completedDays.push(missionDay.dia);
+        }
+        if (
+          missionDay.teoriaId &&
+          !state.studiedTheory.includes(missionDay.teoriaId)
+        ) {
+          state.studiedTheory.push(missionDay.teoriaId);
+        }
+        saveState();
+        if (missionDay.dia < plano.length) {
+          guidedDayNum = missionDay.dia + 1;
+        }
+        guidedStep = 1;
+        showFullBlockInGuided = false;
+        renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    document
+      .getElementById("btn-guided-prev-day")
+      ?.addEventListener("click", function () {
+        if (guidedDayNum > 1) {
+          guidedDayNum--;
+          guidedStep = 1;
+          showFullBlockInGuided = false;
+          renderDashboard();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+    document
+      .getElementById("btn-guided-next-day")
+      ?.addEventListener("click", function () {
+        if (guidedDayNum < plano.length) {
+          guidedDayNum++;
+          guidedStep = 1;
+          showFullBlockInGuided = false;
+          renderDashboard();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+    document
+      .getElementById("btn-guided-open-calendar")
+      ?.addEventListener("click", function () {
+        switchTab("plano");
+      });
+
+    updateKPIStatsAndTables();
   }
 
   function renderBlockPerformance() {
@@ -1137,6 +1512,7 @@
   function openQuestionsForDay(dayObj) {
     customQuestionIdsFilter = dayObj.questoesIds.slice();
     customFilterLabel = `Dia ${dayObj.dia} (${dayObj.titulo})`;
+    returnToTheoryId = dayObj.teoriaId || null;
     switchTab("questoes");
   }
 
@@ -1182,15 +1558,15 @@
               <div class="day-breakdown">
                 <div class="day-breakdown-item">
                   <span class="time-pill">10 min</span>
-                  <div><strong>Teoria:</strong> ${d.focoTeoria}</div>
+                  <div><strong>1. Leitura:</strong> ${d.focoTeoria}</div>
                 </div>
                 <div class="day-breakdown-item">
                   <span class="time-pill">15 min</span>
-                  <div><strong>Prática:</strong> Resolver Questões <strong>${d.questoesIds.map((q) => "Q" + q).join(", ")}</strong></div>
+                  <div><strong>2. Prática:</strong> Questões <strong>${d.questoesIds.map((q) => "Q" + q).join(", ")}</strong></div>
                 </div>
                 <div class="day-breakdown-item">
                   <span class="time-pill">05 min</span>
-                  <div><strong>Revisão:</strong> ${d.focoRevisao}</div>
+                  <div><strong>3. Revisão:</strong> ${d.focoRevisao}</div>
                 </div>
               </div>
             </div>
@@ -1199,10 +1575,9 @@
                 <input type="checkbox" data-check-day="${d.dia}" ${isCompleted ? "checked" : ""}>
                 Concluído
               </label>
-              <div style="margin-left:auto;display:flex;gap:6px;">
-                <button class="btn btn-secondary btn-sm" data-goto-theory="${d.teoriaId}">Teoria</button>
-                <button class="btn btn-primary btn-sm" data-goto-questions="${d.dia}">Questões (${d.questoesIds.length})</button>
-              </div>
+              <button class="btn btn-primary btn-sm" data-open-guided-day="${d.dia}" style="margin-left:auto;">
+                Abrir no Estudo Guiado →
+              </button>
             </div>
           </div>
         `;
@@ -1218,17 +1593,12 @@
       });
     });
 
-    grid.querySelectorAll("[data-goto-theory]").forEach((btn) => {
+    grid.querySelectorAll("[data-open-guided-day]").forEach((btn) => {
       btn.addEventListener("click", function () {
-        openTheoryModule(this.getAttribute("data-goto-theory"));
-      });
-    });
-
-    grid.querySelectorAll("[data-goto-questions]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const dia = parseInt(this.getAttribute("data-goto-questions"), 10);
-        const dayObj = plano.find((item) => item.dia === dia);
-        if (dayObj) openQuestionsForDay(dayObj);
+        const dia = parseInt(this.getAttribute("data-open-guided-day"), 10);
+        activeGuidedDayNum = dia;
+        activeGuidedStep = 1;
+        switchTab("dashboard");
       });
     });
   }
@@ -1242,8 +1612,12 @@
     const contentEl = document.getElementById("theory-content-view");
     if (!sidebarEl || !contentEl || modulos.length === 0) return;
 
-    const activeMod =
-      modulos.find((m) => m.id === currentTheoryId) || modulos[0];
+    const activeModIdx = modulos.findIndex((m) => m.id === currentTheoryId);
+    const activeMod = activeModIdx >= 0 ? modulos[activeModIdx] : modulos[0];
+    const nextMod =
+      activeModIdx >= 0 && activeModIdx + 1 < modulos.length
+        ? modulos[activeModIdx + 1]
+        : modulos[0];
 
     sidebarEl.innerHTML = modulos
       .map((m) => {
@@ -1296,34 +1670,66 @@
             <span class="badge badge-blue">${activeMod.codigo}</span>
             <span class="badge badge-yellow">Incidência: ${activeMod.pesoProva}</span>
             <span class="badge ${isStudied ? "badge-green" : "badge-purple"}">
-              ${isStudied ? "Módulo Estudado" : "Prioridade: " + activeMod.prioridade}
+              ${isStudied ? "✓ Capítulo Concluído" : "Prioridade: " + activeMod.prioridade}
             </span>
           </div>
-          <h2 style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;">${activeMod.titulo}</h2>
-          <p style="font-size:0.84rem;color:var(--text-muted);margin-top:4px;">
-            <strong>Tópicos do Anexo IV do Edital 2026.4:</strong> ${activeMod.subtopicosEdital}
+          <h2 style="font-size:1.35rem;font-weight:700;letter-spacing:-0.02em;">${activeMod.titulo}</h2>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">
+            <strong>Tópicos do Edital 2026.4:</strong> ${activeMod.subtopicosEdital}
           </p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn ${isStudied ? "btn-secondary" : "btn-primary"} btn-sm" id="btn-toggle-studied-theory">
-            ${isStudied ? "Marcar como Não Lido" : "Marcar Módulo como Estudado"}
-          </button>
-          <button class="btn btn-yellow btn-sm" id="btn-practice-block-questions">
-            Resolver ${relatedCount} Questões deste Bloco
+            ${isStudied ? "✓ Capítulo Lido (Desmarcar)" : "Marcar Capítulo como Lido"}
           </button>
         </div>
       </div>
       <div class="theory-body">
         ${activeMod.conteudoHTML}
       </div>
+      <div class="linear-next-cta-box">
+        <div>
+          <div class="linear-next-cta-label">Fim do Capítulo · ${activeMod.codigo}</div>
+          <div class="linear-next-cta-title">Pratique todas as ${relatedCount} questões deste bloco ou avance para o próximo capítulo</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-secondary" id="btn-next-theory-chapter">
+            Próximo Capítulo: ${nextMod.codigo} →
+          </button>
+          <button class="btn btn-primary btn-lg" id="btn-practice-block-questions-bottom">
+            Resolver Todas as ${relatedCount} Questões deste Bloco →
+          </button>
+        </div>
+      </div>
     `;
 
     // Renderiza todas as fórmulas LaTeX ($...$ e $$...$$) dentro da apostila teórica
     typesetMathInElement(contentEl);
 
+    // Eventos dos botões "Resolver as X Questões deste Tópico →" ao final de cada subtópico
+    contentEl.querySelectorAll("[data-practice-qids]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const qIdsStr = this.getAttribute("data-practice-qids") || "";
+        const label =
+          this.getAttribute("data-practice-label") || activeMod.titulo;
+        const retTheory =
+          this.getAttribute("data-return-theory") || activeMod.id;
+        const parsedIds = qIdsStr
+          .split(",")
+          .map((x) => parseInt(x.trim(), 10))
+          .filter((n) => !isNaN(n));
+        if (parsedIds.length > 0) {
+          customQuestionIdsFilter = parsedIds;
+          customFilterLabel = label;
+          returnToTheoryId = retTheory;
+          switchTab("questoes");
+        }
+      });
+    });
+
     document
       .getElementById("btn-toggle-studied-theory")
-      .addEventListener("click", function () {
+      ?.addEventListener("click", function () {
         const idx = state.studiedTheory.indexOf(activeMod.id);
         if (idx >= 0) state.studiedTheory.splice(idx, 1);
         else state.studiedTheory.push(activeMod.id);
@@ -1332,13 +1738,30 @@
       });
 
     document
-      .getElementById("btn-practice-block-questions")
-      .addEventListener("click", function () {
+      .getElementById("btn-practice-block-questions-bottom")
+      ?.addEventListener("click", function () {
+        if (!state.studiedTheory.includes(activeMod.id)) {
+          state.studiedTheory.push(activeMod.id);
+          saveState();
+        }
         customQuestionIdsFilter = null;
         customFilterLabel = "";
+        returnToTheoryId = activeMod.id;
         const selBloco = document.getElementById("filter-q-bloco");
         if (selBloco) selBloco.value = activeMod.id;
         switchTab("questoes");
+      });
+
+    document
+      .getElementById("btn-next-theory-chapter")
+      ?.addEventListener("click", function () {
+        if (!state.studiedTheory.includes(activeMod.id)) {
+          state.studiedTheory.push(activeMod.id);
+          saveState();
+        }
+        currentTheoryId = nextMod.id;
+        renderTeoria();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
   }
 
@@ -1348,6 +1771,7 @@
   function renderQuestoes() {
     const listContainer = document.getElementById("questions-list-container");
     const summaryBanner = document.getElementById("questions-filter-summary");
+    const controlsBar = document.querySelector("#tab-questoes .quiz-controls-bar");
     if (!listContainer) return;
 
     const searchVal = (
@@ -1360,6 +1784,14 @@
       document.getElementById("filter-q-origem")?.value || "todas";
     const statusVal =
       document.getElementById("filter-q-status")?.value || "todas";
+
+    // Quando o usuário veio de um tópico específico da leitura, oculta a barra de filtros complexa para manter foco linear
+    if (controlsBar) {
+      controlsBar.style.display =
+        customQuestionIdsFilter && customQuestionIdsFilter.length > 0
+          ? "none"
+          : "";
+    }
 
     const filtered = TODAS_QUESTOES.filter((q) => {
       if (customQuestionIdsFilter && customQuestionIdsFilter.length > 0) {
@@ -1380,7 +1812,7 @@
           return false;
       }
 
-      if (searchVal) {
+      if (searchVal && (!customQuestionIdsFilter || customQuestionIdsFilter.length === 0)) {
         const hay = (
           "q" +
           q.numero +
@@ -1398,26 +1830,50 @@
       return true;
     });
 
+    const answeredInFiltered = filtered.filter(
+      (q) => state.answeredQuestions[q.id]
+    ).length;
+
     if (summaryBanner) {
-      if (customQuestionIdsFilter) {
+      if (customQuestionIdsFilter && customQuestionIdsFilter.length > 0) {
         summaryBanner.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--accent-green-soft);border:1px solid var(--accent-green);padding:10px 16px;border-radius:4px;margin-bottom:16px;">
-            <span>FILTRO DE META ATIVO: exibindo as <strong>${filtered.length} questões selecionadas</strong> para <strong>${customFilterLabel}</strong></span>
-            <button class="btn btn-secondary btn-sm" id="btn-clear-day-filter">Mostrar Todas as 85 Questões</button>
+          <div class="linear-focus-banner">
+            <div>
+              <div style="font-size:0.72rem;font-family:var(--font-mono);color:var(--accent-blue);text-transform:uppercase;font-weight:700;margin-bottom:2px;">
+                Prática Direcionada do Conteúdo Lido · ${answeredInFiltered} de ${filtered.length} respondidas
+              </div>
+              <div style="font-size:0.95rem;font-weight:600;color:var(--text-primary);">
+                Tópico: <strong>${customFilterLabel}</strong> (${filtered.map((q) => "Q" + q.id).join(", ")})
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              ${
+                returnToTheoryId
+                  ? `<button class="btn btn-secondary btn-sm" id="btn-back-to-theory-top">← Voltar à Leitura Teórica</button>`
+                  : ""
+              }
+              <button class="btn btn-secondary btn-sm" id="btn-clear-day-filter">Ver Banco Completo (85 Questões)</button>
+            </div>
           </div>
         `;
         document
           .getElementById("btn-clear-day-filter")
-          .addEventListener("click", function () {
+          ?.addEventListener("click", function () {
             customQuestionIdsFilter = null;
             customFilterLabel = "";
             renderQuestoes();
           });
+        document
+          .getElementById("btn-back-to-theory-top")
+          ?.addEventListener("click", function () {
+            if (returnToTheoryId) currentTheoryId = returnToTheoryId;
+            switchTab("teoria");
+          });
       } else {
         summaryBanner.innerHTML = `
           <div style="margin-bottom:14px;font-size:0.84rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-            <span>Exibindo <strong>${filtered.length}</strong> de <strong>${TODAS_QUESTOES.length}</strong> questões disponíveis (70 da Prova 2023.2 + 15 Inéditas 2026.4).</span>
-            <span>Selecione uma alternativa (A–E) para aferição imediata e exibição do memorial de cálculo.</span>
+            <span>Exibindo <strong>${filtered.length}</strong> de <strong>${TODAS_QUESTOES.length}</strong> questões disponíveis (${answeredInFiltered} respondidas neste filtro).</span>
+            <span>Clique em uma alternativa (A–E) para correção imediata e resolução comentada.</span>
           </div>
         `;
       }
@@ -1433,7 +1889,7 @@
       `;
       document
         .getElementById("btn-reset-all-q-filters")
-        .addEventListener("click", function () {
+        ?.addEventListener("click", function () {
           customQuestionIdsFilter = null;
           document.getElementById("filter-q-search").value = "";
           document.getElementById("filter-q-bloco").value = "todos";
@@ -1444,46 +1900,62 @@
       return;
     }
 
-    listContainer.innerHTML = filtered
-      .map((q) => buildQuestionCardHTML(q))
-      .join("");
+    const modulos = window.DADOS_TEORIA || [];
+    const activeTheoryId =
+      returnToTheoryId || (blocoVal !== "todos" ? blocoVal : null);
+    const activeModIdx = activeTheoryId
+      ? modulos.findIndex((m) => m.id === activeTheoryId)
+      : -1;
+    const nextMod =
+      activeModIdx >= 0 && activeModIdx + 1 < modulos.length
+        ? modulos[activeModIdx + 1]
+        : modulos[0];
 
-    // Eventos das questões
-    listContainer.querySelectorAll("[data-q-option]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const qId = parseInt(this.getAttribute("data-q-id"), 10);
-        const letter = this.getAttribute("data-q-option");
-        handleAnswerQuestion(qId, letter);
-      });
+    const bottomLinearBarHTML =
+      customQuestionIdsFilter || blocoVal !== "todos"
+        ? `
+      <div class="linear-next-cta-box">
+        <div>
+          <div class="linear-next-cta-label">Fim da Bateria de Questões (${answeredInFiltered}/${filtered.length} respondidas)</div>
+          <div class="linear-next-cta-title">Continue a leitura teórica de onde parou ou avance para o próximo capítulo</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          ${
+            activeTheoryId
+              ? `<button class="btn btn-secondary" id="btn-return-reading-bottom">← Continuar Leitura deste Capítulo</button>`
+              : ""
+          }
+          ${
+            nextMod
+              ? `<button class="btn btn-primary btn-lg" id="btn-advance-next-chapter-bottom">Ir para Próximo Capítulo (${nextMod.codigo}) →</button>`
+              : ""
+          }
+        </div>
+      </div>
+    `
+        : "";
+
+    listContainer.innerHTML =
+      filtered.map((q) => buildQuestionCardHTML(q)).join("") +
+      bottomLinearBarHTML;
+
+    bindQuestionCardEvents(listContainer, () => {
+      renderQuestoes();
     });
 
-    listContainer.querySelectorAll("[data-q-bookmark]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const qId = parseInt(this.getAttribute("data-q-bookmark"), 10);
-        const idx = state.bookmarkedQuestions.indexOf(qId);
-        if (idx >= 0) state.bookmarkedQuestions.splice(idx, 1);
-        else state.bookmarkedQuestions.push(qId);
-        saveState();
-        renderQuestoes();
+    document
+      .getElementById("btn-return-reading-bottom")
+      ?.addEventListener("click", function () {
+        if (activeTheoryId) currentTheoryId = activeTheoryId;
+        switchTab("teoria");
       });
-    });
 
-    listContainer.querySelectorAll("[data-q-toggle-exp]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const qId = this.getAttribute("data-q-toggle-exp");
-        const expBox = document.getElementById("exp-box-" + qId);
-        if (expBox) expBox.classList.toggle("visible");
+    document
+      .getElementById("btn-advance-next-chapter-bottom")
+      ?.addEventListener("click", function () {
+        if (nextMod) currentTheoryId = nextMod.id;
+        switchTab("teoria");
       });
-    });
-
-    listContainer.querySelectorAll("[data-q-reset]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const qId = parseInt(this.getAttribute("data-q-reset"), 10);
-        delete state.answeredQuestions[qId];
-        saveState();
-        renderQuestoes();
-      });
-    });
   }
 
   function buildQuestionCardHTML(q) {
@@ -1569,7 +2041,7 @@
     `;
   }
 
-  function handleAnswerQuestion(qId, selectedLetter) {
+  function handleAnswerQuestion(qId, selectedLetter, onUpdateCallback) {
     const q = TODAS_QUESTOES.find((item) => item.id === qId);
     if (!q) return;
     const isCorrect = selectedLetter === q.correta;
@@ -1587,13 +2059,15 @@
       temp.innerHTML = buildQuestionCardHTML(q);
       const newCard = temp.firstElementChild;
       cardEl.replaceWith(newCard);
+      typesetMathInElement(newCard);
 
       // Reatribui listeners ao novo card
       newCard.querySelectorAll("[data-q-option]").forEach((btn) => {
         btn.addEventListener("click", function () {
           handleAnswerQuestion(
             parseInt(this.getAttribute("data-q-id"), 10),
-            this.getAttribute("data-q-option")
+            this.getAttribute("data-q-option"),
+            onUpdateCallback
           );
         });
       });
@@ -1604,7 +2078,8 @@
           if (idx >= 0) state.bookmarkedQuestions.splice(idx, 1);
           else state.bookmarkedQuestions.push(qId);
           saveState();
-          renderQuestoes();
+          if (onUpdateCallback) onUpdateCallback();
+          else renderQuestoes();
         });
       newCard
         .querySelector("[data-q-toggle-exp]")
@@ -1618,7 +2093,8 @@
         ?.addEventListener("click", function () {
           delete state.answeredQuestions[qId];
           saveState();
-          renderQuestoes();
+          if (onUpdateCallback) onUpdateCallback();
+          else renderQuestoes();
         });
     }
   }
@@ -1627,6 +2103,7 @@
   // ABA 5: SIMULADO CRONOMETRADO & CALCULADORA DE HABILITAÇÃO/CORTE
   // =========================================================================
   function renderSimuladoTab() {
+    updateKPIStatsAndTables();
     updateCutoffCalculator();
     renderSimuladoHistory();
   }
