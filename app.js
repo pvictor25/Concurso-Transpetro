@@ -876,17 +876,45 @@
   let currentFlashcardIdx = 0;
   let flashcardShowingBack = false;
 
+  // Data local real (evita o bug de toISOString() que usa UTC e vira o dia às 21h no Brasil UTC-3)
+  function getLocalTodayISO() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function getLocalTodayLabel() {
+    const dias = [
+      "Domingo",
+      "Segunda-feira",
+      "Terça-feira",
+      "Quarta-feira",
+      "Quinta-feira",
+      "Sexta-feira",
+      "Sábado"
+    ];
+    const now = new Date();
+    const dd = String(now.getDate()).padStart(2, "0");
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    return `${dias[now.getDay()]}, ${dd}/${mm}`;
+  }
+
   function getTodayOrNextPlanDay() {
     const plano = window.PLANO_30_DIAS || [];
-    // Prioriza sempre o primeiro dia ainda não concluído na fila sequencial,
-    // garantindo que nenhum conteúdo essencial fique para trás caso você falte algum dia!
+    const todayISO = getLocalTodayISO();
+    const todayEntry = plano.find((d) => d.dataISO === todayISO);
+    if (todayEntry && !state.completedDays.includes(todayEntry.dia)) {
+      return todayEntry;
+    }
     const nextPending = plano.find((d) => !state.completedDays.includes(d.dia));
-    return nextPending || plano[plano.length - 1] || plano[0];
+    return nextPending || todayEntry || plano[plano.length - 1] || plano[0];
   }
 
   function getOverdueDays() {
     const plano = window.PLANO_30_DIAS || [];
-    const todayISO = new Date().toISOString().slice(0, 10);
+    const todayISO = getLocalTodayISO();
     return plano.filter(
       (d) => d.dataISO < todayISO && !state.completedDays.includes(d.dia)
     );
@@ -1193,13 +1221,23 @@
       `;
     }
 
+    const todayISO = getLocalTodayISO();
+    const isMissionToday = missionDay.dataISO === todayISO;
+    const todayPlanEntry = plano.find((d) => d.dataISO === todayISO);
+
     heroContainer.innerHTML = `
       <div class="guided-shell">
         <!-- CABEÇALHO DO DIA ATUAL -->
         <div class="guided-top-bar">
           <div>
             <div class="guided-day-meta">
-              <span class="guided-day-kicker">DIA ${String(missionDay.dia).padStart(2, "0")} DE 30 · ${missionDay.data} (${missionDay.diaSemana})</span>
+              <span class="guided-day-kicker">
+                DIA ${String(missionDay.dia).padStart(2, "0")} DE 30 · ${
+                  isMissionToday
+                    ? `HOJE: ${missionDay.data} (${missionDay.diaSemana})`
+                    : `Meta agendada: ${missionDay.data} (${missionDay.diaSemana}) · Hoje é ${getLocalTodayLabel()}`
+                }
+              </span>
               <span class="badge badge-blue">${missionDay.bloco}</span>
               <span class="badge ${isDone ? "badge-green" : "badge-yellow"}">${isDone ? "✓ Dia Concluído" : "Em Estudo"}</span>
             </div>
@@ -1207,6 +1245,11 @@
           </div>
           <div class="guided-day-nav">
             <button class="btn btn-secondary btn-sm" id="btn-guided-prev-day" ${missionDay.dia <= 1 ? "disabled" : ""}>← Dia Anterior</button>
+            ${
+              todayPlanEntry && todayPlanEntry.dia !== missionDay.dia
+                ? `<button class="btn btn-secondary btn-sm" id="btn-guided-goto-today">Ir p/ Hoje (Dia ${String(todayPlanEntry.dia).padStart(2, "0")})</button>`
+                : ""
+            }
             <button class="btn btn-secondary btn-sm" id="btn-guided-open-calendar">Ver 30 Dias</button>
             <button class="btn btn-secondary btn-sm" id="btn-guided-next-day" ${missionDay.dia >= plano.length ? "disabled" : ""}>Próximo Dia →</button>
           </div>
@@ -1410,6 +1453,18 @@
       });
 
     document
+      .getElementById("btn-guided-goto-today")
+      ?.addEventListener("click", function () {
+        if (todayPlanEntry) {
+          guidedDayNum = todayPlanEntry.dia;
+          guidedStep = 1;
+          showFullBlockInGuided = false;
+          renderDashboard();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+    document
       .getElementById("btn-guided-open-calendar")
       ?.addEventListener("click", function () {
         switchTab("plano");
@@ -1521,7 +1576,7 @@
     if (!grid) return;
 
     const plano = window.PLANO_30_DIAS || [];
-    const todayISO = new Date().toISOString().slice(0, 10);
+    const todayISO = getLocalTodayISO();
 
     const filtered = plano.filter((d) => {
       if (currentPlanFilter === "pendentes")
@@ -1554,7 +1609,7 @@
               <div style="margin-bottom:6px;">
                 <span class="badge badge-blue">${d.bloco}</span>
               </div>
-              <div class="day-title">${d.titulo}</div>
+              <div class="day-title" style="cursor:pointer;" data-open-guided-day="${d.dia}">${d.titulo}</div>
               <div class="day-breakdown">
                 <div class="day-breakdown-item">
                   <span class="time-pill">10 min</span>
@@ -1575,7 +1630,7 @@
                 <input type="checkbox" data-check-day="${d.dia}" ${isCompleted ? "checked" : ""}>
                 Concluído
               </label>
-              <button class="btn btn-primary btn-sm" data-open-guided-day="${d.dia}" style="margin-left:auto;">
+              <button type="button" class="btn btn-primary btn-sm" data-open-guided-day="${d.dia}" style="margin-left:auto;">
                 Abrir no Estudo Guiado →
               </button>
             </div>
@@ -1596,8 +1651,9 @@
     grid.querySelectorAll("[data-open-guided-day]").forEach((btn) => {
       btn.addEventListener("click", function () {
         const dia = parseInt(this.getAttribute("data-open-guided-day"), 10);
-        activeGuidedDayNum = dia;
-        activeGuidedStep = 1;
+        guidedDayNum = dia;
+        guidedStep = 1;
+        showFullBlockInGuided = false;
         switchTab("dashboard");
       });
     });
@@ -2429,7 +2485,7 @@
     // Cronograma Oficial (Timeline)
     const timelineEl = document.getElementById("official-timeline-container");
     if (timelineEl) {
-      const todayISO = new Date().toISOString().slice(0, 10);
+      const todayISO = getLocalTodayISO();
       let nextFound = false;
 
       timelineEl.innerHTML = edital.cronograma
