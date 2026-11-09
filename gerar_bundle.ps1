@@ -1,4 +1,4 @@
-# Script para versionar automaticamente (Cache-Busting por Hash SHA-256), gerar version.json e criar o pacote único (plataforma_transpetro_bundle.html)
+﻿# Script para versionar automaticamente (Cache-Busting por Hash SHA-256), gerar version.json e criar o pacote único (plataforma_transpetro_bundle.html)
 $ErrorActionPreference = "Stop"
 $dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $utf8 = New-Object System.Text.UTF8Encoding($false)
@@ -30,7 +30,7 @@ $nowIso = (Get-Date).ToString("o")
 $versionJson = "{`n  `"hash`": `"$buildHash`",`n  `"updatedAt`": `"$nowIso`"`n}`n"
 [System.IO.File]::WriteAllText($versionJsonPath, $versionJson, $utf8)
 
-# Monta o bundle único para Google Sites (substituindo tags de estilo e scripts de forma literal)
+# Monta o bundle único offline (substituindo tags de estilo e scripts de forma literal)
 $bundleHtml = $htmlUpdated
 $bundleHtml = [System.Text.RegularExpressions.Regex]::Replace($bundleHtml, '<link rel="stylesheet"[^>]*href="styles\.css[^"]*"[^>]*>', [System.Text.RegularExpressions.MatchEvaluator]{ param($m) "<style>`n$css`n</style>" })
 $bundleHtml = $bundleHtml.Replace("<script src=`"dados_edital_plano.js?v=$buildHash`"></script>", "<script>`n$js1`n</script>")

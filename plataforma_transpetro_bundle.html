@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-  <script>window.APP_BUILD_HASH = "a8a985fdea";</script>
+  <script>window.APP_BUILD_HASH = "16797419a3";</script>
   <style>
 :root {
   --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -2742,7 +2742,7 @@ body {
 
     <div class="sidebar-footer">
       <button class="btn btn-primary btn-sm" id="btn-open-cloud-modal" style="width:100%;margin-bottom:6px;justify-content:center;">
-        Sincronização em Nuvem
+        ☁️ Nuvem GitHub (Auto-Save)
       </button>
       <div class="footer-actions">
         <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
@@ -3205,13 +3205,20 @@ body {
     </button>
   </nav>
 
-  <!-- MODAL DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM -->
+  <!-- MODAL DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM VIA GITHUB -->
   <div class="cloud-modal-backdrop" id="cloud-sync-modal" style="display:none;">
     <div class="cloud-modal">
       <div class="cloud-modal-header">
         <div>
-          <h3>Sincronização em Nuvem (Auto-Save)</h3>
-          <p style="font-size:0.82rem;color:var(--text-secondary);">Mantenha o histórico de questões, cronograma, simulados e notas sincronizado entre computador, smartphone e Google Sites.</p>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-primary);flex-shrink:0;">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <h3 style="margin:0;">Sincronização na Nuvem via GitHub</h3>
+          </div>
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;">
+            Seu progresso completo (questões respondidas, cronograma de 30 dias, fórmulas e notas) fica salvo na sua própria conta do GitHub através de um <strong>Secret Gist privado</strong>, sincronizando em tempo real no <strong>GitHub Pages</strong> entre computador, tablet e celular.
+          </p>
         </div>
         <button class="btn btn-secondary btn-sm" id="btn-close-cloud-modal">Fechar</button>
       </div>
@@ -3220,75 +3227,100 @@ body {
       <div class="cloud-status-box" id="cloud-modal-status-box">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
-            <div style="font-weight:700;font-size:0.9rem;" id="cloud-modal-status-title">Nuvem não configurada</div>
-            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Configure abaixo utilizando Google Apps Script, GitHub Gist ou endpoint REST.</div>
+            <div style="font-weight:700;font-size:0.9rem;" id="cloud-modal-status-title">GitHub não configurado</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Conecte seu token do GitHub abaixo para ativar o salvamento automático na nuvem.</div>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">Enviar para Nuvem</button>
-            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">Baixar da Nuvem</button>
+            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">⬆️ Enviar ao GitHub (Push)</button>
+            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">⬇️ Baixar do GitHub (Pull)</button>
           </div>
         </div>
       </div>
 
-      <!-- SELETOR DE PROVEDOR -->
-      <div class="cloud-provider-tabs">
-        <button class="cloud-tab-btn active" data-cloud-provider="google">01 · Google Apps Script</button>
-        <button class="cloud-tab-btn" data-cloud-provider="github">02 · GitHub Gist Privado</button>
-        <button class="cloud-tab-btn" data-cloud-provider="firebase">03 · Endpoint REST / Firebase</button>
-      </div>
-
-      <!-- ABA 1: GOOGLE APPS SCRIPT -->
-      <div class="cloud-provider-panel active" id="cloud-panel-google">
-        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
-          <strong>Google Apps Script (Conta Google Pessoal):</strong> Opera diretamente na sua conta Google sem exigir permissões de OAuth externas e funciona dentro do iframe do Google Sites:
-          <ol style="margin:6px 0 10px 18px;">
-            <li>Copie o script de 15 linhas no botão abaixo e acesse <a href="https://script.google.com/home/start" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">script.google.com (Novo Projeto)</a>.</li>
-            <li>Substitua o conteúdo do editor pelo código copiado e selecione <strong>Implantar &gt; Nova implantação</strong>.</li>
-            <li>Escolha o tipo <strong>App da Web</strong>, defina o acesso como <strong>Qualquer pessoa (Anyone)</strong> e confirme em <strong>Implantar</strong>.</li>
-            <li>Copie a <strong>URL do App da Web</strong> (`https://script.google.com/macros/s/.../exec`) e insira abaixo:</li>
-          </ol>
-          <button class="btn btn-secondary btn-sm" id="btn-copy-gas-code" style="margin-bottom:10px;">Copiar Script Google (15 linhas)</button>
+      <!-- PAINEL GITHUB NATIVO -->
+      <div class="cloud-provider-panel" id="cloud-panel-github">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--accent-green);">
+            Passo 1: Gerar Token no GitHub (1 Clique)
+          </div>
+          <a
+            href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-primary btn-sm"
+            style="text-decoration:none;"
+          >
+            🔑 Abrir GitHub para Gerar Token →
+          </a>
         </div>
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Web App (`.../exec`):</label>
-        <input type="url" class="form-input" id="input-cloud-gas-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" style="width:100%;margin-bottom:8px;">
-      </div>
 
-      <!-- ABA 2: GITHUB GIST SECRETO -->
-      <div class="cloud-provider-panel" id="cloud-panel-github" style="display:none;">
-        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
-          Armazena o estado da aplicação em um arquivo JSON privado (<strong>Secret Gist</strong>) na sua conta do GitHub:
-          <ol style="margin:6px 0 8px 18px;">
-            <li>Gere um Personal Access Token com escopo <code>gist</code> em <a href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">github.com/settings/tokens</a>.</li>
-            <li>Insira o token abaixo (o <em>Gist ID</em> é localizado ou criado automaticamente):</li>
+        <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.55;margin-bottom:14px;background:var(--bg-elevated);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:10px 12px;">
+          <strong>Como funciona:</strong>
+          <ol style="margin:4px 0 2px 18px;padding:0;">
+            <li>O link acima já seleciona automaticamente apenas a permissão <code>gist</code>.</li>
+            <li>No GitHub, basta rolar até o fim da página e clicar no botão verde <strong>Generate token</strong>.</li>
+            <li>Copie o código gerado (<code>ghp_...</code>) e cole no campo abaixo.</li>
           </ol>
         </div>
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">GitHub Personal Access Token (`ghp_...`):</label>
-        <input type="password" class="form-input" id="input-cloud-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%;margin-bottom:8px;">
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Gist ID (opcional — preenchido automaticamente):</label>
-        <input type="text" class="form-input" id="input-cloud-gh-gist" placeholder="Localizado automaticamente após conectar" style="width:100%;margin-bottom:8px;">
-      </div>
 
-      <!-- ABA 3: FIREBASE / REST JSON -->
-      <div class="cloud-provider-panel" id="cloud-panel-firebase" style="display:none;">
-        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
-          Compatível com <strong>Firebase Realtime Database</strong> ou qualquer endpoint REST JSON com suporte a requisições <code>GET</code> e <code>PUT</code>:
+        <div style="margin-bottom:12px;">
+          <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">
+            GitHub Personal Access Token (`ghp_...` ou `github_pat_...`):
+          </label>
+          <input
+            type="password"
+            class="form-input"
+            id="input-cloud-gh-token"
+            placeholder="Cole seu token aqui (ex: ghp_xxxxxxxxxxxxxxxxxxxx)"
+            style="width:100%;font-family:var(--font-mono);font-size:0.82rem;"
+            autocomplete="off"
+            spellcheck="false"
+          >
         </div>
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Endpoint JSON:</label>
-        <input type="url" class="form-input" id="input-cloud-fb-url" placeholder="https://seu-banco.firebaseio.com/transpetro.json" style="width:100%;margin-bottom:8px;">
+
+        <div style="margin-bottom:6px;">
+          <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">
+            Gist ID (opcional — detectado ou criado automaticamente pelo sistema):
+          </label>
+          <input
+            type="text"
+            class="form-input"
+            id="input-cloud-gh-gist"
+            placeholder="Preenchido automaticamente ao conectar"
+            style="width:100%;font-family:var(--font-mono);font-size:0.82rem;"
+            spellcheck="false"
+          >
+        </div>
       </div>
 
-      <!-- BOTÕES DE SALVAR CONFIGURAÇÃO + GERAR BUNDLE PARA GOOGLE SITES -->
+      <!-- BOTÕES DE SALVAR CONFIGURAÇÃO E AÇÕES -->
       <div class="cloud-modal-footer">
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;width:100%;">
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-primary" id="btn-save-cloud-config">Conectar e Sincronizar</button>
+            <button class="btn btn-primary" id="btn-save-cloud-config">✓ Conectar e Sincronizar com GitHub</button>
             <button class="btn btn-secondary btn-sm" id="btn-disconnect-cloud">Desconectar</button>
           </div>
-          <button class="btn btn-yellow btn-sm" id="btn-copy-bundle-with-cloud" title="Copia o código HTML completo já com sua nuvem pré-configurada para colar no Google Sites">
-            Copiar HTML p/ Google Sites (Com Nuvem Embutida)
+          <button class="btn btn-yellow btn-sm" id="btn-copy-mobile-sync-link" title="Gera um link rápido com o token para você abrir no smartphone sem digitar nada">
+            📲 Copiar Link p/ Celular
           </button>
         </div>
+
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--border-color);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <span style="font-size:0.75rem;color:var(--text-muted);">
+            Backup manual em arquivo local:
+          </span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" id="btn-modal-export-json" style="font-size:0.74rem;">
+              📥 Exportar Backup (.json)
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btn-modal-import-json" style="font-size:0.74rem;">
+              📤 Importar Backup (.json)
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 
@@ -6848,28 +6880,38 @@ window.QUESTOES_PARTE2 = [
   }
 
   // =========================================================================
-  // MOTOR DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM (GOOGLE SCRIPT / GITHUB GIST / FIREBASE)
+  // MOTOR DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM VIA GITHUB (GIST PRIVADO)
   // =========================================================================
   function loadCloudConfig() {
     try {
       const raw = localStorage.getItem(CLOUD_CONFIG_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed && parsed.enabled) return parsed;
+        if (parsed && typeof parsed === "object") {
+          return {
+            enabled: !!parsed.enabled,
+            provider: "github",
+            ghToken: (parsed.ghToken || "").trim(),
+            gistId: (parsed.gistId || "").trim()
+          };
+        }
       }
     } catch (e) {
       // ignora
     }
     if (EMBEDDED_CLOUD_CONFIG && EMBEDDED_CLOUD_CONFIG.enabled) {
-      return JSON.parse(JSON.stringify(EMBEDDED_CLOUD_CONFIG));
+      return {
+        enabled: true,
+        provider: "github",
+        ghToken: (EMBEDDED_CLOUD_CONFIG.ghToken || "").trim(),
+        gistId: (EMBEDDED_CLOUD_CONFIG.gistId || "").trim()
+      };
     }
     return {
       enabled: false,
-      provider: "google", // "google" | "github" | "firebase"
-      gasUrl: "",
+      provider: "github",
       ghToken: "",
-      gistId: "",
-      fbUrl: ""
+      gistId: ""
     };
   }
 
@@ -6883,11 +6925,12 @@ window.QUESTOES_PARTE2 = [
   }
 
   function isCloudConfigured() {
-    if (!cloudConfig || !cloudConfig.enabled) return false;
-    if (cloudConfig.provider === "google") return !!cloudConfig.gasUrl;
-    if (cloudConfig.provider === "github") return !!cloudConfig.ghToken;
-    if (cloudConfig.provider === "firebase") return !!cloudConfig.fbUrl;
-    return false;
+    return !!(
+      cloudConfig &&
+      cloudConfig.enabled &&
+      cloudConfig.ghToken &&
+      cloudConfig.ghToken.trim().length > 0
+    );
   }
 
   function updateCloudStatusUI() {
@@ -6898,20 +6941,13 @@ window.QUESTOES_PARTE2 = [
 
     if (!isCloudConfigured()) {
       if (dot) dot.className = "cloud-dot";
-      if (label) label.textContent = "Nuvem: Configurar";
-      if (modalTitle) modalTitle.textContent = "Nuvem desconectada (persistência local no navegador)";
+      if (label) label.textContent = "GitHub: Conectar Nuvem";
+      if (modalTitle) modalTitle.textContent = "GitHub não configurado (armazenamento local)";
       if (modalSub)
         modalSub.textContent =
-          "Escolha abaixo Google Script (recomendado p/ Google Sites), GitHub Gist ou Firebase para ativar o salvamento na nuvem.";
+          "Gere seu token no GitHub acima e conecte para sincronizar seu progresso automaticamente em tempo real.";
       return;
     }
-
-    const provName =
-      cloudConfig.provider === "google"
-        ? "Google Cloud Script"
-        : cloudConfig.provider === "github"
-        ? "GitHub Gist Secreto"
-        : "Firebase / REST";
 
     const timeStr = cloudStatus.lastSyncAt
       ? new Date(cloudStatus.lastSyncAt).toLocaleTimeString("pt-BR", {
@@ -6923,26 +6959,29 @@ window.QUESTOES_PARTE2 = [
 
     if (cloudStatus.state === "syncing") {
       if (dot) dot.className = "cloud-dot syncing";
-      if (label) label.textContent = "Sincronizando nuvem...";
-      if (modalTitle) modalTitle.textContent = `Sincronizando com ${provName}...`;
-      if (modalSub) modalSub.textContent = "Aguarde a confirmação do servidor...";
+      if (label) label.textContent = "Salvando no GitHub...";
+      if (modalTitle) modalTitle.textContent = "Sincronizando com GitHub...";
+      if (modalSub) modalSub.textContent = "Gravando alterações no seu Secret Gist privado...";
     } else if (cloudStatus.state === "error") {
       if (dot) dot.className = "cloud-dot error";
-      if (label) label.textContent = "Nuvem: Erro de sinc.";
-      if (modalTitle) modalTitle.textContent = `Falha ao sincronizar com ${provName}`;
-      if (modalSub) modalSub.textContent = cloudStatus.message || "Verifique sua URL/Token ou conexão com a internet.";
+      if (label) label.textContent = "GitHub: Erro de sinc.";
+      if (modalTitle) modalTitle.textContent = "Falha ao sincronizar com GitHub";
+      if (modalSub)
+        modalSub.textContent =
+          cloudStatus.message ||
+          "Verifique se o token tem permissão 'gist' ou se há conexão com a internet.";
     } else {
       if (dot) dot.className = "cloud-dot synced";
       if (label)
         label.textContent = timeStr
-          ? `Sincronizado (${timeStr.slice(0, 5)})`
-          : "Nuvem Conectada";
+          ? `GitHub: Sincronizado (${timeStr.slice(0, 5)})`
+          : "GitHub Conectado";
       if (modalTitle)
-        modalTitle.textContent = `Conectado a ${provName} ${timeStr ? "· Última sinc: " + timeStr : ""}`;
+        modalTitle.textContent = `Conectado ao GitHub ${timeStr ? "· Última sinc: " + timeStr : ""}`;
       if (modalSub)
         modalSub.textContent =
           cloudStatus.message ||
-          "Qualquer questão respondida, dia concluído ou anotação é salvo automaticamente na sua nuvem.";
+          "Todas as questões respondidas, cronograma e anotações são salvos automaticamente no seu Secret Gist do GitHub.";
     }
   }
 
@@ -6957,18 +6996,44 @@ window.QUESTOES_PARTE2 = [
   }
 
   async function ensureGitHubGist() {
-    if (cloudConfig.gistId) return cloudConfig.gistId;
+    const token = (cloudConfig.ghToken || "").trim();
+    if (!token) throw new Error("Token do GitHub não fornecido.");
+
     const headers = {
-      Authorization: "Bearer " + cloudConfig.ghToken,
+      Authorization: "Bearer " + token,
       Accept: "application/vnd.github+json"
     };
-    // Procura Gist existente na conta do usuário
+
+    // 1. Se já possui gistId registrado, valida se ele ainda existe
+    if (cloudConfig.gistId) {
+      try {
+        const checkRes = await fetch("https://api.github.com/gists/" + cloudConfig.gistId.trim(), {
+          method: "GET",
+          headers: headers
+        });
+        if (checkRes.ok) return cloudConfig.gistId.trim();
+        if (checkRes.status === 404) {
+          console.warn("Gist anterior não encontrado (404), procurando ou criando um novo...");
+          cloudConfig.gistId = "";
+        }
+      } catch (e) {
+        return cloudConfig.gistId.trim();
+      }
+    }
+
+    // 2. Procura Gist existente com o arquivo da plataforma na conta do usuário
     const listRes = await fetch("https://api.github.com/gists?per_page=60", {
       method: "GET",
       headers: headers
     });
     if (!listRes.ok) {
-      throw new Error("Token do GitHub inválido ou sem permissão 'gist' (HTTP " + listRes.status + ").");
+      if (listRes.status === 401) {
+        throw new Error("Token do GitHub inválido ou expirado (HTTP 401). Gere um novo token com escopo 'gist'.");
+      }
+      if (listRes.status === 403) {
+        throw new Error("Limite de requisições da API atingido ou token sem escopo 'gist' (HTTP 403).");
+      }
+      throw new Error("Erro ao consultar a API do GitHub (HTTP " + listRes.status + ").");
     }
     const gists = await listRes.json();
     const found = (gists || []).find(
@@ -6981,7 +7046,8 @@ window.QUESTOES_PARTE2 = [
       if (inputGist) inputGist.value = found.id;
       return found.id;
     }
-    // Cria novo Gist Secreto
+
+    // 3. Cria um novo Gist Secreto na conta do usuário
     const createRes = await fetch("https://api.github.com/gists", {
       method: "POST",
       headers: Object.assign({ "Content-Type": "application/json" }, headers),
@@ -6996,7 +7062,7 @@ window.QUESTOES_PARTE2 = [
       })
     });
     if (!createRes.ok) {
-      throw new Error("Não foi possível criar o Gist Secreto (HTTP " + createRes.status + ").");
+      throw new Error("Não foi possível criar o Secret Gist no GitHub (HTTP " + createRes.status + ").");
     }
     const created = await createRes.json();
     cloudConfig.gistId = created.id;
@@ -7012,22 +7078,33 @@ window.QUESTOES_PARTE2 = [
     updateCloudStatusUI();
 
     try {
-      const payloadStr = JSON.stringify(state);
+      const token = (cloudConfig.ghToken || "").trim();
+      let gistId = await ensureGitHubGist();
 
-      if (cloudConfig.provider === "google") {
-        const res = await fetch(cloudConfig.gasUrl, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: payloadStr,
-          redirect: "follow"
-        });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-      } else if (cloudConfig.provider === "github") {
-        const gistId = await ensureGitHubGist();
-        const res = await fetch("https://api.github.com/gists/" + gistId, {
+      let res = await fetch("https://api.github.com/gists/" + gistId, {
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + token,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          files: {
+            "transpetro_2026_estudo.json": {
+              content: JSON.stringify(state, null, 2)
+            }
+          }
+        })
+      });
+
+      // Se o Gist foi apagado remotamente, recria e tenta novamente
+      if (!res.ok && res.status === 404) {
+        cloudConfig.gistId = "";
+        gistId = await ensureGitHubGist();
+        res = await fetch("https://api.github.com/gists/" + gistId, {
           method: "PATCH",
           headers: {
-            Authorization: "Bearer " + cloudConfig.ghToken,
+            Authorization: "Bearer " + token,
             Accept: "application/vnd.github+json",
             "Content-Type": "application/json"
           },
@@ -7039,27 +7116,21 @@ window.QUESTOES_PARTE2 = [
             }
           })
         });
-        if (!res.ok) throw new Error("GitHub HTTP " + res.status);
-      } else if (cloudConfig.provider === "firebase") {
-        const res = await fetch(cloudConfig.fbUrl, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: payloadStr
-        });
-        if (!res.ok) throw new Error("REST HTTP " + res.status);
       }
+
+      if (!res.ok) throw new Error("GitHub HTTP " + res.status);
 
       cloudStatus.state = "synced";
       cloudStatus.lastSyncAt = Date.now();
-      cloudStatus.message = "Progresso salvo na nuvem com sucesso!";
+      cloudStatus.message = "Progresso salvo no GitHub com sucesso!";
       updateCloudStatusUI();
       return true;
     } catch (err) {
       cloudStatus.state = "error";
-      cloudStatus.message = "Erro ao enviar para nuvem: " + (err.message || err);
+      cloudStatus.message = "Erro ao salvar no GitHub: " + (err.message || err);
       updateCloudStatusUI();
       if (!opts || !opts.silent) {
-        alert("Não foi possível salvar na nuvem:\n" + cloudStatus.message);
+        alert("Não foi possível salvar no GitHub:\n" + cloudStatus.message);
       }
       return false;
     }
@@ -7071,42 +7142,25 @@ window.QUESTOES_PARTE2 = [
     updateCloudStatusUI();
 
     try {
-      let remoteData = null;
+      const token = (cloudConfig.ghToken || "").trim();
+      const gistId = await ensureGitHubGist();
 
-      if (cloudConfig.provider === "google") {
-        const sep = cloudConfig.gasUrl.includes("?") ? "&" : "?";
-        const res = await fetch(cloudConfig.gasUrl + sep + "t=" + Date.now(), {
+      const res = await fetch(
+        "https://api.github.com/gists/" + gistId + "?t=" + Date.now(),
+        {
           method: "GET",
-          redirect: "follow"
-        });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const text = await res.text();
-        remoteData = text ? JSON.parse(text) : null;
-      } else if (cloudConfig.provider === "github") {
-        const gistId = await ensureGitHubGist();
-        const res = await fetch(
-          "https://api.github.com/gists/" + gistId + "?t=" + Date.now(),
-          {
-            method: "GET",
-            headers: {
-              Authorization: "Bearer " + cloudConfig.ghToken,
-              Accept: "application/vnd.github+json"
-            }
+          headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/vnd.github+json"
           }
-        );
-        if (!res.ok) throw new Error("GitHub HTTP " + res.status);
-        const gist = await res.json();
-        const fileObj = gist.files && gist.files["transpetro_2026_estudo.json"];
-        if (fileObj && fileObj.content) {
-          remoteData = JSON.parse(fileObj.content);
         }
-      } else if (cloudConfig.provider === "firebase") {
-        const sep = cloudConfig.fbUrl.includes("?") ? "&" : "?";
-        const res = await fetch(cloudConfig.fbUrl + sep + "t=" + Date.now(), {
-          method: "GET"
-        });
-        if (!res.ok) throw new Error("REST HTTP " + res.status);
-        remoteData = await res.json();
+      );
+      if (!res.ok) throw new Error("GitHub HTTP " + res.status);
+      const gist = await res.json();
+      const fileObj = gist.files && gist.files["transpetro_2026_estudo.json"];
+      let remoteData = null;
+      if (fileObj && fileObj.content) {
+        remoteData = JSON.parse(fileObj.content);
       }
 
       const hasRemoteContent =
@@ -10355,36 +10409,17 @@ window.QUESTOES_PARTE2 = [
     );
 
     // =======================================================================
-    // EVENTOS DO MODAL DE SINCRONIZAÇÃO NA NUVEM
+    // EVENTOS DO MODAL DE SINCRONIZAÇÃO NA NUVEM VIA GITHUB
     // =======================================================================
-    function selectCloudProviderTab(prov) {
-      cloudConfig.provider = prov;
-      document.querySelectorAll("[data-cloud-provider]").forEach((btn) => {
-        btn.classList.toggle(
-          "active",
-          btn.getAttribute("data-cloud-provider") === prov
-        );
-      });
-      ["google", "github", "firebase"].forEach((p) => {
-        const panel = document.getElementById("cloud-panel-" + p);
-        if (panel) panel.style.display = p === prov ? "block" : "none";
-      });
-    }
-
     function openCloudModal() {
       const modal = document.getElementById("cloud-sync-modal");
       if (!modal) return;
-      const inGas = document.getElementById("input-cloud-gas-url");
       const inGhTok = document.getElementById("input-cloud-gh-token");
       const inGhGist = document.getElementById("input-cloud-gh-gist");
-      const inFb = document.getElementById("input-cloud-fb-url");
 
-      if (inGas) inGas.value = cloudConfig.gasUrl || "";
       if (inGhTok) inGhTok.value = cloudConfig.ghToken || "";
       if (inGhGist) inGhGist.value = cloudConfig.gistId || "";
-      if (inFb) inFb.value = cloudConfig.fbUrl || "";
 
-      selectCloudProviderTab(cloudConfig.provider || "google");
       updateCloudStatusUI();
       modal.style.display = "flex";
     }
@@ -10409,179 +10444,152 @@ window.QUESTOES_PARTE2 = [
         if (ev.target === this) closeCloudModal();
       });
 
-    document.querySelectorAll("[data-cloud-provider]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        selectCloudProviderTab(this.getAttribute("data-cloud-provider"));
-      });
-    });
-
-    document
-      .getElementById("btn-copy-gas-code")
-      ?.addEventListener("click", function () {
-        const gasCode = [
-          "// Código Google Apps Script — Salvar Progresso Transpetro 2026.4 na Nuvem",
-          "function doGet() {",
-          "  var p = PropertiesService.getScriptProperties();",
-          "  var n = Number(p.getProperty('CHUNKS') || 0);",
-          "  var s = '';",
-          "  for (var i = 0; i < n; i++) s += (p.getProperty('C_' + i) || '');",
-          "  return ContentService.createTextOutput(s || '{}').setMimeType(ContentService.MimeType.JSON);",
-          "}",
-          "function doPost(e) {",
-          "  var p = PropertiesService.getScriptProperties();",
-          "  var body = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';",
-          "  var chunks = Math.ceil(body.length / 7000);",
-          "  var obj = { CHUNKS: String(chunks) };",
-          "  for (var i = 0; i < chunks; i++) obj['C_' + i] = body.slice(i * 7000, (i + 1) * 7000);",
-          "  p.setProperties(obj, true);",
-          "  return ContentService.createTextOutput('{\"ok\":true}').setMimeType(ContentService.MimeType.JSON);",
-          "}"
-        ].join("\n");
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(gasCode).then(() => {
-            this.textContent = "Código Copiado — Cole em script.google.com";
-            setTimeout(() => {
-              this.textContent =
-                "1. Copiar Código do Google Apps Script (15 linhas)";
-            }, 3500);
-          });
-        } else {
-          prompt("Copie o código abaixo:", gasCode);
-        }
-      });
-
+    // Conectar e Sincronizar com GitHub
     document
       .getElementById("btn-save-cloud-config")
       ?.addEventListener("click", async function () {
-        cloudConfig.gasUrl = (
-          document.getElementById("input-cloud-gas-url")?.value || ""
-        ).trim();
-        cloudConfig.ghToken = (
-          document.getElementById("input-cloud-gh-token")?.value || ""
-        ).trim();
-        cloudConfig.gistId = (
-          document.getElementById("input-cloud-gh-gist")?.value || ""
-        ).trim();
-        cloudConfig.fbUrl = (
-          document.getElementById("input-cloud-fb-url")?.value || ""
-        ).trim();
-        cloudConfig.enabled = true;
+        const tokenInput = document.getElementById("input-cloud-gh-token");
+        const gistInput = document.getElementById("input-cloud-gh-gist");
 
-        if (!isCloudConfigured()) {
-          alert(
-            "Preencha a URL ou o Token do provedor escolhido antes de conectar."
-          );
+        const token = (tokenInput?.value || "").trim();
+        const gist = (gistInput?.value || "").trim();
+
+        if (!token) {
+          alert("Por favor, cole seu Personal Access Token do GitHub gerado no Passo 1.");
+          tokenInput?.focus();
           return;
         }
 
+        cloudConfig.provider = "github";
+        cloudConfig.ghToken = token;
+        cloudConfig.gistId = gist;
+        cloudConfig.enabled = true;
+
         saveCloudConfig();
+        showCloudSaveToast("Conectando ao GitHub...", "info");
+
         const ok = await pullFromCloud({ silent: false });
         if (ok) {
           await pushToCloud({ silent: true });
+          showCloudSaveToast("✓ Conectado ao GitHub com sucesso!", "success");
         }
       });
 
+    // Enviar para GitHub (Push manual)
     document
       .getElementById("btn-cloud-push-now")
       ?.addEventListener("click", function () {
         if (!isCloudConfigured()) {
-          alert("Configure e conecte um provedor de nuvem abaixo primeiro.");
+          alert("Conecte seu token do GitHub abaixo antes de enviar dados.");
           return;
         }
         pushToCloud({ silent: false });
       });
 
+    // Baixar do GitHub (Pull manual)
     document
       .getElementById("btn-cloud-pull-now")
       ?.addEventListener("click", function () {
         if (!isCloudConfigured()) {
-          alert("Configure e conecte um provedor de nuvem abaixo primeiro.");
+          alert("Conecte seu token do GitHub abaixo antes de baixar dados.");
           return;
         }
         pullFromCloud({ silent: false, forceOverwrite: true });
       });
 
+    // Desconectar Nuvem
     document
       .getElementById("btn-disconnect-cloud")
       ?.addEventListener("click", function () {
+        if (
+          !confirm(
+            "Deseja realmente desconectar a sincronização com o GitHub neste navegador? Seu progresso local continuará salvo."
+          )
+        ) {
+          return;
+        }
         cloudConfig.enabled = false;
         saveCloudConfig();
         cloudStatus.state = "unconfigured";
         cloudStatus.message = "";
         updateCloudStatusUI();
+        showCloudSaveToast("Nuvem desconectada", "info");
       });
 
+    // Copiar Link de Conexão Rápida para Celular
     document
-      .getElementById("btn-copy-bundle-with-cloud")
+      .getElementById("btn-copy-mobile-sync-link")
       ?.addEventListener("click", function () {
         if (!isCloudConfigured()) {
-          alert(
-            "Conecte sua nuvem primeiro (Google Script, GitHub Gist ou Firebase) para embutir a configuração no HTML do Google Sites!"
-          );
+          alert("Conecte seu token do GitHub primeiro para gerar o link de sincronização para outros dispositivos!");
           return;
         }
-        const modal = document.getElementById("cloud-sync-modal");
-        if (modal) modal.style.display = "none";
+        const base = window.location.origin + window.location.pathname;
+        const quickUrl =
+          base +
+          "#gh=" +
+          encodeURIComponent(cloudConfig.ghToken) +
+          (cloudConfig.gistId ? "&gist=" + encodeURIComponent(cloudConfig.gistId) : "");
 
-        let rawDoc = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-        if (modal) modal.style.display = "flex";
-
-        // Se foi aberto a partir do index.html modular, embute os dados e o script principal automaticamente
-        if (/src="app\.js(\?[^"]*)?"/.test(rawDoc)) {
-          let inlineCss = "";
-          try {
-            Array.from(document.styleSheets).forEach((sheet) => {
-              if (sheet.href && sheet.href.includes("katex")) return;
-              Array.from(sheet.cssRules || []).forEach((rule) => {
-                inlineCss += rule.cssText + "\n";
-              });
-            });
-          } catch (e) {
-            // ignora CORS de folhas externas
-          }
-          if (inlineCss) {
-            rawDoc = rawDoc.replace(
-              /<link rel="stylesheet"[^>]*href="styles\.css(\?[^"]*)?"[^>]*>/,
-              "<style>\n" + inlineCss + "\n</style>"
-            );
-          }
-          const dataScripts =
-            "<script>\n" +
-            "window.DADOS_EDITAL = " + JSON.stringify(window.DADOS_EDITAL) + ";\n" +
-            "window.PLANO_30_DIAS = " + JSON.stringify(window.PLANO_30_DIAS) + ";\n" +
-            "window.TEXTOS_BASE = " + JSON.stringify(window.TEXTOS_BASE) + ";\n" +
-            "window.DADOS_TEORIA = " + JSON.stringify(window.DADOS_TEORIA) + ";\n" +
-            "window.QUESTOES_PARTE1 = " + JSON.stringify(window.QUESTOES_PARTE1) + ";\n" +
-            "window.QUESTOES_PARTE2 = " + JSON.stringify(window.QUESTOES_PARTE2) + ";\n" +
-            "(" + transpetroAppMain.toString() + ")();\n" +
-            "</script>";
-
-          rawDoc = rawDoc
-            .replace(/<script src="dados_edital_plano\.js(\?[^"]*)?"><\/script>/, "")
-            .replace(/<script src="dados_teoria\.js(\?[^"]*)?"><\/script>/, "")
-            .replace(/<script src="dados_questoes_parte1\.js(\?[^"]*)?"><\/script>/, "")
-            .replace(/<script src="dados_questoes_parte2\.js(\?[^"]*)?"><\/script>/, "")
-            .replace(/<script src="app\.js(\?[^"]*)?"><\/script>/, dataScripts);
-        }
-
-        const withCloud = rawDoc.replace(
-          /\/\*__EMBEDDED_CLOUD_CFG_START__\*\/[\s\S]*?\/\*__EMBEDDED_CLOUD_CFG_END__\*\//,
-          "/*__EMBEDDED_CLOUD_CFG_START__*/ " +
-            JSON.stringify(cloudConfig) +
-            " /*__EMBEDDED_CLOUD_CFG_END__*/"
-        );
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(withCloud).then(() => {
-            this.textContent =
-              "HTML Copiado com Nuvem Embutida — Cole no Google Sites";
+          navigator.clipboard.writeText(quickUrl).then(() => {
+            const originalText = this.textContent;
+            this.textContent = "✓ Link Copiado!";
+            showCloudSaveToast("Link copiado! Abra no celular para conectar direto.", "success");
             setTimeout(() => {
-              this.textContent =
-                "Copiar HTML p/ Google Sites (Com Nuvem Embutida)";
-            }, 4000);
+              this.textContent = originalText;
+            }, 3000);
           });
+        } else {
+          prompt("Copie o link abaixo e envie para o seu celular/outro dispositivo:", quickUrl);
         }
       });
+
+    // Atalhos para Backup JSON dentro do Modal
+    document
+      .getElementById("btn-modal-export-json")
+      ?.addEventListener("click", exportProgressJSON);
+    document
+      .getElementById("btn-modal-import-json")
+      ?.addEventListener("click", function () {
+        document.getElementById("input-import-json")?.click();
+      });
+
+    // Processa credenciais passadas na URL (#gh=... ou ?gh=...) para auto-configuração em celulares/outros dispositivos
+    function checkUrlCloudCredentials() {
+      try {
+        const hash = window.location.hash || "";
+        const search = window.location.search || "";
+        let params = new URLSearchParams(hash.startsWith("#") ? hash.slice(1) : "");
+        if (!params.has("gh") && !params.has("token")) {
+          params = new URLSearchParams(search);
+        }
+        const token = params.get("gh") || params.get("token") || params.get("ghToken");
+        const gist = params.get("gist") || params.get("gistId");
+        if (token && token.trim()) {
+          cloudConfig.provider = "github";
+          cloudConfig.ghToken = token.trim();
+          if (gist && gist.trim()) cloudConfig.gistId = gist.trim();
+          cloudConfig.enabled = true;
+          saveCloudConfig();
+
+          if (window.history && window.history.replaceState) {
+            const cleanUrl =
+              window.location.pathname +
+              (window.location.search && !window.location.search.includes("gh")
+                ? window.location.search
+                : "");
+            window.history.replaceState(null, "", cleanUrl);
+          }
+          showCloudSaveToast("Conectado ao GitHub via link! Sincronizando...", "success");
+          pullFromCloud({ silent: true });
+        }
+      } catch (e) {
+        console.warn("Erro ao processar credenciais da URL:", e);
+      }
+    }
+
+    checkUrlCloudCredentials();
 
     // Renderização inicial
     updateCloudStatusUI();

@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-  <script>window.APP_BUILD_HASH = "a8a985fdea";</script>
-  <link rel="stylesheet" id="main-stylesheet" href="styles.css?v=a8a985fdea">
+  <script>window.APP_BUILD_HASH = "16797419a3";</script>
+  <link rel="stylesheet" id="main-stylesheet" href="styles.css?v=16797419a3">
 </head>
 <body>
 
@@ -111,7 +111,7 @@
 
     <div class="sidebar-footer">
       <button class="btn btn-primary btn-sm" id="btn-open-cloud-modal" style="width:100%;margin-bottom:6px;justify-content:center;">
-        Sincronização em Nuvem
+        ☁️ Nuvem GitHub (Auto-Save)
       </button>
       <div class="footer-actions">
         <button class="btn-utility" id="btn-toggle-theme">Tema Claro</button>
@@ -574,13 +574,20 @@
     </button>
   </nav>
 
-  <!-- MODAL DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM -->
+  <!-- MODAL DE SINCRONIZAÇÃO AUTOMÁTICA NA NUVEM VIA GITHUB -->
   <div class="cloud-modal-backdrop" id="cloud-sync-modal" style="display:none;">
     <div class="cloud-modal">
       <div class="cloud-modal-header">
         <div>
-          <h3>Sincronização em Nuvem (Auto-Save)</h3>
-          <p style="font-size:0.82rem;color:var(--text-secondary);">Mantenha o histórico de questões, cronograma, simulados e notas sincronizado entre computador, smartphone e Google Sites.</p>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-primary);flex-shrink:0;">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <h3 style="margin:0;">Sincronização na Nuvem via GitHub</h3>
+          </div>
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;">
+            Seu progresso completo (questões respondidas, cronograma de 30 dias, fórmulas e notas) fica salvo na sua própria conta do GitHub através de um <strong>Secret Gist privado</strong>, sincronizando em tempo real no <strong>GitHub Pages</strong> entre computador, tablet e celular.
+          </p>
         </div>
         <button class="btn btn-secondary btn-sm" id="btn-close-cloud-modal">Fechar</button>
       </div>
@@ -589,83 +596,108 @@
       <div class="cloud-status-box" id="cloud-modal-status-box">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
-            <div style="font-weight:700;font-size:0.9rem;" id="cloud-modal-status-title">Nuvem não configurada</div>
-            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Configure abaixo utilizando Google Apps Script, GitHub Gist ou endpoint REST.</div>
+            <div style="font-weight:700;font-size:0.9rem;" id="cloud-modal-status-title">GitHub não configurado</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);" id="cloud-modal-status-sub">Conecte seu token do GitHub abaixo para ativar o salvamento automático na nuvem.</div>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">Enviar para Nuvem</button>
-            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">Baixar da Nuvem</button>
+            <button class="btn btn-primary btn-sm" id="btn-cloud-push-now">⬆️ Enviar ao GitHub (Push)</button>
+            <button class="btn btn-secondary btn-sm" id="btn-cloud-pull-now">⬇️ Baixar do GitHub (Pull)</button>
           </div>
         </div>
       </div>
 
-      <!-- SELETOR DE PROVEDOR -->
-      <div class="cloud-provider-tabs">
-        <button class="cloud-tab-btn active" data-cloud-provider="google">01 · Google Apps Script</button>
-        <button class="cloud-tab-btn" data-cloud-provider="github">02 · GitHub Gist Privado</button>
-        <button class="cloud-tab-btn" data-cloud-provider="firebase">03 · Endpoint REST / Firebase</button>
-      </div>
-
-      <!-- ABA 1: GOOGLE APPS SCRIPT -->
-      <div class="cloud-provider-panel active" id="cloud-panel-google">
-        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
-          <strong>Google Apps Script (Conta Google Pessoal):</strong> Opera diretamente na sua conta Google sem exigir permissões de OAuth externas e funciona dentro do iframe do Google Sites:
-          <ol style="margin:6px 0 10px 18px;">
-            <li>Copie o script de 15 linhas no botão abaixo e acesse <a href="https://script.google.com/home/start" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">script.google.com (Novo Projeto)</a>.</li>
-            <li>Substitua o conteúdo do editor pelo código copiado e selecione <strong>Implantar &gt; Nova implantação</strong>.</li>
-            <li>Escolha o tipo <strong>App da Web</strong>, defina o acesso como <strong>Qualquer pessoa (Anyone)</strong> e confirme em <strong>Implantar</strong>.</li>
-            <li>Copie a <strong>URL do App da Web</strong> (`https://script.google.com/macros/s/.../exec`) e insira abaixo:</li>
-          </ol>
-          <button class="btn btn-secondary btn-sm" id="btn-copy-gas-code" style="margin-bottom:10px;">Copiar Script Google (15 linhas)</button>
+      <!-- PAINEL GITHUB NATIVO -->
+      <div class="cloud-provider-panel" id="cloud-panel-github">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--accent-green);">
+            Passo 1: Gerar Token no GitHub (1 Clique)
+          </div>
+          <a
+            href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-primary btn-sm"
+            style="text-decoration:none;"
+          >
+            🔑 Abrir GitHub para Gerar Token →
+          </a>
         </div>
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Web App (`.../exec`):</label>
-        <input type="url" class="form-input" id="input-cloud-gas-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" style="width:100%;margin-bottom:8px;">
-      </div>
 
-      <!-- ABA 2: GITHUB GIST SECRETO -->
-      <div class="cloud-provider-panel" id="cloud-panel-github" style="display:none;">
-        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
-          Armazena o estado da aplicação em um arquivo JSON privado (<strong>Secret Gist</strong>) na sua conta do GitHub:
-          <ol style="margin:6px 0 8px 18px;">
-            <li>Gere um Personal Access Token com escopo <code>gist</code> em <a href="https://github.com/settings/tokens/new?scopes=gist&description=Transpetro_Estudo_Cloud" target="_blank" rel="noopener" style="color:var(--accent-blue);font-weight:600;">github.com/settings/tokens</a>.</li>
-            <li>Insira o token abaixo (o <em>Gist ID</em> é localizado ou criado automaticamente):</li>
+        <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.55;margin-bottom:14px;background:var(--bg-elevated);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:10px 12px;">
+          <strong>Como funciona:</strong>
+          <ol style="margin:4px 0 2px 18px;padding:0;">
+            <li>O link acima já seleciona automaticamente apenas a permissão <code>gist</code>.</li>
+            <li>No GitHub, basta rolar até o fim da página e clicar no botão verde <strong>Generate token</strong>.</li>
+            <li>Copie o código gerado (<code>ghp_...</code>) e cole no campo abaixo.</li>
           </ol>
         </div>
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">GitHub Personal Access Token (`ghp_...`):</label>
-        <input type="password" class="form-input" id="input-cloud-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%;margin-bottom:8px;">
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Gist ID (opcional — preenchido automaticamente):</label>
-        <input type="text" class="form-input" id="input-cloud-gh-gist" placeholder="Localizado automaticamente após conectar" style="width:100%;margin-bottom:8px;">
-      </div>
 
-      <!-- ABA 3: FIREBASE / REST JSON -->
-      <div class="cloud-provider-panel" id="cloud-panel-firebase" style="display:none;">
-        <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:10px;line-height:1.55;">
-          Compatível com <strong>Firebase Realtime Database</strong> ou qualquer endpoint REST JSON com suporte a requisições <code>GET</code> e <code>PUT</code>:
+        <div style="margin-bottom:12px;">
+          <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">
+            GitHub Personal Access Token (`ghp_...` ou `github_pat_...`):
+          </label>
+          <input
+            type="password"
+            class="form-input"
+            id="input-cloud-gh-token"
+            placeholder="Cole seu token aqui (ex: ghp_xxxxxxxxxxxxxxxxxxxx)"
+            style="width:100%;font-family:var(--font-mono);font-size:0.82rem;"
+            autocomplete="off"
+            spellcheck="false"
+          >
         </div>
-        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">URL do Endpoint JSON:</label>
-        <input type="url" class="form-input" id="input-cloud-fb-url" placeholder="https://seu-banco.firebaseio.com/transpetro.json" style="width:100%;margin-bottom:8px;">
+
+        <div style="margin-bottom:6px;">
+          <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">
+            Gist ID (opcional — detectado ou criado automaticamente pelo sistema):
+          </label>
+          <input
+            type="text"
+            class="form-input"
+            id="input-cloud-gh-gist"
+            placeholder="Preenchido automaticamente ao conectar"
+            style="width:100%;font-family:var(--font-mono);font-size:0.82rem;"
+            spellcheck="false"
+          >
+        </div>
       </div>
 
-      <!-- BOTÕES DE SALVAR CONFIGURAÇÃO + GERAR BUNDLE PARA GOOGLE SITES -->
+      <!-- BOTÕES DE SALVAR CONFIGURAÇÃO E AÇÕES -->
       <div class="cloud-modal-footer">
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;width:100%;">
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-primary" id="btn-save-cloud-config">Conectar e Sincronizar</button>
+            <button class="btn btn-primary" id="btn-save-cloud-config">✓ Conectar e Sincronizar com GitHub</button>
             <button class="btn btn-secondary btn-sm" id="btn-disconnect-cloud">Desconectar</button>
           </div>
-          <button class="btn btn-yellow btn-sm" id="btn-copy-bundle-with-cloud" title="Copia o código HTML completo já com sua nuvem pré-configurada para colar no Google Sites">
-            Copiar HTML p/ Google Sites (Com Nuvem Embutida)
+          <button class="btn btn-yellow btn-sm" id="btn-copy-mobile-sync-link" title="Gera um link rápido com o token para você abrir no smartphone sem digitar nada">
+            📲 Copiar Link p/ Celular
           </button>
+        </div>
+
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--border-color);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <span style="font-size:0.75rem;color:var(--text-muted);">
+            Backup manual em arquivo local:
+          </span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" id="btn-modal-export-json" style="font-size:0.74rem;">
+              📥 Exportar Backup (.json)
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btn-modal-import-json" style="font-size:0.74rem;">
+              📤 Importar Backup (.json)
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+    </div>
+  </div>
 
   <!-- SCRIPTS LOCAIS (FUNCIONA 100% OFFLINE DIRETO NO NAVEGADOR) -->
-  <script src="dados_edital_plano.js?v=a8a985fdea"></script>
-  <script src="dados_teoria.js?v=a8a985fdea"></script>
-  <script src="dados_questoes_parte1.js?v=a8a985fdea"></script>
-  <script src="dados_questoes_parte2.js?v=a8a985fdea"></script>
-  <script src="app.js?v=a8a985fdea"></script>
+  <script src="dados_edital_plano.js?v=16797419a3"></script>
+  <script src="dados_teoria.js?v=16797419a3"></script>
+  <script src="dados_questoes_parte1.js?v=16797419a3"></script>
+  <script src="dados_questoes_parte2.js?v=16797419a3"></script>
+  <script src="app.js?v=16797419a3"></script>
 </body>
 </html>

@@ -38,11 +38,11 @@ Plataforma interativa desenvolvida sob medida para a preparação diária de **3
    - Mini-simulado (10 questões / 30 min), Foco Específicas (20 questões / 60 min) e Prova Completa (70 questões / 4h30min).
    - Simulador das regras de corte da Fase 1 (mínimo de 50% em Conhecimentos Específicos) e Fase 2 (eliminação com zero em Português ou Inglês), comparando com o corte de homologação de 2x (Vagas + CR) por polo e modalidade.
 
-6. **☁️ Sincronização Automática na Nuvem (Auto-Save) + Backup Local**:
-   - **Auto-Save em Nuvem**: Suporte integrado a **Google Apps Script** (100% gratuito na Conta Google, sem avisos de permissão), **GitHub Gist Secreto** e **Firebase / REST JSON**.
-   - **Mesclagem Inteligente**: Ao abrir em outro dispositivo (celular, PC ou Google Sites), puxa e mescla automaticamente as questões resolvidas e o progresso mais recente.
-   - **Exportação com Nuvem Embutida**: Botão no modal de nuvem que gera o pacote HTML único já pré-configurado com sua nuvem para colar no Google Sites Restrito.
-   - Progresso salvo simultaneamente no `localStorage` do navegador + botões de **Exportar (.json)** e **Importar Backup**.
+6. **☁️ Sincronização Automática na Nuvem via GitHub (Auto-Save) + Backup Local**:
+   - **Auto-Save no GitHub**: Sincronização nativa em tempo real com **Secret Gist privado** na sua própria conta do GitHub, sem intermediários.
+   - **Mesclagem Multi-Dispositivo**: Ao abrir no computador, tablet ou smartphone através do **GitHub Pages**, a plataforma sincroniza e mescla automaticamente as questões respondidas, anotações e o progresso mais recente.
+   - **Link Rápido para Celular**: Botão `📲 Copiar Link p/ Celular` no modal que permite abrir no smartphone já conectado, sem precisar digitar tokens em teclado virtual.
+   - **Backup Local**: Progresso salvo simultaneamente no `localStorage` do navegador + botões de **Exportar (.json)** e **Importar Backup**.
 
 ---
 
@@ -50,7 +50,7 @@ Plataforma interativa desenvolvida sob medida para a preparação diária de **3
 
 Basta abrir o arquivo `index.html` diretamente em qualquer navegador moderno (Chrome, Edge, Firefox, Safari). Não requer instalação de servidores ou dependências externas.
 
-Para atualizar o pacote único (`plataforma_transpetro_bundle.html`) e copiá-lo automaticamente para a Área de Transferência (`Ctrl + V`), execute no PowerShell:
+Para recompilar o pacote autônomo offline (`plataforma_transpetro_bundle.html`) e atualizar os hashes de cache-busting do GitHub Pages, execute no PowerShell:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\gerar_bundle.ps1
@@ -58,13 +58,21 @@ powershell -ExecutionPolicy Bypass -File .\gerar_bundle.ps1
 
 ---
 
-## 🌐 Publicação no GitHub Pages e Google Sites
+## 🌐 Publicação e Acesso no GitHub Pages
 
-1. **Via Código Embutido (100% Privado no Google Sites Restrito)**:
-   - Conecte sua nuvem em `☁️ Nuvem: Configurar` e clique em `📦 Copiar HTML p/ Google Sites (Com Nuvem Embutida)`.
-   - No Google Sites, crie uma página com **Incorporação de página inteira (`</>`) > Incorporar código** e cole (`Ctrl + V`).
-2. **Via GitHub Pages (Por URL)**:
-   - Suba os arquivos para seu repositório no GitHub (`main`).
-   - Ative o **GitHub Pages** em `Settings > Pages > Branch: main > Save`.
-   - No **Google Sites**, crie uma página com **Incorporação de página inteira (`</>`)** e cole a URL do GitHub Pages (`https://seu-usuario.github.io/seu-repo/`).
+1. **Repositório GitHub**:
+   - Faça push das alterações para a branch `main`:
+     ```bash
+     git add .
+     git commit -m "feat: sincronizacao em nuvem via github"
+     git push origin main
+     ```
+2. **GitHub Pages**:
+   - Em `Settings > Pages > Build and deployment > Branch: main > Save`.
+   - A plataforma estará disponível mundialmente no seu endereço GitHub Pages: `https://pvictor25.github.io/Concurso-Transpetro/`.
+3. **Conexão de Nuvem (Auto-Save)**:
+   - Clique no botão `☁️ Nuvem GitHub (Auto-Save)` ou no topo `GitHub: Conectar Nuvem`.
+   - Clique em `🔑 Abrir GitHub para Gerar Token →` (já com permissão `gist`).
+   - Cole o token gerado e clique em `✓ Conectar e Sincronizar com GitHub`.
+   - Para acessar no celular com tudo sincronizado, use o botão `📲 Copiar Link p/ Celular`.
 
